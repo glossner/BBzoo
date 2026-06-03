@@ -4,4 +4,6 @@ version = "0.1.0"
 description = "Python-based assemblers and toolchain for the Brooks Computer Architecture Zoo"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "pyelftools"
+]

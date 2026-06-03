@@ -1,3 +1,8 @@
+# 06/03/2026 16:04 ELF Loading Toolchain and Cross-Compilation Integration
+- Integrated `pyelftools` dependency to enable parsing ELF object and linked binary files.
+- Implemented `elf_loader.py` utility to extract section data from relocatable `.o` files and convert them to word-size formatted simulation hex files.
+- Implemented `verify_elf.py` validating a complete Motorola 68000 cross-compilation pipeline using `clang -target m68k-elf -c` and the Python ELF loader.
+
 # 06/03/2026 15:54 Python-based Architecture Taxonomy and uv Dependency Management
 - Implemented Python-based architecture taxonomy class traits (`StorageArchitecture`, `InstructionFormat`, `Operations`) under `common/sw/architecture/` mirroring Scala OOP traits.
 - Refactored the four Python-based assemblers (`pdp8`, `ibm360`, `cray1`, `m68k`) to inherit from the appropriate taxonomy traits and declare properties.

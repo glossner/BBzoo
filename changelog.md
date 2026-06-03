@@ -1,3 +1,9 @@
+# 06/03/2026 16:10 Custom Python AST Compiler for Exotic Zoo Architectures
+- Implemented `zoo_compiler.py` parsing Python source files via the native `ast` parser and targeting DEC PDP-8 and Cray-1 assembly.
+- Added `Pdp8Codegen` subclass supporting accumulator-based scalar assignments, binary addition/AND expressions, variable allocation, and literal constants.
+- Added `Cray1Codegen` subclass supporting vector register instructions, loads/stores, vector addition, and vector length control.
+- Developed `verify_compiler.py` to automate compilation, assembly, and test verification against reference core hex files.
+
 # 06/03/2026 16:04 ELF Loading Toolchain and Cross-Compilation Integration
 - Integrated `pyelftools` dependency to enable parsing ELF object and linked binary files.
 - Implemented `elf_loader.py` utility to extract section data from relocatable `.o` files and convert them to word-size formatted simulation hex files.

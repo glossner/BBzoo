@@ -1,7 +1,23 @@
 import re
 from zoo_assembler import BaseAssembler
 
-class Cray1Assembler(BaseAssembler):
+from architecture.storage_hierarchy import VectorArchitecture
+from architecture.instruction_format import FixedLengthFormat
+from architecture.operations import FixedPointOperations, FloatingPointOperations, VectorOperations
+
+class Cray1Assembler(BaseAssembler, VectorArchitecture, FixedLengthFormat, FixedPointOperations, FloatingPointOperations, VectorOperations):
+    word_width = 64
+    address_width = 24
+    num_gprs = 8
+    num_fprs = 8
+    vector_length = 64
+    num_vec_regs = 8
+    op_code_width = 7
+    instruction_width = 16
+    has_multiply_divide = True
+    fpu_precision = 64
+    has_chaining = True
+
     def get_arch_instruction_size(self, line):
         return 1
 

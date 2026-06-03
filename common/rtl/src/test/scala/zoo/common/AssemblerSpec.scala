@@ -1,0 +1,50 @@
+package zoo.common
+
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
+import scala.io.Source
+import java.io.File
+import zoo.common.sw._
+
+class AssemblerSpec extends AnyFlatSpec with Matchers {
+  behavior of "ZooAssembler"
+
+  def getProjectFile(relativePath: String): File = {
+    var dir = new File(".").getCanonicalFile
+    while (dir != null && !new File(dir, "build.sbt").exists()) {
+      dir = dir.getParentFile
+    }
+    if (dir == null) {
+      new File(relativePath)
+    } else {
+      new File(dir, relativePath)
+    }
+  }
+
+  def verifyHex(arch: String, asmPath: String, hexPath: String, assembler: BaseAssembler): Unit = {
+    it should s"assemble $asmPath to match $hexPath for $arch" in {
+      val asmFile = getProjectFile(asmPath)
+      val hexFile = getProjectFile(hexPath)
+
+      val asmSource = Source.fromFile(asmFile).mkString
+      val assembledOutput = assembler.assemble(asmSource)
+
+      val origLines = Source.fromFile(hexFile).getLines()
+        .map(_.trim.toUpperCase)
+        .filter(line => line.nonEmpty && !line.startsWith("#"))
+        .toList
+
+      val newLines = assembledOutput.split("\n")
+        .map(_.trim.toUpperCase)
+        .filter(line => line.nonEmpty && !line.startsWith("#"))
+        .toList
+
+      newLines shouldBe origLines
+    }
+  }
+
+  verifyHex("pdp8", "decpdp8/sw/test_add.asm", "decpdp8/sw/test_add.hex", new Pdp8Assembler())
+  verifyHex("ibm360", "ibm360/sw/test_add.asm", "ibm360/sw/test_add.hex", new Ibm360Assembler())
+  verifyHex("cray1", "cray1/sw/test_vector.asm", "cray1/sw/test_vector.hex", new Cray1Assembler())
+  verifyHex("m68k", "motorola68000/sw/test_add.asm", "motorola68000/sw/test_add.hex", new M68kAssembler())
+}

@@ -1,7 +1,18 @@
 import re
 from zoo_assembler import BaseAssembler
 
-class Pdp8Assembler(BaseAssembler):
+from architecture.storage_hierarchy import AccumulatorArchitecture
+from architecture.instruction_format import FixedLengthFormat
+from architecture.operations import FixedPointOperations
+
+class Pdp8Assembler(BaseAssembler, AccumulatorArchitecture, FixedLengthFormat, FixedPointOperations):
+    word_width = 12
+    address_width = 12
+    has_link_bit = True
+    op_code_width = 3
+    instruction_width = 12
+    has_multiply_divide = False
+
     def get_arch_instruction_size(self, line):
         return 1
 

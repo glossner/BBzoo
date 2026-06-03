@@ -1,7 +1,19 @@
 import re
 from zoo_assembler import BaseAssembler
 
-class M68kAssembler(BaseAssembler):
+from architecture.storage_hierarchy import GeneralRegisterArchitecture
+from architecture.instruction_format import VariableLengthFormat
+from architecture.operations import FixedPointOperations
+
+class M68kAssembler(BaseAssembler, GeneralRegisterArchitecture, VariableLengthFormat, FixedPointOperations):
+    word_width = 32
+    address_width = 24
+    num_gprs = 16
+    num_fprs = 0
+    op_code_width = 4
+    formats = ["single", "extension"]
+    has_multiply_divide = True
+
     def __init__(self):
         super().__init__()
         # Exclude '#' so we don't strip M68k immediate operands!

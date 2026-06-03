@@ -1,7 +1,21 @@
 import re
 from zoo_assembler import BaseAssembler
 
-class Ibm360Assembler(BaseAssembler):
+from architecture.storage_hierarchy import GeneralRegisterArchitecture
+from architecture.instruction_format import VariableLengthFormat
+from architecture.operations import FixedPointOperations, FloatingPointOperations, DecimalOperations
+
+class Ibm360Assembler(BaseAssembler, GeneralRegisterArchitecture, VariableLengthFormat, FixedPointOperations, FloatingPointOperations, DecimalOperations):
+    word_width = 32
+    address_width = 24
+    num_gprs = 16
+    num_fprs = 4
+    op_code_width = 8
+    formats = ["RR", "RX", "RS", "SI", "SS"]
+    has_multiply_divide = True
+    fpu_precision = 64
+    has_decimal_pack = True
+
     def clean_instruction(self, line):
         # Replace common separators like commas, parentheses with space
         line = line.replace(',', ' ').replace('(', ' ').replace(')', ' ')

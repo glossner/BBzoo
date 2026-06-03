@@ -21,6 +21,12 @@ class Cray1Core extends Module {
     val a0_debug   = Output(UInt(24.W)) // A0 register value
     val v0_0_debug = Output(UInt(64.W)) // Element 0 of Vector Register V0
     val v0_1_debug = Output(UInt(64.W)) // Element 1 of Vector Register V0
+
+    // PMU outputs
+    val pmu_cycles = Output(UInt(32.W))
+    val pmu_insts  = Output(UInt(32.W))
+    val pmu_reads  = Output(UInt(32.W))
+    val pmu_writes = Output(UInt(32.W))
   })
 
   // Sub-modules
@@ -47,6 +53,29 @@ class Cray1Core extends Module {
   io.hlt      := hltReg
   io.pc_debug := pc
   io.vl_debug := vl
+
+  // PMU Counter Logic
+  val pmu_cycles = RegInit(0.U(32.W))
+  val pmu_insts  = RegInit(0.U(32.W))
+  val pmu_reads  = RegInit(0.U(32.W))
+  val pmu_writes = RegInit(0.U(32.W))
+
+  pmu_cycles := pmu_cycles + 1.U
+  when(io.mem.req && io.mem.ready) {
+    when(io.mem.write) {
+      pmu_writes := pmu_writes + 1.U
+    }.otherwise {
+      pmu_reads := pmu_reads + 1.U
+    }
+  }
+  when(state === sFETCH && io.mem.ready) {
+    pmu_insts := pmu_insts + 1.U
+  }
+
+  io.pmu_cycles := pmu_cycles
+  io.pmu_insts  := pmu_insts
+  io.pmu_reads  := pmu_reads
+  io.pmu_writes := pmu_writes
 
   // Decode instruction parcel (bits 15-0)
   decoder.io.inst := inst(15, 0)

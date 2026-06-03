@@ -17,6 +17,12 @@ class Pdp8Core extends Module {
     val pc_debug   = Output(UInt(12.W))
     val acc_debug  = Output(UInt(12.W))
     val link_debug = Output(Bool())
+    
+    // PMU outputs
+    val pmu_cycles = Output(UInt(32.W))
+    val pmu_insts  = Output(UInt(32.W))
+    val pmu_reads  = Output(UInt(32.W))
+    val pmu_writes = Output(UInt(32.W))
   })
 
   // Sub-modules
@@ -227,4 +233,27 @@ class Pdp8Core extends Module {
       }
     }
   }
+
+  // PMU Counter Logic
+  val pmu_cycles = RegInit(0.U(32.W))
+  val pmu_insts  = RegInit(0.U(32.W))
+  val pmu_reads  = RegInit(0.U(32.W))
+  val pmu_writes = RegInit(0.U(32.W))
+
+  pmu_cycles := pmu_cycles + 1.U
+  when(io.mem.req && io.mem.ready) {
+    when(io.mem.write) {
+      pmu_writes := pmu_writes + 1.U
+    }.otherwise {
+      pmu_reads := pmu_reads + 1.U
+    }
+  }
+  when(state === sFETCH && io.mem.ready) {
+    pmu_insts := pmu_insts + 1.U
+  }
+
+  io.pmu_cycles := pmu_cycles
+  io.pmu_insts  := pmu_insts
+  io.pmu_reads  := pmu_reads
+  io.pmu_writes := pmu_writes
 }

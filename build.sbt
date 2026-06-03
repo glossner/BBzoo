@@ -82,6 +82,8 @@ lazy val cray1 = (project in file("cray1/rtl"))
 // ***************************
 lazy val root = (project in file("."))
   .aggregate(common, motorola68000, decpdp8, ibm360, cray1)
+  .dependsOn(common, motorola68000, decpdp8, ibm360, cray1)
   .settings(
     name := "BrooksZoo"
   )
+  .settings(commonSettings: _*)

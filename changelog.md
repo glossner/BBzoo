@@ -1,3 +1,8 @@
+# 06/03/2026 18:50 Synthesizable PMU Hardware and Unified Architecture Profiler
+- Added synthesizable Performance Monitoring Units (PMUs) to `Pdp8Core`, `Ibm360Core`, `Cray1Core`, and `M68kCore` to track cycle counts, retired instructions, and memory reads/writes.
+- Created `ProfilerSpec.scala` in the root project to execute all four cores, query their hardware PMU registers, and output a consolidated comparative markdown report comparing CPI and memory traffic.
+- Updated `build.sbt` to allow the root project to depend on all zoo subprojects for unified test-bench access.
+
 # 06/03/2026 16:10 Custom Python AST Compiler for Exotic Zoo Architectures
 - Implemented `zoo_compiler.py` parsing Python source files via the native `ast` parser and targeting DEC PDP-8 and Cray-1 assembly.
 - Added `Pdp8Codegen` subclass supporting accumulator-based scalar assignments, binary addition/AND expressions, variable allocation, and literal constants.

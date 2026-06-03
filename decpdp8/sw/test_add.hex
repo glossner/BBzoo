@@ -1,0 +1,20 @@
+# DEC PDP-8 Simple Addition Test Program
+# Address | Octal | Hex  | Instruction/Data
+# --------|-------|------|-----------------
+# 000     | 7200  | E00  | CLA CLL (Clear Accumulator and Link)
+# 001     | 1005  | 205  | TAD 005 (Two's complement add value at address 005)
+# 002     | 1006  | 206  | TAD 006 (Two's complement add value at address 006)
+# 003     | 3007  | 607  | DCA 007 (Deposit Accumulator to address 007 and clear AC)
+# 004     | 7402  | F02  | HLT (Halt)
+# 005     | 0005  | 005  | Data: 5
+# 006     | 0015  | 00D  | Data: 13
+# 007     | 0000  | 000  | Data: 0 (Result target, should become 18 = 0x12)
+
+E00
+205
+206
+607
+F02
+005
+00D
+000

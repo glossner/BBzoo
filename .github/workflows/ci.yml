@@ -10,6 +10,9 @@ on:
       - main
       - dev
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -27,8 +30,11 @@ jobs:
 
       - name: Install System Dependencies
         run: |
+          echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
+          echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | sudo tee /etc/apt/sources.list.d/sbt_old.list
+          curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF63486E45A8585D416D7" | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/sbt.gpg > /bin/null
           sudo apt-get update
-          sudo apt-get install -y verilator build-essential ccache
+          sudo apt-get install -y sbt verilator build-essential ccache
 
       - name: Set up Python
         uses: actions/setup-python@v5

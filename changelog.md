@@ -1,3 +1,9 @@
+# 06/04/2026 10:45 Educational CLI Simulator & Target Assembler Examples
+- Implemented a standalone command-line simulator runner (`SimulatorApp.scala`) to execute user assembly hex files with cycle-by-cycle register and memory tracing.
+- Created `/examples` directory with sample assembly programs (`mips1_fibonacci.asm`, `mos6502_factorial.asm`, and `intel8080a_loop.asm`) representing MIPS RISC, MOS Accumulator, and Intel Accumulator loop patterns.
+- Verified execution correctness of all examples via the `SimulatorApp` runner.
+- Documented custom assembly compilation and simulation procedures in the root `README.md` and `examples/README.md`.
+
 # 06/04/2026 10:34 PMU Metrics Enhancement & Benchmark Documentation
 - Enhanced the comparative architecture report (`pmu_report.md`) with four advanced hardware execution metrics: Code Footprint (words), ALU Duty Cycle, Memory Bandwidth Efficiency (Bytes/Instruction), and Register Port Stress.
 - Updated `ProfilerSpec.scala` to analytically compute and output the new metrics based on code size, word width, register footprints, and memory transactions.

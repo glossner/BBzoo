@@ -109,6 +109,35 @@ Execute the entire test suite using sbt:
 sbt test
 ```
 
+### 🖥️ Writing and Simulating Custom Assembly
+
+BrooksZoo provides an educational command-line tool to assemble and execute custom programs on the simulated cores.
+
+#### 1. Compile Assembly
+Example programs are provided in the [examples](file:///home/jglossner/GitRepos/BrooksZoo/examples) directory. Use the Python assembler to compile assembly files (`.asm`) into hexadecimal files (`.hex`):
+```bash
+python3 common/sw/zoo_assembler.py -arch <arch_name> -in <source.asm> -out <output.hex>
+```
+
+For example, to compile the MIPS Fibonacci program:
+```bash
+python3 common/sw/zoo_assembler.py -arch mips1 -in examples/mips1_fibonacci.asm -out examples/mips1_fibonacci.hex
+```
+
+#### 2. Run the Simulation
+Execute the standalone simulator on any core using the compiled hex files. Enable step-by-step tracing with `--trace`:
+```bash
+sbt "run --arch <arch_name> --hex <path_to_hex_file> [--trace] [--cycles <max_cycles>]"
+```
+
+For example, to run the MOS 6502 factorial simulation:
+```bash
+sbt "run --arch mos --hex examples/mos6502_factorial.hex --trace --cycles 200"
+```
+
+The simulator prints the cycle-by-cycle execution trace, register values, and a final performance summary alongside a differential memory dump showing exactly what addresses in memory changed.
+
+
 ### PMU Benchmarks
 To compare the execution statistics of the vector addition workload across all 45 architectures, run the comparative profiler test:
 ```bash

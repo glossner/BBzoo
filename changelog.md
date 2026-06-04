@@ -1,3 +1,6 @@
+# 06/04/2026 11:15 Instruction Simplification Rationale
+- Documented the design rationale for implementing minimal synthesizable instruction subsets in README.md, emphasizing educational readability, build performance, and baseline architectural paradigms.
+
 # 06/04/2026 11:12 Purpose-Conforming Assembly File Generation
 - Generated a dedicated assembly file (`sw/purpose_stress.asm`) and compiled hex file (`sw/purpose_stress.hex`) for all 45 simulated architectures inside their respective subdirectories.
 - Verified successful assembly of all 45 stress programs.

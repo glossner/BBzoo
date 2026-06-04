@@ -6,7 +6,7 @@ import scala.io.Source
 object Assembler {
   def main(args: Array[String]): Unit = {
     if (args.length < 5 || args(0) != "-arch") {
-      println("Usage: sbt \"common/runMain zoo.common.sw.Assembler -arch <pdp8|ibm360|cray1|m68k> <input.asm> -o <output.hex>\"")
+      println("Usage: sbt \"common/runMain zoo.common.sw.Assembler -arch <pdp8|ibm360|cray1|m68k|burroughsb5500|decpdp11|cdc6600|mos6502> <input.asm> -o <output.hex>\"")
       sys.exit(1)
     }
 
@@ -15,10 +15,14 @@ object Assembler {
     val output = args(4)
 
     val assembler = arch match {
-      case "pdp8"   => new Pdp8Assembler()
-      case "ibm360" => new Ibm360Assembler()
-      case "cray1"  => new Cray1Assembler()
-      case "m68k"   => new M68kAssembler()
+      case "pdp8"            => new Pdp8Assembler()
+      case "ibm360"          => new Ibm360Assembler()
+      case "cray1"           => new Cray1Assembler()
+      case "m68k"            => new M68kAssembler()
+      case "burroughsb5500"  => new B5500Assembler()
+      case "decpdp11"        => new Pdp11Assembler()
+      case "cdc6600"         => new Cdc6600Assembler()
+      case "mos6502"         => new Mos6502Assembler()
       case _ =>
         println(s"Unknown architecture: $arch")
         sys.exit(1)

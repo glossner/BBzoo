@@ -1,3 +1,9 @@
+# 06/03/2026 21:08 Expansion of BrooksZoo with Burroughs B5500, DEC PDP-11, CDC 6600, and MOS 6502
+- Implemented Burroughs B5500 (Stack), DEC PDP-11 (Orthogonal CISC), CDC 6600 (implicit Load/Store via Address Registers), and MOS 6502 (Accumulator-Index) architectures.
+- Added instruction decoders, cores with synthesizable performance monitoring units (PMUs), and test suites for all 4 new projects.
+- Developed Scala and Python assemblers for all 4 new architectures.
+- Unified the 4-element Vector Addition benchmark across all 8 processors and updated `ProfilerSpec.scala` to run them and output a consolidated PMU comparison report.
+
 # 06/03/2026 19:05 Unified Vector Addition Benchmark and IBM 360 Core Bug Fix
 - Designed and implemented a unified 4-element Vector Addition benchmark program across DEC PDP-8, IBM System/360, Cray-1, and Motorola 68000.
 - Fixed a hardware logic bug in `Ibm360Core` where RX arithmetic instructions incorrectly bypassed the ALU during writeback (MemToReg routing).

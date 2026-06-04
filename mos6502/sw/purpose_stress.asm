@@ -3,7 +3,6 @@ CLC
 ADC valA
 STA valY
 BRK
-
 ORG 20
 valX: DATA 10
 valA: DATA 20

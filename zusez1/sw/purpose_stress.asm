@@ -1,0 +1,14 @@
+PR valX
+MOV R1, R2
+PR valA
+ADD
+MOV R1, R2
+PR valB
+SUB
+PS valY
+HLT
+ORG 20
+valX: DATA 10
+valA: DATA 20
+valB: DATA 5
+valY: DATA 0

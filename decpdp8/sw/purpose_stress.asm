@@ -1,0 +1,9 @@
+ORG 0
+CLA CLL
+TAD valX
+TAD valA
+DCA valY
+HLT
+valX: DATA 10
+valA: DATA 20
+valY: DATA 0

@@ -1,0 +1,10 @@
+L valX
+ADD valA
+SUB valB
+S valY
+HLT
+ORG 20
+valX: DATA 10
+valA: DATA 20
+valB: DATA 5
+valY: DATA 0

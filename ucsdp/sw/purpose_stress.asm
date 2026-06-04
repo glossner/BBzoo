@@ -1,0 +1,9 @@
+PUSH valX
+PUSH valA
+ADD
+POP valY
+HALT
+ORG 20
+valX: DATA 10
+valA: DATA 20
+valY: DATA 0

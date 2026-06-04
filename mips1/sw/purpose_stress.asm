@@ -1,0 +1,9 @@
+LW R1, valX
+LW R2, valA
+ADDU R1, R1, R2
+SW R1, valY
+HALT
+ORG 20
+valX: DATA 10
+valA: DATA 20
+valY: DATA 0

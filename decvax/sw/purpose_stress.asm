@@ -1,0 +1,14 @@
+MOVL #valX, R0
+MOVL #valA, R1
+MOVL #valB, R2
+MOVL (R0), R3
+ADDL2 (R1), R3
+SUBL2 (R2), R3
+MOVL #valY, R4
+MOVL R3, (R4)
+HALT
+ORG 20
+valX: DATA 10
+valA: DATA 20
+valB: DATA 5
+valY: DATA 0

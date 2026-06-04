@@ -1,0 +1,15 @@
+MOVEA.L #valX, A0
+MOVE.L (A0), D0
+MOVEA.L #valA, A1
+MOVE.L (A1), D1
+ADD.L D1, D0
+MOVEA.L #valB, A2
+MOVE.L (A2), D2
+SUB.L D2, D0
+MOVEA.L #valY, A3
+MOVE.L D0, (A3)
+ORG 40
+valX: DATA 10
+valA: DATA 20
+valB: DATA 5
+valY: DATA 0

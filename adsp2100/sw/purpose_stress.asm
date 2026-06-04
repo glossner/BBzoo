@@ -1,0 +1,8 @@
+LD AX0, valX
+LD AY0, valA
+ADD AR
+ST AR, valY
+ORG 20
+valX: DATA 10
+valA: DATA 20
+valY: DATA 0

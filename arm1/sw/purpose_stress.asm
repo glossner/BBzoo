@@ -1,0 +1,8 @@
+LDR R1, valX
+LDR R2, valA
+ADD R1, R1, R2
+STR R1, valY
+ORG 20
+valX: DATA 10
+valA: DATA 20
+valY: DATA 0

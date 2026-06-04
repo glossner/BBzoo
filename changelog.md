@@ -1,3 +1,7 @@
+# 06/04/2026 11:12 Purpose-Conforming Assembly File Generation
+- Generated a dedicated assembly file (`sw/purpose_stress.asm`) and compiled hex file (`sw/purpose_stress.hex`) for all 45 simulated architectures inside their respective subdirectories.
+- Verified successful assembly of all 45 stress programs.
+
 # 06/04/2026 11:00 Documented Design Purposes & Assembly Stress Programs
 - Documented the primary historical design purpose of all 45 simulated architectures directly in their corresponding `arch.md` files.
 - Provided a purpose-conforming assembly language program inside each machine's `arch.md` file that stresses its simulated instruction set (sharing program layouts across same-purpose machines to the extent possible).

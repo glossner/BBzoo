@@ -1,0 +1,9 @@
+VLD V0, valX
+VLD V1, valY
+VADD V2, V0, V1
+VST V2, valZ
+HALT
+ORG 20
+valX: DATA 10
+valY: DATA 20
+valZ: DATA 0

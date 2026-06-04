@@ -1,0 +1,7 @@
+LDAA valX
+ADDA valA
+STAA valY
+ORG 20
+valX: DATA 10
+valA: DATA 20
+valY: DATA 0

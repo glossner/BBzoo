@@ -1,0 +1,9 @@
+LDX X0, 0
+LD ACC, valX(X0)
+ADD ACC, valA(X0)
+ST ACC, valY(X0)
+HLT
+ORG 20
+valX: DATA 10
+valA: DATA 20
+valY: DATA 0

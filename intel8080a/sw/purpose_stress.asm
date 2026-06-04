@@ -1,0 +1,9 @@
+LDA valX
+MOV B, A
+LDA valA
+ADD B
+STA valY
+ORG 20
+valX: DATA 10
+valA: DATA 20
+valY: DATA 0

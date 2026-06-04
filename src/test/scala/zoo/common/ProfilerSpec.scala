@@ -61,6 +61,11 @@ import zoo.icldap.{Core => IcldapCore}
 import zoo.goodmpp.{Core => GoodmppCore}
 import zoo.cm1.{Core => Cm1Core}
 import zoo.ibmmfast.{Core => IbmmfastCore}
+import zoo.multiflow.{Core => MultiflowCore}
+import zoo.cydra5.{Core => Cydra5Core}
+import zoo.tms320c6k.{Core => Tms320c6kCore}
+import zoo.crusoe.{Core => CrusoeCore}
+import zoo.itanium.{Core => ItaniumCore}
 
 class ProfilerSpec extends AnyFlatSpec with Matchers {
   behavior of "ZooArchitectureProfiler"
@@ -77,7 +82,7 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     if (foundFile.exists()) foundFile else new File(relativePath)
   }
 
-  it should "profile and compare execution statistics for all 45 cores" in {
+  it should "profile and compare execution statistics for all 59 cores" in {
     println("\n=== RUNNING BENCHMARKS & GATHERING PMU STATS ===")
 
     // 1. DEC PDP-8
@@ -2737,6 +2742,251 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       mem(27) shouldBe 44
     }
 
+    // 55. Multiflow TRACE
+    val multiflowHex = findWorkspaceFile("multiflow/sw/test_vector.hex")
+    val multiflowBytes = Source.fromFile(multiflowHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var multiflowCycles = 0L
+    var multiflowInsts = 0L
+    var multiflowReads = 0L
+    var multiflowWrites = 0L
+
+    simulate(new MultiflowCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- multiflowBytes.indices) mem(i) = multiflowBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      multiflowCycles = c.io.pmu_cycles.peek().litValue.toLong
+      multiflowInsts  = c.io.pmu_insts.peek().litValue.toLong
+      multiflowReads  = c.io.pmu_reads.peek().litValue.toLong
+      multiflowWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(92) shouldBe 11
+      mem(93) shouldBe 22
+      mem(94) shouldBe 33
+      mem(95) shouldBe 44
+    }
+
+    // 56. Cydrome Cydra 5
+    val cydra5Hex = findWorkspaceFile("cydra5/sw/test_vector.hex")
+    val cydra5Bytes = Source.fromFile(cydra5Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var cydra5Cycles = 0L
+    var cydra5Insts = 0L
+    var cydra5Reads = 0L
+    var cydra5Writes = 0L
+
+    simulate(new Cydra5Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- cydra5Bytes.indices) mem(i) = cydra5Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      cydra5Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      cydra5Insts  = c.io.pmu_insts.peek().litValue.toLong
+      cydra5Reads  = c.io.pmu_reads.peek().litValue.toLong
+      cydra5Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(92) shouldBe 11
+      mem(93) shouldBe 22
+      mem(94) shouldBe 33
+      mem(95) shouldBe 44
+    }
+
+    // 57. TI TMS320C6000
+    val tms320c6kHex = findWorkspaceFile("tms320c6k/sw/test_vector.hex")
+    val tms320c6kBytes = Source.fromFile(tms320c6kHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var tms320c6kCycles = 0L
+    var tms320c6kInsts = 0L
+    var tms320c6kReads = 0L
+    var tms320c6kWrites = 0L
+
+    simulate(new Tms320c6kCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- tms320c6kBytes.indices) mem(i) = tms320c6kBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      tms320c6kCycles = c.io.pmu_cycles.peek().litValue.toLong
+      tms320c6kInsts  = c.io.pmu_insts.peek().litValue.toLong
+      tms320c6kReads  = c.io.pmu_reads.peek().litValue.toLong
+      tms320c6kWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(92) shouldBe 11
+      mem(93) shouldBe 22
+      mem(94) shouldBe 33
+      mem(95) shouldBe 44
+    }
+
+    // 58. Transmeta Crusoe
+    val crusoeHex = findWorkspaceFile("crusoe/sw/test_vector.hex")
+    val crusoeBytes = Source.fromFile(crusoeHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var crusoeCycles = 0L
+    var crusoeInsts = 0L
+    var crusoeReads = 0L
+    var crusoeWrites = 0L
+
+    simulate(new CrusoeCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- crusoeBytes.indices) mem(i) = crusoeBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      crusoeCycles = c.io.pmu_cycles.peek().litValue.toLong
+      crusoeInsts  = c.io.pmu_insts.peek().litValue.toLong
+      crusoeReads  = c.io.pmu_reads.peek().litValue.toLong
+      crusoeWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(92) shouldBe 11
+      mem(93) shouldBe 22
+      mem(94) shouldBe 33
+      mem(95) shouldBe 44
+    }
+
+    // 59. Intel Itanium
+    val itaniumHex = findWorkspaceFile("itanium/sw/test_vector.hex")
+    val itaniumBytes = Source.fromFile(itaniumHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16).toInt).toArray
+    var itaniumCycles = 0L
+    var itaniumInsts = 0L
+    var itaniumReads = 0L
+    var itaniumWrites = 0L
+
+    simulate(new ItaniumCore) { c =>
+      val mem = Array.fill(256)(0L)
+      for (i <- 0 until (itaniumBytes.length / 2)) {
+        val w0 = itaniumBytes(2 * i).toLong & 0xFFFFFFFFL
+        val w1 = itaniumBytes(2 * i + 1).toLong & 0xFFFFFFFFL
+        mem(i) = (w1 << 32) | w0
+      }
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toLong
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          val wordAddr = addr >> 1
+          if (write) mem(wordAddr) = wdata
+          c.io.mem.rdata.poke(mem(wordAddr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      itaniumCycles = c.io.pmu_cycles.peek().litValue.toLong
+      itaniumInsts  = c.io.pmu_insts.peek().litValue.toLong
+      itaniumReads  = c.io.pmu_reads.peek().litValue.toLong
+      itaniumWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(50) shouldBe 11L
+      mem(51) shouldBe 22L
+      mem(52) shouldBe 33L
+      mem(53) shouldBe 44L
+    }
+
     // Print Consolidated Comparative Table
     // Print Consolidated Comparative Table
     def aluDutyCycle(arch: String, cycles: Long): String = {
@@ -2752,6 +3002,7 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
         case "b5500" | "ucsdp" => 6.0
         case "mos" | "intel8080a" | "motorola6800" | "pdp8" | "upd7720" | "tms32010" | "adsp2100" | "ibmmwave" | "amd2901" | "intel3002" | "imp16" | "mc10800" | "icldap" | "goodmpp" | "cm1" => 4.0
         case "illiac4" | "ibmmfast" => 8.0
+        case "multiflow" | "cydra5" | "tms320c6k" | "crusoe" | "itanium" => 4.0
         case _ => 4.0
       }
       if (cycles > 0) String.format("%.1f%%", Double.box((aluCycles / cycles.toDouble) * 100.0)) else "N/A"
@@ -2771,6 +3022,7 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
         case "mips1" | "arm1" | "berkeleyrisc" | "ibm6150" | "decvax" | "pdp11" | "m68k" => 2.5
         case "mos" | "intel8080a" | "motorola6800" | "pdp8" | "upd7720" | "tms32010" | "adsp2100" | "ibmmwave" | "amd2901" | "intel3002" | "imp16" | "mc10800" | "icldap" | "goodmpp" | "cm1" => 1.2
         case "b5500" | "ucsdp" | "hp3000" | "ethlilith" | "cambridgeedsac" | "manchestermu1" | "babbage" | "harvard" | "zuse" | "univac" | "princetonias" => 0.5
+        case "multiflow" | "cydra5" | "tms320c6k" | "crusoe" | "itanium" => 3.0
         case _ => 1.0
       }
       String.format("%.1f regs/inst", Double.box(factor))
@@ -2830,6 +3082,11 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     val goodmppCpi = if (goodmppInsts > 0) String.format("%.2f", Double.box(goodmppCycles.toDouble / goodmppInsts)) else "N/A"
     val cm1Cpi = if (cm1Insts > 0) String.format("%.2f", Double.box(cm1Cycles.toDouble / cm1Insts)) else "N/A"
     val ibmmfastCpi = if (ibmmfastInsts > 0) String.format("%.2f", Double.box(ibmmfastCycles.toDouble / ibmmfastInsts)) else "N/A"
+    val multiflowCpi = if (multiflowInsts > 0) String.format("%.2f", Double.box(multiflowCycles.toDouble / multiflowInsts)) else "N/A"
+    val cydra5Cpi    = if (cydra5Insts > 0)    String.format("%.2f", Double.box(cydra5Cycles.toDouble / cydra5Insts))       else "N/A"
+    val tms320c6kCpi = if (tms320c6kInsts > 0) String.format("%.2f", Double.box(tms320c6kCycles.toDouble / tms320c6kInsts)) else "N/A"
+    val crusoeCpi    = if (crusoeInsts > 0)    String.format("%.2f", Double.box(crusoeCycles.toDouble / crusoeInsts))       else "N/A"
+    val itaniumCpi   = if (itaniumInsts > 0)   String.format("%.2f", Double.box(itaniumCycles.toDouble / itaniumInsts))     else "N/A"
 
     val table = s"""
 | Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI | Code Footprint (words) | ALU Duty Cycle | Mem BW Efficiency | Register Port Stress |
@@ -2888,6 +3145,11 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
 | Goodyear MPP        | 1 (Bit-Serial)    | $goodmppCycles              | $goodmppInsts                   | $goodmppReads            | $goodmppWrites             | $goodmppCpi | ${goodmppBytes.length} | ${aluDutyCycle("goodmpp", goodmppCycles)} | ${memBwEfficiency(16.0, goodmppReads, goodmppWrites, goodmppInsts)} | ${regPortStress("goodmpp")} |
 | Connection Machine  | 1 (Bit-Serial)    | $cm1Cycles              | $cm1Insts                   | $cm1Reads            | $cm1Writes             | $cm1Cpi | ${cm1Bytes.length} | ${aluDutyCycle("cm1", cm1Cycles)} | ${memBwEfficiency(16.0, cm1Reads, cm1Writes, cm1Insts)} | ${regPortStress("cm1")} |
 | IBM MFAST           | 16 (VLIW)         | $ibmmfastCycles              | $ibmmfastInsts                   | $ibmmfastReads            | $ibmmfastWrites             | $ibmmfastCpi | ${ibmmfastBytes.length} | ${aluDutyCycle("ibmmfast", ibmmfastCycles)} | ${memBwEfficiency(16.0, ibmmfastReads, ibmmfastWrites, ibmmfastInsts)} | ${regPortStress("ibmmfast")} |
+| Multiflow TRACE     | 32                | $multiflowCycles              | $multiflowInsts                   | $multiflowReads            | $multiflowWrites             | $multiflowCpi | ${multiflowBytes.length} | ${aluDutyCycle("multiflow", multiflowCycles)} | ${memBwEfficiency(32.0, multiflowReads, multiflowWrites, multiflowInsts)} | ${regPortStress("multiflow")} |
+| Cydrome Cydra 5     | 32                | $cydra5Cycles              | $cydra5Insts                   | $cydra5Reads            | $cydra5Writes             | $cydra5Cpi | ${cydra5Bytes.length} | ${aluDutyCycle("cydra5", cydra5Cycles)} | ${memBwEfficiency(32.0, cydra5Reads, cydra5Writes, cydra5Insts)} | ${regPortStress("cydra5")} |
+| TI TMS320C6000      | 32                | $tms320c6kCycles              | $tms320c6kInsts                   | $tms320c6kReads            | $tms320c6kWrites             | $tms320c6kCpi | ${tms320c6kBytes.length} | ${aluDutyCycle("tms320c6k", tms320c6kCycles)} | ${memBwEfficiency(32.0, tms320c6kReads, tms320c6kWrites, tms320c6kInsts)} | ${regPortStress("tms320c6k")} |
+| Transmeta Crusoe    | 32                | $crusoeCycles              | $crusoeInsts                   | $crusoeReads            | $crusoeWrites             | $crusoeCpi | ${crusoeBytes.length} | ${aluDutyCycle("crusoe", crusoeCycles)} | ${memBwEfficiency(32.0, crusoeReads, crusoeWrites, crusoeInsts)} | ${regPortStress("crusoe")} |
+| Intel Itanium       | 64                | $itaniumCycles              | $itaniumInsts                   | $itaniumReads            | $itaniumWrites             | $itaniumCpi | ${itaniumBytes.length} | ${aluDutyCycle("itanium", itaniumCycles)} | ${memBwEfficiency(64.0, itaniumReads, itaniumWrites, itaniumInsts)} | ${regPortStress("itanium")} |
 """
 
     println("\n=== COMPARATIVE ARCHITECTURE PERFORMANCE REPORT ===")

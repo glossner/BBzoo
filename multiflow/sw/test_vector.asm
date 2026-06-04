@@ -1,0 +1,64 @@
+# Multiflow TRACE Vector Addition Benchmark
+ORG 0
+LD_CU R1, A0
+LD_CU R2, B0
+LD_CU R3, C0
+LD_CU R7, ONE
+NOP ; LD R7, R7 ; NOP
+
+# Element 0
+NOP ; LD R4, R1 ; NOP
+NOP ; LD R5, R2 ; NOP
+ADD R6, R4, R5 ; NOP ; NOP
+NOP ; ST R6, R3 ; NOP
+
+# Element 1
+ADD R1, R1, R7 ; NOP ; NOP
+ADD R2, R2, R7 ; NOP ; NOP
+ADD R3, R3, R7 ; NOP ; NOP
+NOP ; LD R4, R1 ; NOP
+NOP ; LD R5, R2 ; NOP
+ADD R6, R4, R5 ; NOP ; NOP
+NOP ; ST R6, R3 ; NOP
+
+# Element 2
+ADD R1, R1, R7 ; NOP ; NOP
+ADD R2, R2, R7 ; NOP ; NOP
+ADD R3, R3, R7 ; NOP ; NOP
+NOP ; LD R4, R1 ; NOP
+NOP ; LD R5, R2 ; NOP
+ADD R6, R4, R5 ; NOP ; NOP
+NOP ; ST R6, R3 ; NOP
+
+# Element 3
+ADD R1, R1, R7 ; NOP ; NOP
+ADD R2, R2, R7 ; NOP ; NOP
+ADD R3, R3, R7 ; NOP ; NOP
+NOP ; LD R4, R1 ; NOP
+NOP ; LD R5, R2 ; NOP
+ADD R6, R4, R5 ; NOP ; NOP
+NOP ; ST R6, R3 ; NOP
+
+HLT
+
+# Constants & Vector Data
+ORG 80
+ONE: DATA 1
+
+ORG 84
+A0: DATA 10
+A1: DATA 20
+A2: DATA 30
+A3: DATA 40
+
+ORG 88
+B0: DATA 1
+B1: DATA 2
+B2: DATA 3
+B3: DATA 4
+
+ORG 92
+C0: DATA 0
+C1: DATA 0
+C2: DATA 0
+C3: DATA 0

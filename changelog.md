@@ -1,3 +1,12 @@
+# 06/04/2026 15:23 VLIW House: Multiflow TRACE, Cydrome Cydra 5, TI TMS320C6000, Transmeta Crusoe, and Intel Itanium
+- Implemented five historical VLIW architectures under the new **VLIW House**: Multiflow TRACE, Cydrome Cydra 5, TI TMS320C6000, Transmeta Crusoe, and Intel Itanium.
+- Built synthesizable datapath cores, instruction decoders, and sbt test suites for all 5 architectures.
+- Added synthesizable Performance Monitoring Units (PMUs) to all 5 new cores to track cycles, instruction retirement, and memory read/write traffic.
+- Developed Python and Scala assemblers for all 5 new architectures and registered them globally.
+- Created architectural documentation (`arch.md`) and assembly vector addition test codes for all 5 architectures.
+- Integrated the new VLIW cores into the unified 4-element Vector Addition benchmark (`ProfilerSpec.scala`), compiling them, verifying correct computation, and generating comparison PMU metrics.
+- Reorganized `README.md` and `examples/README.md` to catalog all 59 architectures, establishing the new **VLIW House** category.
+
 # 06/04/2026 14:45 Array Processor House: ILLIAC IV, ICL DAP, Goodyear MPP, Thinking Machines CM-1, and IBM MFAST
 - Implemented five historical array processor architectures under the new **Array Processor House**: ILLIAC IV, ICL DAP, Goodyear MPP, Thinking Machines CM-1, and IBM MFAST.
 - Built synthesizable multi-cycle datapath cores, instruction decoders, and sbt test suites for all 5 architectures.

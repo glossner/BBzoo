@@ -1,0 +1,64 @@
+# Transmeta Crusoe x86-like Vector Addition Benchmark
+ORG 0
+LD_CU R1, A0
+LD_CU R2, B0
+LD_CU R3, C0
+LD_CU R7, ONE
+MOV R7, [R7]
+
+# Element 0
+MOV R4, [R1]
+MOV R5, [R2]
+ADD R4, R5
+MOV [R3], R4
+
+# Element 1
+ADD R1, R7
+ADD R2, R7
+ADD R3, R7
+MOV R4, [R1]
+MOV R5, [R2]
+ADD R4, R5
+MOV [R3], R4
+
+# Element 2
+ADD R1, R7
+ADD R2, R7
+ADD R3, R7
+MOV R4, [R1]
+MOV R5, [R2]
+ADD R4, R5
+MOV [R3], R4
+
+# Element 3
+ADD R1, R7
+ADD R2, R7
+ADD R3, R7
+MOV R4, [R1]
+MOV R5, [R2]
+ADD R4, R5
+MOV [R3], R4
+
+HLT
+
+# Constants & Vector Data
+ORG 80
+ONE: DATA 1
+
+ORG 84
+A0: DATA 10
+A1: DATA 20
+A2: DATA 30
+A3: DATA 40
+
+ORG 88
+B0: DATA 1
+B1: DATA 2
+B2: DATA 3
+B3: DATA 4
+
+ORG 92
+C0: DATA 0
+C1: DATA 0
+C2: DATA 0
+C3: DATA 0

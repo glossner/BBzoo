@@ -1,12 +1,12 @@
 # BBZoo 🦁
 
-Welcome to **BBZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit A. Blaauw and Frederick P. Brooks, Jr. This repository implements **54 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
+Welcome to **BBZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit A. Blaauw and Frederick P. Brooks, Jr. This repository implements **59 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
 
 ---
 
 ## 🏛️ Architectural Houses
 
-The architectures in the zoo are organized into 14 distinct "houses" based on their core datapath and register organization paradigms:
+The architectures in the zoo are organized into 15 distinct "houses" based on their core datapath and register organization paradigms:
 
 ### 1. Pioneer House
 *Characterized by the earliest explorations of stored-program, mechanical, or relay-based calculation.*
@@ -104,6 +104,14 @@ The architectures in the zoo are organized into 14 distinct "houses" based on th
 - 🛰️ **Goodyear MPP** (Goodyear / NASA, 1983) — [goodmpp](goodmpp) / [arch.md](goodmpp/arch.md)
 - 🕸️ **Thinking Machines CM-1** (Thinking Machines, 1985) — [cm1](cm1) / [arch.md](cm1/arch.md)
 - ⚡ **IBM MFAST** (IBM, 1998) — [ibmmfast](ibmmfast) / [arch.md](ibmmfast/arch.md)
+
+### 15. VLIW House
+*Architectures utilizing wide instruction words containing multiple parallel operations packed into bundles.*
+- ⚡ **Multiflow TRACE** (Josh Fisher, 1987) — [multiflow](multiflow) / [arch.md](multiflow/arch.md)
+- 🌀 **Cydrome Cydra 5** (Bob Rau, 1987) — [cydra5](cydra5) / [arch.md](cydra5/arch.md)
+- 🧮 **TI TMS320C6000** (Texas Instruments, 1997) — [tms320c6k](tms320c6k) / [arch.md](tms320c6k/arch.md)
+- 🔌 **Transmeta Crusoe** (David Ditzel, 2000) — [crusoe](crusoe) / [arch.md](crusoe/arch.md)
+- 🏛️ **Intel Itanium** (Intel / HP, 2001) — [itanium](itanium) / [arch.md](itanium/arch.md)
 
 ---
 
@@ -227,3 +235,8 @@ This design choice keeps the RTL implementation of each core clean, highly reada
 | Goodyear MPP        | 1 (Bit-Serial)    | 558              | 100                   | 132            | 64             | 5.58 | 165 | 0.7% | 3.92 B/inst | 1.2 regs/inst |
 | Connection Machine  | 1 (Bit-Serial)    | 548              | 98                   | 128            | 64             | 5.59 | 158 | 0.7% | 3.92 B/inst | 1.2 regs/inst |
 | IBM MFAST           | 16 (VLIW)         | 39              | 8                   | 8            | 4             | 4.88 | 28 | 20.5% | 3.00 B/inst | 4.5 regs/inst |
+| Multiflow TRACE     | 32                | 106              | 31                   | 9            | 4             | 3.42 | 96 | 3.8% | 1.68 B/inst | 3.0 regs/inst |
+| Cydrome Cydra 5     | 32                | 94              | 27                   | 9            | 4             | 3.48 | 96 | 4.3% | 1.93 B/inst | 3.0 regs/inst |
+| TI TMS320C6000      | 32                | 95              | 31                   | 9            | 4             | 3.06 | 96 | 4.2% | 1.68 B/inst | 3.0 regs/inst |
+| Transmeta Crusoe    | 32                | 87              | 31                   | 9            | 4             | 2.81 | 96 | 4.6% | 1.68 B/inst | 3.0 regs/inst |
+| Intel Itanium       | 64                | 124              | 31                   | 9            | 4             | 4.00 | 108 | 3.2% | 3.35 B/inst | 3.0 regs/inst |

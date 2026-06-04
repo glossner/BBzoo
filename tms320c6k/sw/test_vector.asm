@@ -1,0 +1,64 @@
+# TI TMS320C6000 Vector Addition Benchmark
+ORG 0
+LD_CU R1, A0
+LD_CU R2, B0
+LD_CU R3, C0
+LD_CU R0, ONE
+LDW *R0, R0
+
+# Element 0
+LDW *R1, R4
+|| LDW *R2, R5
+ADD R4, R5, R6
+STW R6, *R3
+
+# Element 1
+ADD R1, R0, R1
+|| ADD R2, R0, R2
+|| ADD R3, R0, R3
+LDW *R1, R4
+|| LDW *R2, R5
+ADD R4, R5, R6
+STW R6, *R3
+
+# Element 2
+ADD R1, R0, R1
+|| ADD R2, R0, R2
+|| ADD R3, R0, R3
+LDW *R1, R4
+|| LDW *R2, R5
+ADD R4, R5, R6
+STW R6, *R3
+
+# Element 3
+ADD R1, R0, R1
+|| ADD R2, R0, R2
+|| ADD R3, R0, R3
+LDW *R1, R4
+|| LDW *R2, R5
+ADD R4, R5, R6
+STW R6, *R3
+
+HLT
+
+# Constants & Vector Data
+ORG 80
+ONE: DATA 1
+
+ORG 84
+A0: DATA 10
+A1: DATA 20
+A2: DATA 30
+A3: DATA 40
+
+ORG 88
+B0: DATA 1
+B1: DATA 2
+B2: DATA 3
+B3: DATA 4
+
+ORG 92
+C0: DATA 0
+C1: DATA 0
+C2: DATA 0
+C3: DATA 0

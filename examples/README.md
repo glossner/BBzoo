@@ -6,7 +6,7 @@ Welcome to the **BBZoo** educational workspace! This guide explains how to write
 
 ## 1. Architectural Paradigms in the Zoo
 
-BBZoo hosts 54 classic architectures classified into different "Houses" based on their design paradigm:
+BBzoo hosts 59 classic architectures classified into different "Houses" based on their design paradigm:
 
 | House | Paradigm | Examples | Register File Structure |
 |---|---|---|---|
@@ -17,6 +17,7 @@ BBZoo hosts 54 classic architectures classified into different "Houses" based on
 | **GPU House** | Parallel, SIMD, and VLIW execution | NVIDIA GeForce 256, ARM Mali-200, AMD R600 | Vector / VLIW register channels |
 | **Bit-Slice House** | Modular bit-slice slice-cascading logic | Am2901, Intel 3002, IMP-16, MC10800 | Cascaded ALUs + general register slices |
 | **Array Processor House** | SIMD, Bit-Serial, and VLIW processing elements | ILLIAC IV, ICL DAP, Goodyear MPP, CM-1, MFAST | Central control registers + parallel PE accumulator/RAM arrays |
+| **VLIW House** | Explicitly parallel bundle execution | Multiflow TRACE, Cydra 5, TMS320C6000, Crusoe, Itanium | Wide bundle packet routing + static/rotating registers |
 
 ---
 

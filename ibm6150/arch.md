@@ -54,3 +54,17 @@ IBM 6150 ROMP instructions in this model are 32-bit words, with absolute address
 - **Register-Indirect & Displacement Addressing**: Address calculation modes such as register plus displacement, indexed addressing, and autoincrement are unimplemented.
 - **Floating Point Co-processor**: FPU registers and decimal operations are not simulated.
 - **Virtual Memory & MMU**: The memory management unit (which featured an advanced inverted page table design) is not modeled.
+
+## Architectural Design Purpose
+
+High-performance computer-aided design (CAD) workstations utilizing early pipelined RISC execution paradigms.
+
+## Target Purpose Stress Program
+
+```assembly
+# IBM 6150 RT PC arithmetic: y = x + a
+L R0, 20
+L R1, 21
+A R0, R1
+ST R0, 22
+```

@@ -54,3 +54,17 @@ In our simulation, absolute load/store instructions span 2 words where the targe
 - **Secondary Registers**: Alternative register banks (AX1, AY1, MX0, MY0, etc.) are omitted.
 - **Data Address Generators (DAGs)**: DAG1 and DAG2 with post-modify and bit-reverse addressing features are not implemented.
 - **Hardware MAC and Shifters**: The MAC hardware and multi-bit barrel shifter are simplified.
+
+## Architectural Design Purpose
+
+Real-time acoustic analysis, audio filter processing, and industrial control instrumentation.
+
+## Target Purpose Stress Program
+
+```assembly
+# ADI ADSP-2100 DSP arithmetic: y = x + a
+LD AX0, 20
+LD AY0, 21
+ADD AR
+ST AR, 22
+```

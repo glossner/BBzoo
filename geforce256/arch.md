@@ -43,3 +43,19 @@ In our simulation, instructions are 32-bit wide. Absolute load/store instruction
 - **ST R[src], addr** (`0x30`): Store 32-bit value from GPR R[src] into memory address `addr`.
 - **COMBINE R[dest], R[srcA], R[srcB], R[srcC], R[srcD]** (`0x20`): Performs the register combiner operation: `R[dest] = (R[srcA] * R[srcB]) + (R[srcC] * R[srcD])`.
 - **HALT** (`0x00`): Halts execution.
+
+## Architectural Design Purpose
+
+Introducing hardware Transform & Lighting (T&L) and configurable Register Combiners for multi-texture pixel blending.
+
+## Target Purpose Stress Program
+
+```assembly
+# NVIDIA GeForce 256 texture blend: R0 = (R0 * R1) + (R2 * R3)
+LD R1, 24    # Scale factor 1
+LD R3, 24    # Scale factor 1
+LD R0, 20    # Input color A
+LD R2, 21    # Input color B
+COMBINE R0, R0, R1, R2, R3
+ST R0, 22
+```

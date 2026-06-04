@@ -43,3 +43,18 @@ In our simulation, instructions are 32-bit wide. Absolute load/store instruction
 - **ST R[src], addr** (`0x30`): Store 32-bit value from GPR R[src] into memory address `addr`.
 - **HSR R[dest], R[src1], R[src2], R[depth_reg]** (`0x20`): Conditional addition representing Hidden Surface Removal: if `R[depth_reg]` is less than the internal `DEPTH` register, set `R[dest] = R[src1] + R[src2]` and update `DEPTH = R[depth_reg]`.
 - **HALT** (`0x00`): Halts execution.
+
+## Architectural Design Purpose
+
+Tile-Based Deferred Rendering with hardware Hidden Surface Removal (HSR) depth sorting.
+
+## Target Purpose Stress Program
+
+```assembly
+# PowerVR Series 1 Fragment HSR: colorC = HSR(colorA, colorB, Depth)
+LD R3, 24    # Fragment Depth
+LD R0, 20    # Color A
+LD R1, 21    # Color B
+HSR R0, R0, R1, R3
+ST R0, 22
+```

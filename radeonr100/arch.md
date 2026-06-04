@@ -43,3 +43,18 @@ In our simulation, instructions are 32-bit wide. Absolute load/store instruction
 - **ST R[src], addr** (`0x30`): Store 32-bit value from GPR R[src] into memory address `addr`.
 - **TAPESTRY R[dest], R[srcA], R[srcB], R[srcC]** (`0x20`): Performs Pixel Tapestry combining logic: `R[dest] = (R[srcA] * R[srcB]) + R[srcC]`.
 - **HALT** (`0x00`): Halts execution.
+
+## Architectural Design Purpose
+
+Environmental texture mapping and programmable pixel tapestries for early 3D shader simulation.
+
+## Target Purpose Stress Program
+
+```assembly
+# ATI Radeon R100 Pixel Tapestry: R0 = (R0 * R1) + R2
+LD R1, 24    # Scale factor 1
+LD R0, 20    # Input color A
+LD R2, 21    # Input color B
+TAPESTRY R0, R0, R1, R2
+ST R0, 22
+```

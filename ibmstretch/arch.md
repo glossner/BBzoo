@@ -39,3 +39,18 @@ The IBM Stretch instruction format represented in this simple 64-bit core is:
 - **Bit-level memory addressing**: True bit-addressable memory offsets and variable byte sizes are not implemented.
 - **Out-of-order execution lookahead**: The lookahead buffer and instruction completion buffers are not simulated.
 - **Floating Point ALU**: Hardware floating-point operations and formats are not modeled.
+
+## Architectural Design Purpose
+
+Pioneering high-speed pipelined supercomputing with multi-register indexing, branch lookahead, and decimal math.
+
+## Target Purpose Stress Program
+
+```assembly
+# IBM Stretch Indexed Polynomial evaluation: y = x + a
+LDX X0, 0
+LD ACC, 20(X0)
+ADD ACC, 21(X0)
+ST ACC, 22(X0)
+HLT
+```

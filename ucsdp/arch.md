@@ -53,3 +53,18 @@ In our simulation, absolute load/store instructions span 2 words where the targe
 - **Pointer/Relative Addressing**: Instructions for accessing variables via static/dynamic links (LOD, STR, etc.) are not modeled.
 - **Procedure Call / Return**: Activation record allocation and program jumps (MST, CUP, ENT, RET) are not simulated.
 - **Set & Array operations**: Pascal-specific set arithmetic and array indexing (DEC, IND, etc.) are unimplemented.
+
+## Architectural Design Purpose
+
+Portable Pascal P-code execution in hardware to achieve cross-platform software distribution.
+
+## Target Purpose Stress Program
+
+```assembly
+# UCSD Pascal P-Machine Stack evaluation: y = x + a
+PUSH 20   # Push x
+PUSH 21   # Push a
+ADD       # Add (x + a)
+POP 22    # Pop and store to y
+HALT
+```

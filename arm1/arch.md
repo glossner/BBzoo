@@ -54,3 +54,17 @@ In our simulation, absolute load/store instructions span 2 words where the targe
 - **Multiplication**: The MUL and MLA instructions are not modeled.
 - **Branches**: Conditional branch instructions (B, BL) are not modeled.
 - **Status Registers**: The Current Program Status Register (CPSR) and its flags (N, Z, C, V) are not simulated.
+
+## Architectural Design Purpose
+
+Low-power mobile computing and coprocessor acceleration introducing conditional instructions and barrel shift logic.
+
+## Target Purpose Stress Program
+
+```assembly
+# ARM1 arithmetic: y = x + a
+LDR R1, 20
+LDR R2, 21
+ADD R1, R1, R2
+STR R1, 22
+```

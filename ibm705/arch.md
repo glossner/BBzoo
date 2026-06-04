@@ -37,3 +37,18 @@ In this simulator, each 35-bit instruction is structured as:
 - **Accumulator Partitioning**: Partitioned Accumulator B and multi-character editing logic are not simulated.
 - **Variable Field Length Scans**: Character-by-character memory scans are simplified to standard 35-bit parallel reads and writes.
 - **Auxiliary Registers**: Non-arithmetic control registers and auxiliary storage units are omitted.
+
+## Architectural Design Purpose
+
+Large-scale commercial record processing, business accounting, and inventory tracking utilizing variable character-field lengths.
+
+## Target Purpose Stress Program
+
+```assembly
+# IBM 705 Polynomial Evaluation: y = (x + a) - b
+LD 20
+ADD 21
+SUB 22
+ST 23
+HLT
+```

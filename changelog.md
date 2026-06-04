@@ -1,3 +1,8 @@
+# 06/04/2026 11:00 Documented Design Purposes & Assembly Stress Programs
+- Documented the primary historical design purpose of all 45 simulated architectures directly in their corresponding `arch.md` files.
+- Provided a purpose-conforming assembly language program inside each machine's `arch.md` file that stresses its simulated instruction set (sharing program layouts across same-purpose machines to the extent possible).
+- Verified assembly and execution of the new purpose-conforming stress programs on the simulated cores using the Python assembler and standalone Scala CLI simulator runner.
+
 # 06/04/2026 10:45 Educational CLI Simulator & Target Assembler Examples
 - Implemented a standalone command-line simulator runner (`SimulatorApp.scala`) to execute user assembly hex files with cycle-by-cycle register and memory tracing.
 - Created `/examples` directory with sample assembly programs (`mips1_fibonacci.asm`, `mos6502_factorial.asm`, and `intel8080a_loop.asm`) representing MIPS RISC, MOS Accumulator, and Intel Accumulator loop patterns.

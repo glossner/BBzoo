@@ -38,3 +38,21 @@ In this simulator, each 40-bit word is structured as:
 - **Bi-Quinary Hardware Checks**: The simulated Chisel core operates on binary representation and does not model bi-quinary error flags.
 - **Hardware Multiply & Divide**: Full 20-digit double accumulator arithmetic operations are not implemented.
 - **Magnetic Drum Rotational Latency**: Drum read/write head seek times are not modeled; memory accesses resolve in a single clock cycle.
+
+## Architectural Design Purpose
+
+Medium-scale business accounting, payroll, and educational/scientific data processing using magnetic drum memory.
+
+## Target Purpose Stress Program
+
+```assembly
+# IBM 650 Polynomial Evaluation: y = (x + a) - b
+# Instructions chain next-instruction addresses on the magnetic drum
+LD valX, inst1
+inst1: ADD valA, inst2
+inst2: ST valY, inst3
+inst3: HLT
+valX: DATA 10
+valA: DATA 20
+valY: DATA 0
+```

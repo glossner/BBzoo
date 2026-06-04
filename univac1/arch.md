@@ -39,3 +39,18 @@ In this simulator, the 72-bit instruction word is formatted as:
 - **Excess-3 and Alphanumeric Math**: The 6-bit excess-3 representation and sign/decimal alignment are simplified to standard 72-bit binary integer math.
 - **Mercury Tube Recirculation Latency**: The serial access times of mercury delay lines are not simulated (memory behaves as random-access SRAM).
 - **Tape I/O (UNISERVO)**: Magnetic tape system reads and writes are not simulated.
+
+## Architectural Design Purpose
+
+Large-scale commercial data processing, business accounting, and census tabulation.
+
+## Target Purpose Stress Program
+
+```assembly
+# Univac I Polynomial Evaluation: y = (x + a) - b
+B 20    # Load x into accumulator
+A 21    # Add a to accumulator
+S 22    # Subtract b from accumulator
+H 23    # Store y
+Q       # Quit
+```

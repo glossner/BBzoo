@@ -48,3 +48,22 @@ The standard double-operand instruction (MOV, ADD, SUB, etc.) utilizes the follo
 - **Byte-level Operations**: Byte/Word selection flag (bit 15 of opcode in standard PDP-11) is not implemented.
 - **Single-Operand Instructions**: Unary operations like `CLR` (Clear), `DEC` (Decrement), `INC` (Increment), `TST` (Test), and `NEG` (Negate) are not implemented.
 - **Conditionals and Traps**: Conditional branches (`BEQ`, `BNE`, etc.), subroutines (`JSR`/`RTS`), and software trap instructions (`TRAP`, `EMT`) are not implemented.
+
+## Architectural Design Purpose
+
+Highly versatile general-purpose minicomputer and time-sharing system introducing a clean, orthogonal addressing model.
+
+## Target Purpose Stress Program
+
+```assembly
+# DEC PDP-11 Polynomial evaluation: y = (x + a) - b
+MOV #20, R0    # Address of x
+MOV #21, R1    # Address of a
+MOV #22, R2    # Address of b
+MOV (R0), R3   # Load x
+ADD (R1), R3   # Add a
+SUB (R2), R3   # Subtract b
+MOV #23, R4    # Address of y
+MOV R3, (R4)   # Store y
+HALT
+```

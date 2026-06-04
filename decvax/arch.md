@@ -45,3 +45,22 @@ Operand specifiers are formatted as a single byte:
 - **3-Operand Instructions**: Operations like `ADDL3` (Add Longword 3-operand) are not supported.
 - **Alternative Data Types**: Quadword, octaword, floating-point, and packed decimal data types are not simulated.
 - **Non-word alignment**: Variable-length byte-level streams (where opcodes and specifiers cross 32-bit word boundaries) are not simulated.
+
+## Architectural Design Purpose
+
+Virtual memory VAX minicomputer for enterprise computing featuring a comprehensive orthogonal instruction set.
+
+## Target Purpose Stress Program
+
+```assembly
+# DEC VAX Polynomial evaluation: y = (x + a) - b
+MOVL #20, R0
+MOVL #21, R1
+MOVL #22, R2
+MOVL (R0), R3
+ADDL2 (R1), R3
+SUBL2 (R2), R3
+MOVL #23, R4
+MOVL R3, (R4)
+HALT
+```

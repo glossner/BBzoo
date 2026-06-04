@@ -37,3 +37,16 @@ The CDC 6600 PPU uses a 12-bit instruction format:
 - **18-bit Addressing / Long Format**: 24-bit instruction formats (using two 12-bit words) for addressing up to 4096 memory words directly or relative to index registers are not implemented.
 - **Channel I/O**: Channel transfer instructions (such as IAM, OAM, ACN, etc.) for communication with central memory and external I/O channels are not simulated.
 - **Register Operations**: Operations involving non-ACC index registers or PPU register swapping are not simulated.
+
+## Architectural Design Purpose
+
+Offloading input/output (I/O) processing and network control from the main central processor of the supercomputer.
+
+## Target Purpose Stress Program
+
+```assembly
+# CDC 6600 PPU I/O Processing: y = x + a
+LD 20
+ADD 21
+ST 22
+```

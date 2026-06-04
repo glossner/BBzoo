@@ -53,3 +53,16 @@ In our simulation, absolute load/store instructions span 2 words where the targe
 - **Table Read / Write**: The TBLR and TBLW instructions are not modeled.
 - **Hardware Multiplier / Shifters**: The 16x16 hardware multiplier and input/output shifters are not simulated; instead, standard addition is used.
 - **Auxiliary Registers (AR0, AR1)**: Pointer registers and auto-increment indirect addressing are unimplemented.
+
+## Architectural Design Purpose
+
+High-speed voice, speech synthesis, and radar digital signal processing utilizing a hardware multiplier.
+
+## Target Purpose Stress Program
+
+```assembly
+# TI TMS32010 DSP arithmetic: y = x + a
+LAC 20
+ADD 21
+SACL 22
+```

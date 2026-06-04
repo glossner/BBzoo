@@ -37,3 +37,16 @@ In this simulator, each instruction is structured as a 36-bit word:
 - **Word Mark Logic**: Word mark setting (`SW`), clearing (`CW`), and checking during arithmetic carry propagation are not simulated; instructions operate on 36-bit parallel word fields.
 - **Variable Instruction Lengths**: Physical 1401 instructions spanned 1, 2, 4, 5, 7, or 8 characters; the simulator uses fixed 36-bit (1-word) instructions.
 - **Modifier Characters**: Instruction modifier fields (`d-modifier`) are not simulated.
+
+## Architectural Design Purpose
+
+Pervasive commercial business data processing, card manipulation, and high-speed report printing.
+
+## Target Purpose Stress Program
+
+```assembly
+# IBM 1401 Polynomial Evaluation: y = x + a (memory-to-memory copy and arithmetic)
+MC 20, 22  # Move character x to y
+A 21, 22   # Add character a to y
+HLT
+```

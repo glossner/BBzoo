@@ -57,3 +57,17 @@
 - **Floating Point**: Single-precision, double-precision, and extended-precision floating point instructions are not implemented.
 - **Privileged System State**: Program Status Word (PSW) controls, supervisor calls, and storage protection keys are not implemented.
 - **Channel I/O**: Mainframe input/output channels are not modeled.
+
+## Architectural Design Purpose
+
+A unified, single ISA mainframe family consolidating business and scientific calculations under one architecture.
+
+## Target Purpose Stress Program
+
+```assembly
+# IBM System/360 Polynomial evaluation: y = (x + a) - b
+L 1, 20    # Load x into register 1
+A 1, 21    # Add a
+S 1, 22    # Subtract b
+ST 1, 23   # Store y
+```

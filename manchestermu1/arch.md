@@ -38,3 +38,20 @@ Manchester Baby instructions are 32 bits wide, but utilize only the lower 16 bit
 ## Unimplemented Instructions / Features
 - **Williams Tube Refresh Cycles**: The electrostatic charge decay and refresh sweep cycles are not simulated (modeled as standard SRAM).
 - **Conditional Skip**: The `NUM` instruction (skip next instruction if Accumulator is negative) is not implemented in this simulator.
+
+## Architectural Design Purpose
+
+Validating the feasibility of electronic stored-program computing and CRT electrostatic random-access memory (Williams Tube).
+
+## Target Purpose Stress Program
+
+```assembly
+# Manchester Baby Polynomial Evaluation: y = (x + a) - b
+LDN 20  # Load -x from address 20
+SUB 21  # Subtract a from address 21 (ACC = -x - a)
+STO 23  # Store temp = -(x + a) to address 23
+LDN 22  # Load -b from address 22
+SUB 23  # Subtract temp (ACC = -b - (-(x+a)) = x + a - b)
+STO 24  # Store y to address 24
+STP
+```

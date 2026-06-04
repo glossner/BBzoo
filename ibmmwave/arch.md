@@ -54,3 +54,17 @@ In our simulation, absolute load/store instructions span 2 words where the targe
 - **General-purpose Register File**: Alternate register groups are omitted.
 - **Direct Memory Access (DMA) & PC Bus Interface**: Host interface logic, ISA/PCI bus interface, and DMA controllers are not modeled.
 - **Hardware MIDI/Modem synthesis logic**: Dedicate hardware accelerators are not simulated.
+
+## Architectural Design Purpose
+
+High-speed desktop multimedia audio, telephony, and dial-up modem signal processing.
+
+## Target Purpose Stress Program
+
+```assembly
+# IBM MWave DSP arithmetic: y = x + a
+LD R1, 20
+LD R2, 21
+ADD
+ST R1, 22
+```

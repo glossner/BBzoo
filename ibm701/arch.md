@@ -40,3 +40,18 @@ In this simulator, each instruction is formatted as:
 - **Index Registers**: Unlike the IBM 704, index registers and indexing options are not present on the IBM 701.
 - **Shift Operations**: Bitwise shifts of accumulator values are omitted.
 - **Electrostatic Memory Timing**: Williams tube refresh and cycle delays are not modeled.
+
+## Architectural Design Purpose
+
+Large-scale scientific modeling, defense calculations, and military cryptanalysis.
+
+## Target Purpose Stress Program
+
+```assembly
+# IBM 701 Polynomial Evaluation: y = (x + a) - b
+LD 20
+ADD 21
+SUB 22
+ST 23
+HLT
+```

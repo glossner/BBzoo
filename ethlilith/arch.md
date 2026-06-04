@@ -53,3 +53,18 @@ In our simulation, absolute load/store instructions span 2 words where the targe
 - **M-code Instructions**: The vast majority of Modula-2 M-code bytecodes (LFC, LI, LGB, etc.) are unimplemented.
 - **Local/Global Frame Addressing**: Frame offsets and dynamic links are not modeled.
 - **Display Register Stack**: The display registers for nesting scopes are not simulated.
+
+## Architectural Design Purpose
+
+Direct, high-performance execution of Modula-2 programs on a stack-oriented academic workstation.
+
+## Target Purpose Stress Program
+
+```assembly
+# Ethlilith Stack expression evaluation: y = x + a
+PUSH 20   # Push x
+PUSH 21   # Push a
+ADD       # Add (x + a)
+POP 22    # Pop and store to y
+HALT
+```

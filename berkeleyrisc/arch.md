@@ -54,3 +54,17 @@ In our simulation, absolute load/store instructions span 2 words where the targe
 - **Branches and Jumps**: Conditional branches (JMP, JMPR) and subroutine calls (CALL, RET) are not simulated.
 - **Immediate Addressing**: Immediate values in ALU instructions are not supported.
 - **Byte/Halfword Loads and Stores**: Only word-aligned 32-bit accesses are implemented.
+
+## Architectural Design Purpose
+
+Exploring register window designs and simplified load-store RISC instruction layouts to optimize compiler compilation.
+
+## Target Purpose Stress Program
+
+```assembly
+# Berkeley RISC-I arithmetic: y = x + a
+LD R1, 20
+LD R2, 21
+ADD R1, R1, R2
+ST R1, 22
+```

@@ -48,3 +48,16 @@ Motorola 6800 instructions vary from 1 to 3 bytes long based on the addressing m
 - **Index Register (X) & Stack Pointer (SP)**: Operations using the 16-bit index register X (LDX, STX, INX, DEX) or stack pointer (push/pop instructions) are not implemented.
 - **Other Addressing Modes**: Immediate, direct (zero page equivalent), indexed, and relative addressing modes are not simulated.
 - **Branch and Subroutine Flow**: Conditional branches (BNE, BEQ, BSR) and jumps (JMP, RTS) are not supported.
+
+## Architectural Design Purpose
+
+Early industrial process instrumentation and low-cost microcomputer system control.
+
+## Target Purpose Stress Program
+
+```assembly
+# Motorola 6800 Arithmetic: y = x + a
+LDAA 20
+ADDA 21
+STAA 22
+```

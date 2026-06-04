@@ -39,3 +39,20 @@ The Burroughs B5500 utilizes 48-bit word structures. An instruction word can pac
 - **Automatic Stack Spilling**: Hardware-managed stack frame allocation, display registers (D0-D31 for nested lexical scope pointers), and memory spilling of TOS registers are not simulated.
 - **Data Tagging**: Word-level tag bits identifying integers, single/double-precision floats, program descriptors, and control words are not implemented.
 - **ALGOL Subroutine Calls**: Nested block entry/exit and program control words (RCW, MSCW) are not simulated.
+
+## Architectural Design Purpose
+
+Direct high-level language (Algol) compiler target execution utilizing evaluation stacks in hardware.
+
+## Target Purpose Stress Program
+
+```assembly
+# Burroughs B5500 Stack expression evaluation: y = (x + a) - b
+PUSH 20   # Push x
+PUSH 21   # Push a
+ADD       # Add (x + a)
+PUSH 22   # Push b
+SUB       # Subtract ((x + a) - b)
+POP 23    # Pop and store to y
+HLT
+```

@@ -41,3 +41,18 @@ In this simulator, the 24-bit Out/In/Op tape format is represented inside a 64-b
 - **Mechanical decimal wheel simulation**: Simplified internally to 64-bit binary integers.
 - **Specialized Interpolators**: Built-in electromechanical units for calculating trigonometric (sine, cosine) and logarithmic functions are not implemented.
 - **Constant Switches**: The 60 manual rotary switches used to input hardcoded program constants are replaced by a synthesizable register test-write port.
+
+## Architectural Design Purpose
+
+Performing long, complex scientific and ballistics calculations automatically using electro-mechanical relay sequences.
+
+## Target Purpose Stress Program
+
+```assembly
+# Harvard Mark I Polynomial Evaluation: y = (x + a) - b
+# Registers: R20 (x), R21 (a), R22 (b), R23 (y)
+MOV R20, R23
+ADD R21, R23
+SUB R22, R23
+HLT
+```

@@ -41,3 +41,17 @@ The STC ZEBRA utilizes a 33-bit instruction word layout:
 - **Register Indexing**: Indexing operations using the 5-bit register field are not simulated.
 - **Rotations and Shifts**: Bit-level shift and rotate operations are not implemented.
 - **Drum Latency Optimization**: Optimum programming timing simulator for drum revolution optimization is not implemented.
+
+## Architectural Design Purpose
+
+Exploring microprogrammed CPU designs to simplify hardware using functional-bit binary instruction layouts.
+
+## Target Purpose Stress Program
+
+```assembly
+# STC ZEBRA Polynomial evaluation: y = x + a
+LD 20
+ADD 21
+ST 22
+HLT
+```

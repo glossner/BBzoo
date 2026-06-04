@@ -43,3 +43,18 @@ In our simulation, instructions are 32-bit wide. Absolute load/store instruction
 - **VST V[src], addr** (`0x30`): Store 4 consecutive 32-bit values from SIMD vector register V[src] into memory starting at address `addr`.
 - **VADD V[dest], V[src1], V[src2]** (`0x20`): Perform element-wise parallel vector addition: `V[dest][j] = V[src1][j] + V[src2][j]` for `j` in 0..3.
 - **HALT** (`0x00`): Halts execution.
+
+## Architectural Design Purpose
+
+Embedded and mobile 3D vertex processing and texture rendering utilizing a compact vector design.
+
+## Target Purpose Stress Program
+
+```assembly
+# ARM Mali-200 Vector blend: V2 = Vector A + Vector B
+VLD V0, 20
+VLD V1, 21
+VADD V2, V0, V1
+VST V2, 22
+HALT
+```

@@ -54,3 +54,18 @@ In our simulation, absolute load/store instructions span 2 words where the targe
 - **Signed Arithmetic & Exceptions**: Add signed (ADD) and subtraction (SUB, SUBU) instructions, and hardware exception triggers on overflow, are unimplemented.
 - **Shift and Logical Operations**: Logical (AND, OR, XOR, NOR) and shift (SLL, SRL, SRA) instructions are not supported.
 - **Coprocessors & Floating Point Unit (FPU)**: CP0 system registers, Virtual Memory MMU, and floating-point registers/instructions are not modeled.
+
+## Architectural Design Purpose
+
+High-performance workstation and enterprise database query acceleration using a clean, pipelined load-store RISC ISA.
+
+## Target Purpose Stress Program
+
+```assembly
+# MIPS I arithmetic: y = x + a
+LW R1, 20
+LW R2, 21
+ADDU R1, R1, R2
+SW R1, 22
+HALT
+```

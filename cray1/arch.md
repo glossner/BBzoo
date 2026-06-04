@@ -61,3 +61,23 @@ For Load Immediate instructions, the immediate value is placed in the lower 12 b
 - **Backup Registers (B & T)**: The 64-word intermediate registers ($B0$-$B77$ and $T0$-$T77$) are not implemented.
 - **Floating-Point Arithmetic**: Single-precision, double-precision, reciprocal approximation, and population count functional units are not implemented.
 - **Logical and Shift Operations**: Bitwise AND, OR, XOR, and vector shifts are not implemented.
+
+## Architectural Design Purpose
+
+Vector pipeline scientific supercomputing for fluid dynamics, physics simulation, and meteorology.
+
+## Target Purpose Stress Program
+
+```assembly
+# Cray-1 Vector Addition: Vector C = Vector A + Vector B
+A1 = 4         # Set vector length to 4
+A2 = 16        # Base address of Vector A
+A3 = 20        # Base address of Vector B
+A4 = 24        # Base address of Vector C
+VL = A1
+V0 = mem[A2]   # Load Vector A
+V1 = mem[A3]   # Load Vector B
+V2 = V0 + V1   # Vector Add
+mem[A4] = V2   # Store Vector C
+HLT
+```

@@ -54,3 +54,17 @@ In our simulation, absolute load/store instructions span 2 words where the targe
 - **Parallel Execution Fields**: The microinstruction control word fields (which control RAM/ROM addresses, ALU ops, and pointer moves concurrently in a single instruction) are not modeled.
 - **Address Registers & DAG**: Data pointer registers (DP, RP) and auto-increment/decrement logic are unimplemented.
 - **Serial Interface**: The serial input/output shift registers and interrupts are not simulated.
+
+## Architectural Design Purpose
+
+Voice-band telecom signal filter operations and real-time modem processing.
+
+## Target Purpose Stress Program
+
+```assembly
+# NEC uPD7720 DSP arithmetic: y = x + a
+LD A, 20
+LD B, 21
+ADD
+ST A, 22
+```

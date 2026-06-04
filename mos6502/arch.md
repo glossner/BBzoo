@@ -62,3 +62,17 @@ MOS 6502 instructions are 1, 2, or 3 bytes long. The layout depends on the addre
 - **Index Addressing Modes**: Zero-page indexed, absolute indexed, indexed indirect, and indirect indexed addressing modes are not supported.
 - **Decimal Mode**: Hardware BCD arithmetic is not simulated.
 - **Subroutines & Stack**: Subroutine call (`JSR`), return (`RTS`), interrupt return (`RTI`), and stack push/pop instructions (`PHA`, `PLA`, `PHP`, `PLP`) are not implemented.
+
+## Architectural Design Purpose
+
+Cost-sensitive consumer home microcomputing and video game console processing using zero-page registers.
+
+## Target Purpose Stress Program
+
+```assembly
+# MOS 6502 Arithmetic: y = x + a
+LDA 20
+CLC
+ADC 21
+STA 22
+```

@@ -38,3 +38,18 @@ In this simulator, the 40-bit instruction word is formatted as:
 - **Instruction Unpacking**: The instruction execution does not fetch and run two separate 20-bit instructions per word (each 40-bit word contains a single instruction).
 - **Multiplier-Quotient (MQ) Register**: Multiplication, division, and MQ register transfers are not simulated.
 - **Shift Operations**: Bitwise shifts of Accumulator values are not implemented.
+
+## Architectural Design Purpose
+
+Solving scientific, meteorological, and defense-related mathematical models using a parallel binary accumulator architecture.
+
+## Target Purpose Stress Program
+
+```assembly
+# Princeton IAS Polynomial Evaluation: y = (x + a) - b
+LD 20
+ADD 21
+SUB 22
+ST 23
+HLT
+```

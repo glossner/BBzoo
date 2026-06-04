@@ -43,3 +43,17 @@ In our simulation, instructions are 32-bit wide. Absolute load/store instruction
 - **ST R[src], addr** (`0x30`): Store 32-bit value from GPR R[src] into memory address `addr`.
 - **ADD R[dest], R[src1], R[src2]** (`0x20`): Add values in R[src1] and R[src2], store result in R[dest].
 - **HALT** (`0x00`): Halts execution.
+
+## Architectural Design Purpose
+
+High-speed 3D hardware rasterization, texture mapping, and depth sorting for gaming PCs.
+
+## Target Purpose Stress Program
+
+```assembly
+# 3dfx Voodoo1 texture blend: colorC = colorA + colorB
+LD R0, 20
+LD R1, 21
+ADD R0, R0, R1
+ST R0, 22
+```

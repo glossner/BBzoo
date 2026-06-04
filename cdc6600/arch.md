@@ -52,3 +52,17 @@ CDC 6600 instructions are either 15-bit or 30-bit. The 30-bit instruction format
 - **Instruction Packing**: The instruction pipeline does not unpack multiple instructions from a single 60-bit word (each memory word holds exactly one instruction).
 - **Float and Logical Units**: Floating-point multiplication, division, normalize, population count, and logical bitwise operations are not implemented.
 - **Conditional Branches**: Jump/branch instructions based on comparison of registers are not implemented.
+
+## Architectural Design Purpose
+
+Pioneering scientific supercomputing with parallel functional units and address-register-triggered load/store logic.
+
+## Target Purpose Stress Program
+
+```assembly
+# CDC 6600 Parallel evaluation: y = x + a
+A1 = B0 + 20   # Load x into X1
+A2 = B0 + 21   # Load a into X2
+X6 = X1 + X2   # X6 = x + a
+A6 = B0 + 22   # Store X6 to address 22
+```

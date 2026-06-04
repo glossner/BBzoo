@@ -53,3 +53,18 @@ In our simulation, absolute load/store instructions span 2 words where the targe
 - **Memory Segmentation**: Segmented registers (PB, PL, DL, DB, etc.) are not modeled.
 - **Register Set**: Index registers (X) and status registers (SR) are not simulated.
 - **Subroutines & Stack frames**: Stack frame pointers and frame setup instructions (PCAL, EXIT) are not simulated.
+
+## Architectural Design Purpose
+
+Multiprogramming and general-purpose system computing utilizing a compiler-friendly stack-based OS execution model.
+
+## Target Purpose Stress Program
+
+```assembly
+# HP 3000 Stack expression evaluation: y = x + a
+PUSH 20   # Push x
+PUSH 21   # Push a
+ADD       # Add (x + a)
+POP 22    # Pop and store to y
+HALT
+```

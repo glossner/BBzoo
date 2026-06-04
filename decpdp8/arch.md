@@ -50,3 +50,18 @@ Operate (`OPR`) instructions use the following format:
 - **IOT** (110): Input/Output Transfer (opcode reserved but not wired to external hardware peripherals).
 - **Auto-indexing registers**: Auto-increment of memory addresses at locations 0010-0017 octal when accessed indirectly is not implemented.
 - **Extended Memory Control**: Multi-field memory addressing (via extended data field registers) is not implemented (limited to the base 4KB address space).
+
+## Architectural Design Purpose
+
+Low-cost minicomputer designed for laboratory automation, process control, and industrial interfacing.
+
+## Target Purpose Stress Program
+
+```assembly
+# DEC PDP-8 Loop Process: y = x + a
+CLA CLL
+TAD 20    # Load x
+TAD 21    # Add a
+DCA 22    # Store to y
+HLT
+```

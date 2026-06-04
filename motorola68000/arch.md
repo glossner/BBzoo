@@ -62,3 +62,21 @@
 - **Multiply/Divide**: `MULU`, `MULS`, `DIVU`, `DIVS` arithmetic operations are not implemented.
 - **Bitwise Logic**: `AND`, `OR`, `EOR`, `NOT`, and bit tests (`BTST`, `BSET`) are not implemented.
 - **Status Register (SR) / User Stack (USP)**: Processor flags (CCR), system flags, and supervisor states are not simulated.
+
+## Architectural Design Purpose
+
+Powerful microprocessor target for UNIX workstations, arcade boards, and consumer computing featuring a flat 32-bit register file.
+
+## Target Purpose Stress Program
+
+```assembly
+# Motorola 68000 Polynomial evaluation: y = (x + a) - b
+MOVEA.L #20, A0
+MOVE.L (A0), D0
+MOVEA.L #21, A1
+ADD.L (A1), D0
+MOVEA.L #22, A2
+SUB.L (A2), D0
+MOVEA.L #23, A3
+MOVE.L D0, (A3)
+```

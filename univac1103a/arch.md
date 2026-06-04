@@ -37,3 +37,17 @@ The UNIVAC 1103A uses a 36-bit instruction format:
 - **Repeat Directive (RPT)**: Repetitive execution modifiers utilizing repetition counter fields are not simulated.
 - **Subtractive 72-bit Accumulator**: Standard multi-precision subtractive accumulator operations are not implemented.
 - **Floating-point registers**: Hardware floating point representation (characteristic and mantissa) is not simulated.
+
+## Architectural Design Purpose
+
+Aerospace simulation, cryptanalysis, and military scientific calculation using memory-to-memory two-address instructions.
+
+## Target Purpose Stress Program
+
+```assembly
+# Univac 1103A Polynomial evaluation: y = (x + a) - b
+TP 20, 23    # Transmit Positive (copy x to y)
+ADD 21, 23   # Add a to y
+SUB 22, 23   # Subtract b from y
+HLT
+```

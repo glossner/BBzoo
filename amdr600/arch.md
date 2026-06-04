@@ -39,3 +39,17 @@ In our simulation, instructions are 32-bit wide VLIW packets containing an ALU s
   - `ADD R[destA], R[src1A], R[src2A] | LD R[regB], addrOffset`
   - `HALT | NOP`
   - etc.
+
+## Architectural Design Purpose
+
+Unified shader processing running VLIW instructions for parallel vertex, pixel, and physics computation.
+
+## Target Purpose Stress Program
+
+```assembly
+# AMD R600 VLIW Arithmetic: R0 = R0 + R1
+NOP | LD R0, 20
+NOP | LD R1, 21
+ADD R0, R0, R1 | NOP
+NOP | ST R0, 22
+```

@@ -41,3 +41,18 @@ In this simulator, the card-based instruction format is represented inside a 64-
 - **Decimal Mechanical Precision**: Babbage's design used decimal gears with 50 digits of precision, which is simplified to 64-bit binary integers in this simulator.
 - **Multiplication and Division**: The complex mechanical multiplication and division gears of the Mill are not implemented.
 - **Conditional Card Stepping**: The ability to step the variable/operation card loops backward or forward (branches) based on sign and zero outcomes of Mill operations is not simulated.
+
+## Architectural Design Purpose
+
+Automating mathematical table calculations (like polynomials and logarithms) mechanically to eliminate human computation errors.
+
+## Target Purpose Stress Program
+
+```assembly
+# Babbage Polynomial Evaluation: y = (x + a) - b
+L 20    # Load x from Store column 20
+ADD 21  # Add constant a from Store column 21
+SUB 22  # Subtract constant b from Store column 22
+S 23    # Store y to Store column 23
+HLT
+```

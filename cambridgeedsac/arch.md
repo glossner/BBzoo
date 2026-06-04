@@ -40,3 +40,19 @@ In this simulator, each 17-bit instruction is formatted as:
 - **Hardware Multiplication**: Multiplier register operations (`V`, `N`) are not simulated.
 - **Shift & Round**: Shift (`R`, `L`) and round operations are omitted.
 - **Input/Output**: Paper tape reader and teleprinter instructions (`I`, `O`, `F`, `G`) are not simulated.
+
+## Architectural Design Purpose
+
+Performing general-purpose scientific computations using a subroutine-based mercury delay-line memory accumulator.
+
+## Target Purpose Stress Program
+
+```assembly
+# Cambridge EDSAC Polynomial Evaluation: y = (x + a) - b
+T 30    # Clear accumulator
+A 20    # Add x into accumulator (Load x)
+A 21    # Add a (ACC = x + a)
+S 22    # Subtract b (ACC = x + a - b)
+T 23    # Store y and clear accumulator
+Z       # Halt
+```

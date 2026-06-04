@@ -49,3 +49,18 @@ Intel 8080A instructions are 1, 2, or 3 bytes long depending on operand types:
 - **Register Pair Pointers (BC, DE, HL, SP)**: Pointer-indirect operations and stack-based memory accesses (PUSH, POP, LXI) are unimplemented.
 - **Arithmetic/Logic Variations**: Subtraction, logical operations (AND, OR, XOR), rotates, increments, and decrements are not supported.
 - **Branch and Subroutine Flow**: Absolute jump (`JMP`), conditional jumps (`JZ`, `JNZ`, `JC`, `JNC`), calls (`CALL`), and returns (`RET`) are not simulated.
+
+## Architectural Design Purpose
+
+Early general-purpose personal computing and industrial embedded controllers running CP/M.
+
+## Target Purpose Stress Program
+
+```assembly
+# Intel 8080A Arithmetic: y = x + a
+LDA 20
+MOV B, A
+LDA 21
+ADD B
+STA 22
+```

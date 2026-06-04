@@ -40,3 +40,18 @@ In this simulator, each instruction is formatted as:
 - **Hardware Floating-Point**: Floating-point instructions (`FAD`, `FSB`, `FMP`, `FDH`, etc.) are not simulated.
 - **Multiplier-Quotient (MQ) Register**: Multiplication, division, and MQ register transfers are not simulated.
 - **Bitwise Shifts & Logical Operations**: Omitted from the simulator.
+
+## Architectural Design Purpose
+
+High-performance scientific calculations introducing hardware floating-point support and index registers.
+
+## Target Purpose Stress Program
+
+```assembly
+# IBM 704 Polynomial Evaluation: y = (x + a) - b
+LD 20
+ADD 21
+SUB 22
+ST 23
+HLT
+```

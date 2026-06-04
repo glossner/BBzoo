@@ -39,3 +39,17 @@ The Bull Gamma 60 instruction is formatted as follows in this simple 24-bit core
 - **Concurrent Specialized Functional Units**: The physical division into separate BCD ALU, Binary ALU, translation unit, and sorting unit is not simulated.
 - **Dynamic Queue Allocation**: Central hardware queue-management buffer in the Program Distributor is simplified to a single secondary thread register.
 - **Variable Length Multi-Word Opcodes**: Multi-character instructions requiring consecutive word fetches are not modeled.
+
+## Architectural Design Purpose
+
+Exploring hardware concurrency and early multitasking execution across multiple independent processing units.
+
+## Target Purpose Stress Program
+
+```assembly
+# Bull Gamma 60 Parallel Evaluation: acc0 = x + a
+LD acc0, 20
+ADD acc0, 21
+ST acc0, 22
+HLT
+```

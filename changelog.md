@@ -1,3 +1,10 @@
+# 06/03/2026 19:05 Unified Vector Addition Benchmark and IBM 360 Core Bug Fix
+- Designed and implemented a unified 4-element Vector Addition benchmark program across DEC PDP-8, IBM System/360, Cray-1, and Motorola 68000.
+- Fixed a hardware logic bug in `Ibm360Core` where RX arithmetic instructions incorrectly bypassed the ALU during writeback (MemToReg routing).
+- Added label symbol resolution inside `DATA` directives for both Python and Scala assemblers.
+- Added `A` (Add) and `S` (Subtract) RX instruction opcodes to both IBM System/360 assemblers.
+- Updated all unit tests and the architecture profiler spec to verify benchmark correctness and output the performance comparison matrix.
+
 # 06/03/2026 18:50 Synthesizable PMU Hardware and Unified Architecture Profiler
 - Added synthesizable Performance Monitoring Units (PMUs) to `Pdp8Core`, `Ibm360Core`, `Cray1Core`, and `M68kCore` to track cycle counts, retired instructions, and memory reads/writes.
 - Created `ProfilerSpec.scala` in the root project to execute all four cores, query their hardware PMU registers, and output a consolidated comparative markdown report comparing CPI and memory traffic.

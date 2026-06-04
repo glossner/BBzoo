@@ -108,7 +108,13 @@ class BaseAssembler:
             data_match = re.match(r'^DATA\s+(.*)', line, re.IGNORECASE)
             if data_match:
                 val_str = data_match.group(1)
-                vals = [self.parse_numeric(v) for v in val_str.split(',')]
+                vals = []
+                for v in val_str.split(','):
+                    v_strip = v.strip()
+                    if v_strip in self.symbols:
+                        vals.append(self.symbols[v_strip])
+                    else:
+                        vals.append(self.parse_numeric(v_strip))
                 output_values.extend(vals)
                 self.pc += len(vals)
                 continue

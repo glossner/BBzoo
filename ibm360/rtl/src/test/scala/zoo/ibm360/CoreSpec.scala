@@ -75,19 +75,20 @@ class CoreSpec extends AnyFlatSpec with Matchers {
         c.clock.step(1)
         cycles += 1
 
-        // Detect if PC branched to address 14 (our infinite branch loop)
+        // Detect if PC branched to address 48 (our infinite branch loop)
         val currentPC = c.io.pc_debug.peek().litValue.toInt
-        if (currentPC == 14) {
+        if (currentPC == 48) {
           loopDetected = true
         }
       }
 
       loopDetected shouldBe true
 
-      // Verify that GPR1 now contains the result (42 + 24 = 66)
-      // And memory[40] contains the result 66
-      val resultInMem = readWord(40)
-      resultInMem shouldBe 66
+      // Verify that Vector C now contains the results
+      readWord(84) shouldBe 11
+      readWord(88) shouldBe 22
+      readWord(92) shouldBe 33
+      readWord(96) shouldBe 44
     }
   }
 }

@@ -47,7 +47,7 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       c.clock.step(5)
       c.reset.poke(false.B)
 
-      var limit = 200
+      var limit = 500
       var halted = false
       while (limit > 0 && !halted) {
         val req = c.io.mem.req.peek().litToBoolean
@@ -71,28 +71,51 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       pdp8Insts  = c.io.pmu_insts.peek().litValue.toLong
       pdp8Reads  = c.io.pmu_reads.peek().litValue.toLong
       pdp8Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      // Verify results
+      mem(22) shouldBe 11
+      mem(23) shouldBe 22
+      mem(24) shouldBe 33
+      mem(25) shouldBe 44
     }
 
     // 2. Profile IBM System/360
     val ibmHex = findWorkspaceFile("ibm360/sw/test_add.hex")
-    val ibmBytes = Source.fromFile(ibmHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    val ibmBytes = Source.fromFile(ibmHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16).toByte).toArray
     var ibmCycles = 0L
     var ibmInsts = 0L
     var ibmReads = 0L
     var ibmWrites = 0L
 
     simulate(new Ibm360Core) { c =>
-      val mem = Array.fill(1024)(0)
+      val mem = Array.fill(1024)(0.toByte)
       for (i <- ibmBytes.indices) mem(i) = ibmBytes(i)
+
+      def readWord(addr: Int): Int = {
+        if (addr + 3 >= 1024) return 0
+        ((mem(addr) & 0xFF) << 24) |
+        ((mem(addr + 1) & 0xFF) << 16) |
+        ((mem(addr + 2) & 0xFF) << 8) |
+        (mem(addr + 3) & 0xFF)
+      }
+
+      def writeWord(addr: Int, data: Int): Unit = {
+        if (addr + 3 >= 1024) return
+        mem(addr)     = ((data >> 24) & 0xFF).toByte
+        mem(addr + 1) = ((data >> 16) & 0xFF).toByte
+        mem(addr + 2) = ((data >> 8) & 0xFF).toByte
+        mem(addr + 3) = (data & 0xFF).toByte
+      }
+
       c.io.mem.ready.poke(false.B)
       c.io.mem.rdata.poke(0.U)
       c.reset.poke(true.B)
       c.clock.step(5)
       c.reset.poke(false.B)
 
-      var limit = 200
-      var halted = false
-      while (limit > 0 && !halted) {
+      var limit = 500
+      var done = false
+      while (limit > 0 && !done) {
         val req = c.io.mem.req.peek().litToBoolean
         val addr = c.io.mem.addr.peek().litValue.toInt
         val write = c.io.mem.write.peek().litToBoolean
@@ -100,20 +123,28 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
 
         if (req) {
           c.io.mem.ready.poke(true.B)
-          if (write) mem(addr) = wdata
-          c.io.mem.rdata.poke(mem(addr).U)
+          if (write) writeWord(addr, wdata)
+          val rdata = readWord(addr)
+          c.io.mem.rdata.poke((rdata.toLong & 0xFFFFFFFFL).U)
         } else {
           c.io.mem.ready.poke(false.B)
         }
 
         c.clock.step(1)
         limit -= 1
-        if (c.io.hlt.peek().litToBoolean) halted = true
+        val pcVal = c.io.pc_debug.peek().litValue.toInt
+        if (pcVal == 48) done = true
       }
       ibmCycles = c.io.pmu_cycles.peek().litValue.toLong
       ibmInsts  = c.io.pmu_insts.peek().litValue.toLong
       ibmReads  = c.io.pmu_reads.peek().litValue.toLong
       ibmWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      // Verify results
+      readWord(84) shouldBe 11
+      readWord(88) shouldBe 22
+      readWord(92) shouldBe 33
+      readWord(96) shouldBe 44
     }
 
     // 3. Profile Cray-1
@@ -133,7 +164,7 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       c.clock.step(5)
       c.reset.poke(false.B)
 
-      var limit = 200
+      var limit = 500
       var halted = false
       while (limit > 0 && !halted) {
         val req = c.io.mem.req.peek().litToBoolean
@@ -157,6 +188,12 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       crayInsts  = c.io.pmu_insts.peek().litValue.toLong
       crayReads  = c.io.pmu_reads.peek().litValue.toLong
       crayWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      // Verify results
+      mem(24) shouldBe 11L
+      mem(25) shouldBe 22L
+      mem(26) shouldBe 33L
+      mem(27) shouldBe 44L
     }
 
     // 4. Profile Motorola 68000
@@ -178,7 +215,7 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       c.clock.step(5)
       c.reset.poke(false.B)
 
-      var limit = 200
+      var limit = 500
       var done = false
       while (limit > 0 && !done) {
         val req = c.io.mem.req.peek().litValue > 0
@@ -199,7 +236,7 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
         
         // Detect loop or halt condition
         val pc = c.io.debug_pc.peek().litValue
-        if (pc == 22) {
+        if (pc == 104) {
           done = true
         }
       }
@@ -207,6 +244,17 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       m68kInsts  = c.io.pmu_insts.peek().litValue.toLong
       m68kReads  = c.io.pmu_reads.peek().litValue.toLong
       m68kWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      // Verify results
+      def read32(addr: Long): Int = {
+        val high = mem.getOrElse(addr, 0)
+        val low = mem.getOrElse(addr + 2, 0)
+        (high << 16) | (low & 0xFFFF)
+      }
+      read32(168) shouldBe 11
+      read32(172) shouldBe 22
+      read32(176) shouldBe 33
+      read32(180) shouldBe 44
     }
 
     // Print Consolidated Comparative Table

@@ -1,46 +1,88 @@
-# IBM System/360 Simple Addition Test Program
-# Address (Dec) | Byte Value (Hex) | Instruction / Data Description
-# -----------------------------------------------------------------
-# 0             | 58               | Opcode: L (Load RX, 4 bytes)
-# 1             | 10               | R1 = 1, X2 = 0
-# 2             | 00               | B2 = 0
-# 3             | 20               | D2 = 32 -> Load GPR1 from address 32
-# 4             | 58               | Opcode: L (Load RX, 4 bytes)
-# 5             | 20               | R1 = 2, X2 = 0
-# 6             | 00               | B2 = 0
-# 7             | 24               | D2 = 36 -> Load GPR2 from address 36
-# 8             | 1A               | Opcode: AR (Add Register RR, 2 bytes)
-# 9             | 12               | R1 = 1, R2 = 2 -> GPR1 = GPR1 + GPR2
-# 10            | 50               | Opcode: ST (Store RX, 4 bytes)
-# 11            | 10               | R1 = 1, X2 = 0
-# 12            | 00               | B2 = 0
-# 13            | 28               | D2 = 40 -> Store GPR1 to address 40
-# 14            | 47               | Opcode: BC (Branch on Condition RX, 4 bytes)
-# 15            | F0               | R1 = 15 (Unconditional), X2 = 0
-# 16            | 00               | B2 = 0
-# 17            | 0E               | D2 = 14 -> Jump to address 14 (infinite loop)
-
-# Instructions (0-17)
+# Compiled IBM System/360 Hex File
 58
 10
 00
-20
-58
-20
+34
+5A
+10
 00
-24
-1A
-12
+44
 50
 10
 00
-28
+54
+58
+10
+00
+38
+5A
+10
+00
+48
+50
+10
+00
+58
+58
+10
+00
+3C
+5A
+10
+00
+4C
+50
+10
+00
+5C
+58
+10
+00
+40
+5A
+10
+00
+50
+50
+10
+00
+60
 47
 F0
 00
-0E
-
-# Padding (18-31)
+30
+00
+00
+00
+0A
+00
+00
+00
+14
+00
+00
+00
+1E
+00
+00
+00
+28
+00
+00
+00
+01
+00
+00
+00
+02
+00
+00
+00
+03
+00
+00
+00
+04
 00
 00
 00
@@ -53,22 +95,6 @@ F0
 00
 00
 00
-00
-00
-
-# Data 1 (32-35) = 42 (0x0000002A)
-00
-00
-00
-2A
-
-# Data 2 (36-39) = 24 (0x00000018)
-00
-00
-00
-18
-
-# Result (40-43) = 0 (to be written as 66 = 0x42)
 00
 00
 00

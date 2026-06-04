@@ -98,7 +98,10 @@ abstract class BaseAssembler extends StorageArchitecture with InstructionFormat 
       } else {
         val dataMatch = "(?i)^DATA\\s+(.*)".r.findFirstMatchIn(line)
         if (dataMatch.isDefined) {
-          val vals = dataMatch.get.group(1).split(",").map(parseNumeric)
+          val vals = dataMatch.get.group(1).split(",").map(v => {
+            val s = v.trim
+            if (symbols.contains(s)) symbols(s) else parseNumeric(s)
+          })
           outputValues ++= vals
           pc += vals.length
         } else {

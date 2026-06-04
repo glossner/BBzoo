@@ -67,7 +67,7 @@ class Ibm360Core extends Module {
 
   // Register write port
   regFile.io.rd_addr := r1
-  regFile.io.rd_data := Mux(decoder.io.ctrl.mem_read, md, alu.io.out)
+  regFile.io.rd_data := Mux(decoder.io.ctrl.rf_src_mem, md, alu.io.out)
   regFile.io.wen     := (state === sEXECUTE) && decoder.io.ctrl.rf_wen
 
   // Debug registers exposure

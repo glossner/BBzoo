@@ -12,23 +12,19 @@ class CoreSpec extends AnyFlatSpec with Matchers {
   behavior of "M68kCore"
 
   it should "execute test_add.hex program correctly" in {
-    val hexPath = "motorola68000/sw/test_add.hex"
-    val programWords = try {
-      val source = Source.fromFile(hexPath)
-      val lines = source.getLines().map(_.trim).filter(_.nonEmpty).toList
-      source.close()
-      lines.map(line => Integer.parseInt(line, 16))
-    } catch {
-      case _: Exception =>
-        List(
-          0x207C, 0x0000, 0x1000, // MOVEA.L #0x1000, A0
-          0x203C, 0x0000, 0x000F, // MOVE.L #15, D0
-          0x223C, 0x0000, 0x001B, // MOVE.L #27, D1
-          0xD081,                 // ADD.L D1, D0
-          0x2080,                 // MOVE.L D0, (A0)
-          0x60FE                  // BRA -2
-        )
+    def findWorkspaceFile(relativePath: String): java.io.File = {
+      var dir = new java.io.File(System.getProperty("user.dir"))
+      var foundFile = new java.io.File(dir, relativePath)
+      while (dir != null && !foundFile.exists()) {
+        dir = dir.getParentFile
+        if (dir != null) {
+          foundFile = new java.io.File(dir, relativePath)
+        }
+      }
+      if (foundFile.exists()) foundFile else new java.io.File(relativePath)
     }
+    val hexFile = findWorkspaceFile("motorola68000/sw/test_add.hex")
+    val programWords = Source.fromFile(hexFile).getLines().map(_.trim).filter(line => line.nonEmpty && !line.startsWith("#")).toList.map(line => Integer.parseInt(line, 16))
 
     simulate(new M68kCore) { dut =>
       dut.reset.poke(true.B)
@@ -72,26 +68,27 @@ class CoreSpec extends AnyFlatSpec with Matchers {
         val reg8 = dut.io.debug_regs(8).peek().litValue
         println(s"Cycle: $cycles | PC: $pc | State: $state | Req: $req | Addr: $addr | Write: $write | Wdata: $wdata | D0: $reg0 | D1: $reg1 | A0: $reg8")
 
-        if (pc == 22) {
-          val valHigh = memory.getOrElse(0x1000L, 0)
-          val valLow = memory.getOrElse(0x1002L, 0)
-          val storedVal = (valHigh << 16) | valLow
-          if (storedVal == 42) {
-            loopDetected = true
-          }
+        if (pc == 104) {
+          loopDetected = true
         }
 
         dut.clock.step(1)
         cycles += 1
       }
 
-      dut.io.debug_regs(0).peek().litValue shouldBe 42
-      dut.io.debug_regs(8).peek().litValue shouldBe 0x1000
+      loopDetected shouldBe true
 
-      val valHigh = memory.getOrElse(0x1000L, 0)
-      val valLow = memory.getOrElse(0x1002L, 0)
-      val storedVal = (valHigh << 16) | valLow
-      storedVal shouldBe 42
+      // Helper to read 32-bit word from 16-bit word memory map
+      def read32(addr: Long): Int = {
+        val high = memory.getOrElse(addr, 0)
+        val low = memory.getOrElse(addr + 2, 0)
+        (high << 16) | (low & 0xFFFF)
+      }
+
+      read32(168) shouldBe 11
+      read32(172) shouldBe 22
+      read32(176) shouldBe 33
+      read32(180) shouldBe 44
     }
   }
 }

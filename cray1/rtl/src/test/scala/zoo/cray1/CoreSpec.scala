@@ -66,16 +66,16 @@ class CoreSpec extends AnyFlatSpec with Matchers {
 
       halted shouldBe true
 
-      // Verify stored vector elements in memory at address 24 and 25
-      // mem[24] should be 2 * 5 = 10
-      // mem[25] should be 2 * 15 = 30
-      mem(24) shouldBe 10L
-      mem(25) shouldBe 30L
+      // Verify stored vector elements in memory at address 24 to 27
+      mem(24) shouldBe 11L
+      mem(25) shouldBe 22L
+      mem(26) shouldBe 33L
+      mem(27) shouldBe 44L
 
       // Verify debug values for registers and vector elements
-      c.io.vl_debug.peek().litValue.toInt shouldBe 2
-      c.io.v0_0_debug.peek().litValue.toLong shouldBe 5L
-      c.io.v0_1_debug.peek().litValue.toLong shouldBe 15L
+      c.io.vl_debug.peek().litValue.toInt shouldBe 4
+      c.io.v0_0_debug.peek().litValue.toLong shouldBe 10L
+      c.io.v0_1_debug.peek().litValue.toLong shouldBe 20L
     }
   }
 }

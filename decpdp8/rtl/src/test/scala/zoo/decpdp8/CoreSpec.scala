@@ -35,7 +35,7 @@ class CoreSpec extends AnyFlatSpec with Matchers {
       c.reset.poke(false.B)
 
       var cycles = 0
-      val maxCycles = 150
+      val maxCycles = 500
       var halted = false
 
       while (cycles < maxCycles && !halted) {
@@ -64,7 +64,10 @@ class CoreSpec extends AnyFlatSpec with Matchers {
       }
 
       halted shouldBe true
-      mem(7) shouldBe 18 // Result: 5 + 13 = 18 (0x12)
+      mem(22) shouldBe 11 // Result: 10 + 1 = 11
+      mem(23) shouldBe 22 // Result: 20 + 2 = 22
+      mem(24) shouldBe 33 // Result: 30 + 3 = 33
+      mem(25) shouldBe 44 // Result: 40 + 4 = 44
       c.io.acc_debug.peek().litValue.toInt shouldBe 0 // DCA clears accumulator
     }
   }

@@ -28,7 +28,7 @@ class Ibm360Assembler(BaseAssembler, GeneralRegisterArchitecture, VariableLength
         mnemonic = parts[0].upper()
         if mnemonic == "AR":
             return 2
-        elif mnemonic in ["L", "ST", "BC"]:
+        elif mnemonic in ["L", "ST", "BC", "A", "S"]:
             return 4
         return 0
 
@@ -50,11 +50,13 @@ class Ibm360Assembler(BaseAssembler, GeneralRegisterArchitecture, VariableLength
             r2 = self.parse_numeric_or_symbol(parts[2])
             return [0x1A, ((r1 & 0xF) << 4) | (r2 & 0xF)]
 
-        elif mnemonic in ["L", "ST", "BC"]:
+        elif mnemonic in ["L", "ST", "BC", "A", "S"]:
             opcodes = {
                 "L": 0x58,
                 "ST": 0x50,
-                "BC": 0x47
+                "BC": 0x47,
+                "A": 0x5A,
+                "S": 0x5B
             }
             opcode = opcodes[mnemonic]
             r1 = self.parse_numeric_or_symbol(parts[1])

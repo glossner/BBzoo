@@ -13,6 +13,7 @@ class Ibm360CtrlSignals extends Bundle {
   val alu_op     = UInt(4.W)
   val inst_len   = UInt(3.W) // 2 for RR, 4 for RX, etc.
   val is_branch  = Bool()
+  val rf_src_mem = Bool()
 }
 
 /**
@@ -52,6 +53,7 @@ class Ibm360Decoder extends Module {
   io.ctrl.alu_op    := AluOp.PASS_A
   io.ctrl.inst_len  := 2.U
   io.ctrl.is_branch := false.B
+  io.ctrl.rf_src_mem := false.B
 
   // Decode logic based on top bits of opcode
   // In System/360:
@@ -91,9 +93,10 @@ class Ibm360Decoder extends Module {
       
       switch(opcode) {
         is(0x58.U) { // L (Load)
-          io.ctrl.mem_read := true.B
-          io.ctrl.rf_wen   := true.B
-          io.ctrl.alu_op   := AluOp.PASS_B
+          io.ctrl.mem_read   := true.B
+          io.ctrl.rf_wen     := true.B
+          io.ctrl.alu_op     := AluOp.PASS_B
+          io.ctrl.rf_src_mem := true.B
         }
         is(0x5A.U) { // A (Add)
           io.ctrl.mem_read := true.B

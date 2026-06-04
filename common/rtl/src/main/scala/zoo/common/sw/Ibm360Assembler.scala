@@ -21,7 +21,7 @@ class Ibm360Assembler extends BaseAssembler with GeneralRegisterArchitecture wit
     if (parts.isEmpty) return 0
     val mnemonic = parts(0).toUpperCase
     if (mnemonic == "AR") 2
-    else if (Seq("L", "ST", "BC").contains(mnemonic)) 4
+    else if (Seq("L", "ST", "BC", "A", "S").contains(mnemonic)) 4
     else 0
   }
 
@@ -44,8 +44,8 @@ class Ibm360Assembler extends BaseAssembler with GeneralRegisterArchitecture wit
       val r1 = parseNumericOrSymbol(parts(1))
       val r2 = parseNumericOrSymbol(parts(2))
       Seq(0x1A, ((r1 & 0xF) << 4) | (r2 & 0xF))
-    } else if (Seq("L", "ST", "BC").contains(mnemonic)) {
-      val opcodes = Map("L" -> 0x58, "ST" -> 0x50, "BC" -> 0x47)
+    } else if (Seq("L", "ST", "BC", "A", "S").contains(mnemonic)) {
+      val opcodes = Map("L" -> 0x58, "ST" -> 0x50, "BC" -> 0x47, "A" -> 0x5A, "S" -> 0x5B)
       val opcode = opcodes(mnemonic)
       val r1 = parseNumericOrSymbol(parts(1))
       val d2 = parseNumericOrSymbol(parts(2))

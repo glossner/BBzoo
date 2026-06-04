@@ -1,3 +1,10 @@
+# 06/04/2026 05:40 Pioneer House Expansion: Babbage, Harvard Mark I, Zuse Z1, Manchester Baby, and Univac I
+- Implemented five pioneer-era CPU architectures (Babbage Analytical Engine, Harvard Mark I, Zuse Z1, Manchester Baby, and Univac I) complete with instruction decoders, cores with synthesizable PMUs, and test suites.
+- Added Scala and Python assemblers for all 5 architectures and integrated them into the pluggable assembler framework.
+- Optimized 72-bit word assembly inside the Univac I Scala assembler using `BigInt` to prevent 64-bit integer overflow.
+- Resolved sign-extension/unsigned lit boundary verification inside the Manchester Baby simulation test suite.
+- Integrated all 5 new machines into the unified 4-element Vector Addition benchmark (`ProfilerSpec.scala`) and generated a consolidated 13-core performance report.
+
 # 06/03/2026 21:08 Expansion of BrooksZoo with Burroughs B5500, DEC PDP-11, CDC 6600, and MOS 6502
 - Implemented Burroughs B5500 (Stack), DEC PDP-11 (Orthogonal CISC), CDC 6600 (implicit Load/Store via Address Registers), and MOS 6502 (Accumulator-Index) architectures.
 - Added instruction decoders, cores with synthesizable performance monitoring units (PMUs), and test suites for all 4 new projects.

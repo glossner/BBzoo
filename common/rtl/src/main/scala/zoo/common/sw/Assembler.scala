@@ -23,6 +23,11 @@ object Assembler {
       case "decpdp11"        => new Pdp11Assembler()
       case "cdc6600"         => new Cdc6600Assembler()
       case "mos6502"         => new Mos6502Assembler()
+      case "babbage"         => new BabbageAssembler()
+      case "harvardmark1"    => new HarvardMark1Assembler()
+      case "zusez1"          => new ZuseZ1Assembler()
+      case "manchester"      => new ManchesterAssembler()
+      case "univac1"         => new Univac1Assembler()
       case _ =>
         println(s"Unknown architecture: $arch")
         sys.exit(1)

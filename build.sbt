@@ -109,12 +109,52 @@ lazy val mos6502 = (project in file("mos6502/rtl"))
   )
   .settings(commonSettings: _*)
 
+// 10. Babbage Analytical Engine Project
+lazy val babbage = (project in file("babbage/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Babbage"
+  )
+  .settings(commonSettings: _*)
+
+// 11. Harvard Mark I Project
+lazy val harvardmark1 = (project in file("harvardmark1/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "HarvardMark1"
+  )
+  .settings(commonSettings: _*)
+
+// 12. Zuse Z1 Project
+lazy val zusez1 = (project in file("zusez1/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "ZuseZ1"
+  )
+  .settings(commonSettings: _*)
+
+// 13. Manchester Baby Project
+lazy val manchester = (project in file("manchester/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Manchester"
+  )
+  .settings(commonSettings: _*)
+
+// 14. Univac I Project
+lazy val univac1 = (project in file("univac1/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Univac1"
+  )
+  .settings(commonSettings: _*)
+
 // ***************************
 // * ROOT PROJECT
 // ***************************
 lazy val root = (project in file("."))
-  .aggregate(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502)
-  .dependsOn(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502)
+  .aggregate(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchester, univac1)
+  .dependsOn(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchester, univac1)
   .settings(
     name := "BrooksZoo"
   )

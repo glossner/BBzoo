@@ -15,6 +15,11 @@ import zoo.burroughsb5500.B5500Core
 import zoo.decpdp11.Pdp11Core
 import zoo.cdc6600.Cdc6600Core
 import zoo.mos6502.Mos6502Core
+import zoo.babbage.BabbageCore
+import zoo.harvardmark1.HarvardMark1Core
+import zoo.zusez1.ZuseZ1Core
+import zoo.manchester.ManchesterCore
+import zoo.univac1.Univac1Core
 
 class ProfilerSpec extends AnyFlatSpec with Matchers {
   behavior of "ZooArchitectureProfiler"
@@ -448,6 +453,263 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       mem(27) shouldBe 44L
     }
 
+    // 9. Babbage Analytical Engine
+    val babbageHex = findWorkspaceFile("babbage/sw/test_vector.hex")
+    val babbageBytes = Source.fromFile(babbageHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
+    var babbageCycles = 0L
+    var babbageInsts = 0L
+    var babbageReads = 0L
+    var babbageWrites = 0L
+
+    simulate(new BabbageCore) { c =>
+      val mem = Array.fill(256)(0L)
+      for (i <- babbageBytes.indices) mem(i) = babbageBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toLong
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      babbageCycles = c.io.pmu_cycles.peek().litValue.toLong
+      babbageInsts  = c.io.pmu_insts.peek().litValue.toLong
+      babbageReads  = c.io.pmu_reads.peek().litValue.toLong
+      babbageWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(28) shouldBe 11L
+      mem(29) shouldBe 22L
+      mem(30) shouldBe 33L
+      mem(31) shouldBe 44L
+    }
+
+    // 10. Harvard Mark I
+    val harvardHex = findWorkspaceFile("harvardmark1/sw/test_vector.hex")
+    val harvardBytes = Source.fromFile(harvardHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
+    var harvardCycles = 0L
+    var harvardInsts = 0L
+    var harvardReads = 0L
+    var harvardWrites = 0L
+
+    simulate(new HarvardMark1Core) { c =>
+      val mem = Array.fill(256)(0L)
+      for (i <- harvardBytes.indices) mem(i) = harvardBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.io.test_wen.poke(false.B)
+      c.io.test_waddr.poke(0.U)
+      c.io.test_wdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      // Pre-load inputs
+      val vecA = Array(10L, 20L, 30L, 40L)
+      val vecB = Array(1L, 2L, 3L, 4L)
+      c.io.test_wen.poke(true.B)
+      for (i <- 0 until 4) {
+        c.io.test_waddr.poke((20 + i).U)
+        c.io.test_wdata.poke(vecA(i).U)
+        c.clock.step(1)
+        c.io.test_waddr.poke((24 + i).U)
+        c.io.test_wdata.poke(vecB(i).U)
+        c.clock.step(1)
+      }
+      c.io.test_wen.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toLong
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      harvardCycles = c.io.pmu_cycles.peek().litValue.toLong
+      harvardInsts  = c.io.pmu_insts.peek().litValue.toLong
+      harvardReads  = c.io.pmu_reads.peek().litValue.toLong
+      harvardWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      c.io.regs_debug(28).peek().litValue shouldBe 11
+      c.io.regs_debug(29).peek().litValue shouldBe 22
+      c.io.regs_debug(30).peek().litValue shouldBe 33
+      c.io.regs_debug(31).peek().litValue shouldBe 44
+    }
+
+    // 11. Zuse Z1
+    val zuseHex = findWorkspaceFile("zusez1/sw/test_vector.hex")
+    val zuseBytes = Source.fromFile(zuseHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var zuseCycles = 0L
+    var zuseInsts = 0L
+    var zuseReads = 0L
+    var zuseWrites = 0L
+
+    simulate(new ZuseZ1Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- zuseBytes.indices) mem(i) = zuseBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      zuseCycles = c.io.pmu_cycles.peek().litValue.toLong
+      zuseInsts  = c.io.pmu_insts.peek().litValue.toLong
+      zuseReads  = c.io.pmu_reads.peek().litValue.toLong
+      zuseWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 12. Manchester Baby
+    val manchesterHex = findWorkspaceFile("manchester/sw/test_vector.hex")
+    val manchesterBytes = Source.fromFile(manchesterHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseLong(l.trim, 16).toInt).toArray
+    var manchesterCycles = 0L
+    var manchesterInsts = 0L
+    var manchesterReads = 0L
+    var manchesterWrites = 0L
+
+    simulate(new ManchesterCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- manchesterBytes.indices) mem(i) = manchesterBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 1000
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      manchesterCycles = c.io.pmu_cycles.peek().litValue.toLong
+      manchesterInsts  = c.io.pmu_insts.peek().litValue.toLong
+      manchesterReads  = c.io.pmu_reads.peek().litValue.toLong
+      manchesterWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 13. Univac I
+    val univacHex = findWorkspaceFile("univac1/sw/test_vector.hex")
+    val univacBytes = Source.fromFile(univacHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => BigInt(l.trim, 16)).toArray
+    var univacCycles = 0L
+    var univacInsts = 0L
+    var univacReads = 0L
+    var univacWrites = 0L
+
+    simulate(new Univac1Core) { c =>
+      val mem = Array.fill(256)(BigInt(0))
+      for (i <- univacBytes.indices) mem(i) = univacBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      univacCycles = c.io.pmu_cycles.peek().litValue.toLong
+      univacInsts  = c.io.pmu_insts.peek().litValue.toLong
+      univacReads  = c.io.pmu_reads.peek().litValue.toLong
+      univacWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe BigInt(11)
+      mem(49) shouldBe BigInt(22)
+      mem(50) shouldBe BigInt(33)
+      mem(51) shouldBe BigInt(44)
+    }
+
     // Print Consolidated Comparative Table
     val pdp8Cpi  = if (pdp8Insts > 0)  String.format("%.2f", Double.box(pdp8Cycles.toDouble / pdp8Insts))  else "N/A"
     val pdp11Cpi = if (pdp11Insts > 0) String.format("%.2f", Double.box(pdp11Cycles.toDouble / pdp11Insts)) else "N/A"
@@ -457,10 +719,20 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     val b5500Cpi = if (b5500Insts > 0) String.format("%.2f", Double.box(b5500Cycles.toDouble / b5500Insts)) else "N/A"
     val cdcCpi   = if (cdcInsts > 0)   String.format("%.2f", Double.box(cdcCycles.toDouble / cdcInsts))   else "N/A"
     val crayCpi  = if (crayInsts > 0)  String.format("%.2f", Double.box(crayCycles.toDouble / crayInsts))  else "N/A"
+    val babbageCpi = if (babbageInsts > 0) String.format("%.2f", Double.box(babbageCycles.toDouble / babbageInsts)) else "N/A"
+    val harvardCpi = if (harvardInsts > 0) String.format("%.2f", Double.box(harvardCycles.toDouble / harvardInsts)) else "N/A"
+    val zuseCpi    = if (zuseInsts > 0)    String.format("%.2f", Double.box(zuseCycles.toDouble / zuseInsts))       else "N/A"
+    val manchesterCpi = if (manchesterInsts > 0) String.format("%.2f", Double.box(manchesterCycles.toDouble / manchesterInsts)) else "N/A"
+    val univacCpi  = if (univacInsts > 0)  String.format("%.2f", Double.box(univacCycles.toDouble / univacInsts))   else "N/A"
 
     val table = s"""
 | Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI |
 |---------------------|-------------------|------------------|----------------------|--------------|---------------|-----|
+| Babbage Anal. Eng.  | 64                | $babbageCycles              | $babbageInsts                   | $babbageReads            | $babbageWrites             | $babbageCpi |
+| Harvard Mark I      | 64                | $harvardCycles              | $harvardInsts                   | $harvardReads            | $harvardWrites             | $harvardCpi |
+| Zuse Z1             | 22                | $zuseCycles              | $zuseInsts                   | $zuseReads            | $zuseWrites             | $zuseCpi |
+| Manchester Baby     | 32                | $manchesterCycles              | $manchesterInsts                   | $manchesterReads            | $manchesterWrites             | $manchesterCpi |
+| Univac I            | 72                | $univacCycles              | $univacInsts                   | $univacReads            | $univacWrites             | $univacCpi |
 | MOS 6502            | 8                 | $mosCycles              | $mosInsts                   | $mosReads            | $mosWrites             | $mosCpi |
 | DEC PDP-8           | 12                | $pdp8Cycles              | $pdp8Insts                   | $pdp8Reads            | $pdp8Writes             | $pdp8Cpi |
 | DEC PDP-11          | 16                | $pdp11Cycles              | $pdp11Insts                   | $pdp11Reads            | $pdp11Writes             | $pdp11Cpi |

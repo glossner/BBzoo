@@ -277,12 +277,60 @@ lazy val ibm6150 = (project in file("ibm6150/rtl"))
   )
   .settings(commonSettings: _*)
 
+// 31. MIPS I Project
+lazy val mipsi = (project in file("mipsi/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Mipsi"
+  )
+  .settings(commonSettings: _*)
+
+// 32. ARM1 Project
+lazy val arm1 = (project in file("arm1/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Arm1"
+  )
+  .settings(commonSettings: _*)
+
+// 33. Berkeley RISC-I Project
+lazy val berkrisc = (project in file("berkrisc/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Berkrisc"
+  )
+  .settings(commonSettings: _*)
+
+// 34. HP 3000 Project
+lazy val hp3000 = (project in file("hp3000/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Hp3000"
+  )
+  .settings(commonSettings: _*)
+
+// 35. Lilith Project
+lazy val lilith = (project in file("lilith/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Lilith"
+  )
+  .settings(commonSettings: _*)
+
+// 36. UCSD Pascal P-Machine Project
+lazy val ucsdp = (project in file("ucsdp/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Ucsdp"
+  )
+  .settings(commonSettings: _*)
+
 // ***************************
 // * ROOT PROJECT
 // ***************************
 lazy val root = (project in file("."))
-  .aggregate(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchester, univac1, ias, edsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150)
-  .dependsOn(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchester, univac1, ias, edsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150)
+  .aggregate(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchester, univac1, ias, edsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150, mipsi, arm1, berkrisc, hp3000, lilith, ucsdp)
+  .dependsOn(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchester, univac1, ias, edsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150, mipsi, arm1, berkrisc, hp3000, lilith, ucsdp)
   .settings(
     name := "BrooksZoo"
   )

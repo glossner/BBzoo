@@ -36,6 +36,12 @@ import zoo.decvax.DecvaxCore
 import zoo.intel8080a.Intel8080aCore
 import zoo.motorola6800.Motorola6800Core
 import zoo.ibm6150.Ibm6150Core
+import zoo.mipsi.MipsiCore
+import zoo.arm1.Arm1Core
+import zoo.berkrisc.BerkriscCore
+import zoo.hp3000.Hp3000Core
+import zoo.lilith.LilithCore
+import zoo.ucsdp.UcsdpCore
 
 class ProfilerSpec extends AnyFlatSpec with Matchers {
   behavior of "ZooArchitectureProfiler"
@@ -1494,6 +1500,294 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       mem(51) shouldBe 44L
     }
 
+    // 30. MIPS I (R2000)
+    val mipsiHex = findWorkspaceFile("mipsi/sw/test_vector.hex")
+    val mipsiBytes = Source.fromFile(mipsiHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
+    var mipsiCycles = 0L
+    var mipsiInsts = 0L
+    var mipsiReads = 0L
+    var mipsiWrites = 0L
+
+    simulate(new MipsiCore) { c =>
+      val mem = Array.fill(256)(0L)
+      for (i <- mipsiBytes.indices) mem(i) = mipsiBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toLong
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      mipsiCycles = c.io.pmu_cycles.peek().litValue.toLong
+      mipsiInsts  = c.io.pmu_insts.peek().litValue.toLong
+      mipsiReads  = c.io.pmu_reads.peek().litValue.toLong
+      mipsiWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11L
+      mem(49) shouldBe 22L
+      mem(50) shouldBe 33L
+      mem(51) shouldBe 44L
+    }
+
+    // 31. ARM1
+    val arm1Hex = findWorkspaceFile("arm1/sw/test_vector.hex")
+    val arm1Bytes = Source.fromFile(arm1Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
+    var arm1Cycles = 0L
+    var arm1Insts = 0L
+    var arm1Reads = 0L
+    var arm1Writes = 0L
+
+    simulate(new Arm1Core) { c =>
+      val mem = Array.fill(256)(0L)
+      for (i <- arm1Bytes.indices) mem(i) = arm1Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toLong
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      arm1Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      arm1Insts  = c.io.pmu_insts.peek().litValue.toLong
+      arm1Reads  = c.io.pmu_reads.peek().litValue.toLong
+      arm1Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11L
+      mem(49) shouldBe 22L
+      mem(50) shouldBe 33L
+      mem(51) shouldBe 44L
+    }
+
+    // 32. Berkeley RISC-I
+    val berkriscHex = findWorkspaceFile("berkrisc/sw/test_vector.hex")
+    val berkriscBytes = Source.fromFile(berkriscHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
+    var berkriscCycles = 0L
+    var berkriscInsts = 0L
+    var berkriscReads = 0L
+    var berkriscWrites = 0L
+
+    simulate(new BerkriscCore) { c =>
+      val mem = Array.fill(256)(0L)
+      for (i <- berkriscBytes.indices) mem(i) = berkriscBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toLong
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      berkriscCycles = c.io.pmu_cycles.peek().litValue.toLong
+      berkriscInsts  = c.io.pmu_insts.peek().litValue.toLong
+      berkriscReads  = c.io.pmu_reads.peek().litValue.toLong
+      berkriscWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11L
+      mem(49) shouldBe 22L
+      mem(50) shouldBe 33L
+      mem(51) shouldBe 44L
+    }
+
+    // 33. HP 3000
+    val hp3000Hex = findWorkspaceFile("hp3000/sw/test_vector.hex")
+    val hp3000Bytes = Source.fromFile(hp3000Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var hp3000Cycles = 0L
+    var hp3000Insts = 0L
+    var hp3000Reads = 0L
+    var hp3000Writes = 0L
+
+    simulate(new Hp3000Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- hp3000Bytes.indices) mem(i) = hp3000Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      hp3000Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      hp3000Insts  = c.io.pmu_insts.peek().litValue.toLong
+      hp3000Reads  = c.io.pmu_reads.peek().litValue.toLong
+      hp3000Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 34. Lilith
+    val lilithHex = findWorkspaceFile("lilith/sw/test_vector.hex")
+    val lilithBytes = Source.fromFile(lilithHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var lilithCycles = 0L
+    var lilithInsts = 0L
+    var lilithReads = 0L
+    var lilithWrites = 0L
+
+    simulate(new LilithCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- lilithBytes.indices) mem(i) = lilithBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      lilithCycles = c.io.pmu_cycles.peek().litValue.toLong
+      lilithInsts  = c.io.pmu_insts.peek().litValue.toLong
+      lilithReads  = c.io.pmu_reads.peek().litValue.toLong
+      lilithWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 35. UCSD Pascal P-Machine
+    val ucsdpHex = findWorkspaceFile("ucsdp/sw/test_vector.hex")
+    val ucsdpBytes = Source.fromFile(ucsdpHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var ucsdpCycles = 0L
+    var ucsdpInsts = 0L
+    var ucsdpReads = 0L
+    var ucsdpWrites = 0L
+
+    simulate(new UcsdpCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- ucsdpBytes.indices) mem(i) = ucsdpBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      ucsdpCycles = c.io.pmu_cycles.peek().litValue.toLong
+      ucsdpInsts  = c.io.pmu_insts.peek().litValue.toLong
+      ucsdpReads  = c.io.pmu_reads.peek().litValue.toLong
+      ucsdpWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
     // Print Consolidated Comparative Table
     val pdp8Cpi  = if (pdp8Insts > 0)  String.format("%.2f", Double.box(pdp8Cycles.toDouble / pdp8Insts))  else "N/A"
     val pdp11Cpi = if (pdp11Insts > 0) String.format("%.2f", Double.box(pdp11Cycles.toDouble / pdp11Insts)) else "N/A"
@@ -1524,6 +1818,12 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     val intel8080aCpi = if (intel8080aInsts > 0) String.format("%.2f", Double.box(intel8080aCycles.toDouble / intel8080aInsts)) else "N/A"
     val motorola6800Cpi = if (motorola6800Insts > 0) String.format("%.2f", Double.box(motorola6800Cycles.toDouble / motorola6800Insts)) else "N/A"
     val ibm6150Cpi = if (ibm6150Insts > 0) String.format("%.2f", Double.box(ibm6150Cycles.toDouble / ibm6150Insts)) else "N/A"
+    val mipsiCpi = if (mipsiInsts > 0) String.format("%.2f", Double.box(mipsiCycles.toDouble / mipsiInsts)) else "N/A"
+    val arm1Cpi = if (arm1Insts > 0) String.format("%.2f", Double.box(arm1Cycles.toDouble / arm1Insts)) else "N/A"
+    val berkriscCpi = if (berkriscInsts > 0) String.format("%.2f", Double.box(berkriscCycles.toDouble / berkriscInsts)) else "N/A"
+    val hp3000Cpi = if (hp3000Insts > 0) String.format("%.2f", Double.box(hp3000Cycles.toDouble / hp3000Insts)) else "N/A"
+    val lilithCpi = if (lilithInsts > 0) String.format("%.2f", Double.box(lilithCycles.toDouble / lilithInsts)) else "N/A"
+    val ucsdpCpi = if (ucsdpInsts > 0) String.format("%.2f", Double.box(ucsdpCycles.toDouble / ucsdpInsts)) else "N/A"
 
     val table = s"""
 | Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI |
@@ -1557,6 +1857,12 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
 | Intel 8080A         | 8                 | $intel8080aCycles              | $intel8080aInsts                   | $intel8080aReads            | $intel8080aWrites             | $intel8080aCpi |
 | Motorola 6800       | 8                 | $motorola6800Cycles              | $motorola6800Insts                   | $motorola6800Reads            | $motorola6800Writes             | $motorola6800Cpi |
 | IBM 6150 ROMP       | 32                | $ibm6150Cycles              | $ibm6150Insts                   | $ibm6150Reads            | $ibm6150Writes             | $ibm6150Cpi |
+| MIPS I (R2000)      | 32                | $mipsiCycles              | $mipsiInsts                   | $mipsiReads            | $mipsiWrites             | $mipsiCpi |
+| ARM1                | 32                | $arm1Cycles              | $arm1Insts                   | $arm1Reads            | $arm1Writes             | $arm1Cpi |
+| Berkeley RISC-I     | 32                | $berkriscCycles              | $berkriscInsts                   | $berkriscReads            | $berkriscWrites             | $berkriscCpi |
+| HP 3000             | 16                | $hp3000Cycles              | $hp3000Insts                   | $hp3000Reads            | $hp3000Writes             | $hp3000Cpi |
+| Lilith              | 16                | $lilithCycles              | $lilithInsts                   | $lilithReads            | $lilithWrites             | $lilithCpi |
+| UCSD Pascal P-Mach  | 16                | $ucsdpCycles              | $ucsdpInsts                   | $ucsdpReads            | $ucsdpWrites             | $ucsdpCpi |
 """
 
     println("\n=== COMPARATIVE ARCHITECTURE PERFORMANCE REPORT ===")

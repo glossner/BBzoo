@@ -6,7 +6,7 @@ import scala.io.Source
 object Assembler {
   def main(args: Array[String]): Unit = {
     if (args.length < 5 || args(0) != "-arch") {
-      println("Usage: sbt \"common/runMain zoo.common.sw.Assembler -arch <pdp8|ibm360|cray1|m68k|burroughsb5500|decpdp11|cdc6600|mos6502|babbage|harvardmark1|zusez1|manchester|univac1|ias|edsac|ibm701|ibm704|ibm650|ibm705|ibm1401|stczebra|bullgamma60|ibmstretch|univac1103a|cdc6600ppu|decvax|intel8080a|motorola6800|ibm6150> <input.asm> -o <output.hex>\"")
+      println("Usage: sbt \"common/runMain zoo.common.sw.Assembler -arch <pdp8|ibm360|cray1|m68k|burroughsb5500|decpdp11|cdc6600|mos6502|babbage|harvardmark1|zusez1|manchester|univac1|ias|edsac|ibm701|ibm704|ibm650|ibm705|ibm1401|stczebra|bullgamma60|ibmstretch|univac1103a|cdc6600ppu|decvax|intel8080a|motorola6800|ibm6150|mipsi|arm1|berkrisc|hp3000|lilith|ucsdp> <input.asm> -o <output.hex>\"")
       sys.exit(1)
     }
 
@@ -44,6 +44,12 @@ object Assembler {
       case "intel8080a"      => new Intel8080aAssembler()
       case "motorola6800"    => new Motorola6800Assembler()
       case "ibm6150"         => new Ibm6150Assembler()
+      case "mipsi"           => new MipsiAssembler()
+      case "arm1"            => new Arm1Assembler()
+      case "berkrisc"        => new BerkriscAssembler()
+      case "hp3000"          => new Hp3000Assembler()
+      case "lilith"          => new LilithAssembler()
+      case "ucsdp"           => new UcsdpAssembler()
       case _ =>
         println(s"Unknown architecture: $arch")
         sys.exit(1)

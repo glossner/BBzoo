@@ -1,3 +1,11 @@
+# 06/04/2026 08:30 RISC House and Stack House Expansion: MIPS I, ARM1, Berkeley RISC-I, HP 3000, Lilith, and UCSD Pascal P-Machine
+- Implemented six new classic architectures to complete the RISC House and Stack House expansions: MIPS I (R2000), ARM1, Berkeley RISC-I, HP 3000, Lilith, and UCSD Pascal P-Machine.
+- Added synthesizable Performance Monitoring Units (PMUs) to all 6 new cores to track cycles, instruction retirement, and memory read/write traffic.
+- Built Scala and Python assemblers for all 6 new architectures and registered them globally.
+- Created architectural documentation (`arch.md`) for all 6 new machines detailing introduction year, designers, unique features, and instruction formats.
+- Expanded the unified 4-element Vector Addition benchmark (`ProfilerSpec.scala`) to include the 6 new cores, verifying correct computation and generating comparative PMU execution metrics.
+- Reorganized `README.md` to catalog all 35 machines, creating the **Stack House** (grouping Burroughs B5500, HP 3000, Lilith, UCSD Pascal P-Machine) and the **RISC House** (grouping IBM 6150 ROMP, MIPS I R2000, ARM1, Berkeley RISC-I).
+
 # 06/04/2026 08:05 Microcomputer House Expansion: Intel 8080A, Motorola 6800, and IBM 6150
 - Implemented three new Microcomputer House architectures (Intel 8080A, Motorola 6800, and IBM 6150 ROMP) with fully functional multi-cycle datapath cores, instruction decoders, and test suites.
 - Added synthesizable Performance Monitoring Units (PMUs) to all 3 new cores to track cycles, instruction retirement, and memory read/write traffic.

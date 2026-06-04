@@ -68,6 +68,12 @@ class AssemblerSpec extends AnyFlatSpec with Matchers {
   verifyHex("intel8080a", "intel8080a/sw/test_vector.asm", "intel8080a/sw/test_vector.hex", new Intel8080aAssembler())
   verifyHex("motorola6800", "motorola6800/sw/test_vector.asm", "motorola6800/sw/test_vector.hex", new Motorola6800Assembler())
   verifyHex("ibm6150", "ibm6150/sw/test_vector.asm", "ibm6150/sw/test_vector.hex", new Ibm6150Assembler())
+  verifyHex("mipsi", "mipsi/sw/test_vector.asm", "mipsi/sw/test_vector.hex", new MipsiAssembler())
+  verifyHex("arm1", "arm1/sw/test_vector.asm", "arm1/sw/test_vector.hex", new Arm1Assembler())
+  verifyHex("berkrisc", "berkrisc/sw/test_vector.asm", "berkrisc/sw/test_vector.hex", new BerkriscAssembler())
+  verifyHex("hp3000", "hp3000/sw/test_vector.asm", "hp3000/sw/test_vector.hex", new Hp3000Assembler())
+  verifyHex("lilith", "lilith/sw/test_vector.asm", "lilith/sw/test_vector.hex", new LilithAssembler())
+  verifyHex("ucsdp", "ucsdp/sw/test_vector.asm", "ucsdp/sw/test_vector.hex", new UcsdpAssembler())
 }
 
 

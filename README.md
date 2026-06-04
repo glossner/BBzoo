@@ -155,6 +155,7 @@ This design choice keeps the RTL implementation of each core clean, highly reada
 
 ## 📊 Architecture Comparison Report
 
+
 | Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI | Code Footprint (words) | ALU Duty Cycle | Mem BW Efficiency | Register Port Stress |
 |---------------------|-------------------|------------------|----------------------|--------------|---------------|-----|------------------------|----------------|-------------------|----------------------|
 | Babbage Anal. Eng.  | 64                | 38              | 13                   | 21            | 4             | 2.92 | 32 | 10.5% | 15.38 B/inst | 0.5 regs/inst |

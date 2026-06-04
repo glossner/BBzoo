@@ -2,7 +2,7 @@
 
 Welcome to **BrooksZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit Blaauw and Frederick Brooks. 
 
-This repository implements **25 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
+This repository implements **26 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
 
 ---
 
@@ -38,14 +38,14 @@ The architectures in the zoo are organized into seven distinct "houses" based on
 - 🚀 **IBM Stretch** (Stephen Dunwell, 1961) — [ibmstretch](file:///home/jglossner/GitRepos/BrooksZoo/ibmstretch) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibmstretch/arch.md)
 - 🥞 **Burroughs B5500** (Robert S. Barton, 1964) — [burroughsb5500](file:///home/jglossner/GitRepos/BrooksZoo/burroughsb5500) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/burroughsb5500/arch.md)
 
-### 5. Accumulator-Minicomputer House
-*Highly constrained accumulator architectures designed for low-cost, mainstream mini and microcomputing.*
+### 5. Bell House
+*Representing the architectural evolution of Digital Equipment Corporation (DEC) systems, led or influenced by C. Gordon Bell.*
 - 📉 **DEC PDP-8** (C. Gordon Bell & Edson de Castro, 1965) — [decpdp8](file:///home/jglossner/GitRepos/BrooksZoo/decpdp8) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/decpdp8/arch.md)
-- 🕹️ **MOS 6502** (Chuck Peddle, 1975) — [mos6502](file:///home/jglossner/GitRepos/BrooksZoo/mos6502) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/mos6502/arch.md)
+- 🖥️ **DEC PDP-11** (C. Gordon Bell, 1970) — [decpdp11](file:///home/jglossner/GitRepos/BrooksZoo/decpdp11) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/decpdp11/arch.md)
+- 💾 **DEC VAX** (C. Gordon Bell & DEC Team, 1977) — [decvax](file:///home/jglossner/GitRepos/BrooksZoo/decvax) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/decvax/arch.md)
 
 ### 6. General Register House
 *Modern paradigms utilizing symmetric register files to decouple calculations from a single accumulator.*
-- 🖥️ **DEC PDP-11** (C. Gordon Bell, 1970) — [decpdp11](file:///home/jglossner/GitRepos/BrooksZoo/decpdp11) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/decpdp11/arch.md)
 - 🏢 **IBM System/360** (Gene Amdahl, Fred Brooks, & G. A. Blaauw, 1964) — [ibm360](file:///home/jglossner/GitRepos/BrooksZoo/ibm360) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm360/arch.md)
 - 📟 **Motorola 68000** (Motorola Team, 1979) — [motorola68000](file:///home/jglossner/GitRepos/BrooksZoo/motorola68000) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/motorola68000/arch.md)
 
@@ -55,6 +55,10 @@ The architectures in the zoo are organized into seven distinct "houses" based on
 - 🎛️ **CDC 6600 PPU** (Seymour Cray, 1964) — [cdc6600ppu](file:///home/jglossner/GitRepos/BrooksZoo/cdc6600ppu) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/cdc6600ppu/arch.md)
 - ⚡ **CDC 6600** (Seymour Cray, 1964) — [cdc6600](file:///home/jglossner/GitRepos/BrooksZoo/cdc6600) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/cdc6600/arch.md)
 - 🌀 **Cray-1** (Seymour Cray, 1976) — [cray1](file:///home/jglossner/GitRepos/BrooksZoo/cray1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/cray1/arch.md)
+
+### 8. Microcomputer House
+*Constrained accumulator and index-register architectures designed for low-cost, mainstream microcomputing.*
+- 🕹️ **MOS 6502** (Chuck Peddle, 1975) — [mos6502](file:///home/jglossner/GitRepos/BrooksZoo/mos6502) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/mos6502/arch.md)
 
 
 ---
@@ -78,7 +82,7 @@ sbt test
 ```
 
 ### PMU Benchmarks
-To compare the execution statistics of the vector addition workload across all 25 architectures, run the comparative profiler test:
+To compare the execution statistics of the vector addition workload across all 26 architectures, run the comparative profiler test:
 ```bash
 sbt "project root" "testOnly zoo.common.ProfilerSpec"
 ```

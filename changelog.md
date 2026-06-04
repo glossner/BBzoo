@@ -1,3 +1,12 @@
+# 06/04/2026 07:50 Bell House Completion: DEC VAX
+- Implemented the classic DEC VAX CISC architecture with a fully functional multi-cycle datapath core, instruction decoder, and test suite.
+- Added synthesizable Performance Monitoring Unit (PMU) to the VAX core to track cycles, instruction retirement, and memory read/write traffic.
+- Designed orthogonal operand specifier decoding supporting register, register deferred, autoincrement, and PC-relative immediate addressing modes packed into a word-aligned 32-bit instruction layout.
+- Built Scala and Python assemblers for VAX supporting MOVL, ADDL2, SUBL2, and HALT instructions, and integrated them into the global assembler registry.
+- Created architectural documentation (`decvax/arch.md`) detailing designer (C. Gordon Bell & DEC Team), introduction year (1977), unique CISC features, instruction formatting, and implemented/unimplemented instructions.
+- Expanded the unified 4-element Vector Addition benchmark (`ProfilerSpec.scala`) to include DEC VAX, verifying correct computation and generating comparative PMU execution metrics.
+- Updated `README.md` to catalog all 26 machines and group DEC PDP-8, DEC PDP-11, and DEC VAX under the newly defined **Bell House**.
+
 # 06/04/2026 07:45 Cray House Expansion: Univac 1103A and CDC 6600 PPU
 - Implemented two new Cray House architectures (Univac 1103A and CDC 6600 PPU) with fully functional multi-cycle datapath cores, instruction decoders, and test suites.
 - Added synthesizable Performance Monitoring Units (PMUs) to both new cores to track cycles, instruction retirement, and memory read/write traffic.

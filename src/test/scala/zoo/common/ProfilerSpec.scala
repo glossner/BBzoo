@@ -32,6 +32,7 @@ import zoo.bullgamma60.Bullgamma60Core
 import zoo.ibmstretch.IbmstretchCore
 import zoo.univac1103a.Univac1103aCore
 import zoo.cdc6600ppu.Cdc6600ppuCore
+import zoo.decvax.DecvaxCore
 
 class ProfilerSpec extends AnyFlatSpec with Matchers {
   behavior of "ZooArchitectureProfiler"
@@ -1298,6 +1299,54 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       mem(51) shouldBe 44L
     }
 
+    // 26. DEC VAX
+    val decvaxHex = findWorkspaceFile("decvax/sw/test_vector.hex")
+    val decvaxBytes = Source.fromFile(decvaxHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
+    var decvaxCycles = 0L
+    var decvaxInsts = 0L
+    var decvaxReads = 0L
+    var decvaxWrites = 0L
+
+    simulate(new DecvaxCore) { c =>
+      val mem = Array.fill(256)(0L)
+      for (i <- decvaxBytes.indices) mem(i) = decvaxBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toLong
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      decvaxCycles = c.io.pmu_cycles.peek().litValue.toLong
+      decvaxInsts  = c.io.pmu_insts.peek().litValue.toLong
+      decvaxReads  = c.io.pmu_reads.peek().litValue.toLong
+      decvaxWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(28) shouldBe 11L
+      mem(29) shouldBe 22L
+      mem(30) shouldBe 33L
+      mem(31) shouldBe 44L
+    }
+
     // Print Consolidated Comparative Table
     val pdp8Cpi  = if (pdp8Insts > 0)  String.format("%.2f", Double.box(pdp8Cycles.toDouble / pdp8Insts))  else "N/A"
     val pdp11Cpi = if (pdp11Insts > 0) String.format("%.2f", Double.box(pdp11Cycles.toDouble / pdp11Insts)) else "N/A"
@@ -1324,6 +1373,7 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     val ibmstretchCpi = if (ibmstretchInsts > 0) String.format("%.2f", Double.box(ibmstretchCycles.toDouble / ibmstretchInsts)) else "N/A"
     val univac1103aCpi = if (univac1103aInsts > 0) String.format("%.2f", Double.box(univac1103aCycles.toDouble / univac1103aInsts)) else "N/A"
     val cdc6600ppuCpi  = if (cdc6600ppuInsts > 0)  String.format("%.2f", Double.box(cdc6600ppuCycles.toDouble / cdc6600ppuInsts))  else "N/A"
+    val decvaxCpi = if (decvaxInsts > 0) String.format("%.2f", Double.box(decvaxCycles.toDouble / decvaxInsts)) else "N/A"
 
     val table = s"""
 | Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI |
@@ -1353,6 +1403,8 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
 | Cray-1              | 64 (Vector)       | $crayCycles              | $crayInsts                   | $crayReads            | $crayWrites             | $crayCpi |
 | Univac 1103A        | 36                | $univac1103aCycles              | $univac1103aInsts                   | $univac1103aReads            | $univac1103aWrites             | $univac1103aCpi |
 | CDC 6600 PPU        | 12                | $cdc6600ppuCycles              | $cdc6600ppuInsts                   | $cdc6600ppuReads            | $cdc6600ppuWrites             | $cdc6600ppuCpi |
+| DEC VAX             | 32                | $decvaxCycles              | $decvaxInsts                   | $decvaxReads            | $decvaxWrites             | $decvaxCpi |
+
 """
 
     println("\n=== COMPARATIVE ARCHITECTURE PERFORMANCE REPORT ===")

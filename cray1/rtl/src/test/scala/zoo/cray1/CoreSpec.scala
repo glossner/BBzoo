@@ -10,10 +10,22 @@ class CoreSpec extends AnyFlatSpec with Matchers {
   behavior of "Cray1Core"
 
   it should "execute vector loads, vector additions, and vector stores correctly" in {
+    def findWorkspaceFile(relativePath: String): java.io.File = {
+      var dir = new java.io.File(System.getProperty("user.dir"))
+      var foundFile = new java.io.File(dir, relativePath)
+      while (dir != null && !foundFile.exists()) {
+        dir = dir.getParentFile
+        if (dir != null) {
+          foundFile = new java.io.File(dir, relativePath)
+        }
+      }
+      if (foundFile.exists()) foundFile else new java.io.File(relativePath)
+    }
+
     simulate(new Cray1Core) { c =>
       // Load program from hex file as 64-bit values
-      val hexFilePath = "/home/jglossner/GitRepos/BrooksZoo/cray1/sw/test_vector.hex"
-      val lines = Source.fromFile(hexFilePath).getLines()
+      val hexFile = findWorkspaceFile("cray1/sw/test_vector.hex")
+      val lines = Source.fromFile(hexFile).getLines()
         .map(_.trim)
         .filterNot(line => line.isEmpty || line.startsWith("#"))
         .map(line => java.lang.Long.parseUnsignedLong(line, 16))

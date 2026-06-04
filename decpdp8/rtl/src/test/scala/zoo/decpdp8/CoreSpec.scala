@@ -10,10 +10,22 @@ class CoreSpec extends AnyFlatSpec with Matchers {
   behavior of "Pdp8Core"
 
   it should "execute test_add.hex program correctly" in {
+    def findWorkspaceFile(relativePath: String): java.io.File = {
+      var dir = new java.io.File(System.getProperty("user.dir"))
+      var foundFile = new java.io.File(dir, relativePath)
+      while (dir != null && !foundFile.exists()) {
+        dir = dir.getParentFile
+        if (dir != null) {
+          foundFile = new java.io.File(dir, relativePath)
+        }
+      }
+      if (foundFile.exists()) foundFile else new java.io.File(relativePath)
+    }
+
     simulate(new Pdp8Core) { c =>
       // Load program from hex file
-      val hexFilePath = "/home/jglossner/GitRepos/BrooksZoo/decpdp8/sw/test_add.hex"
-      val lines = Source.fromFile(hexFilePath).getLines()
+      val hexFile = findWorkspaceFile("decpdp8/sw/test_add.hex")
+      val lines = Source.fromFile(hexFile).getLines()
         .map(_.trim)
         .filterNot(line => line.isEmpty || line.startsWith("#"))
         .map(line => Integer.parseInt(line, 16))

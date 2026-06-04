@@ -1,12 +1,12 @@
-# BrooksZoo Assembly Programming & Simulator Guide
+# BBZoo Assembly Programming & Simulator Guide
 
-Welcome to the **BrooksZoo** educational workspace! This guide explains how to write custom assembly programs, compile them into machine hex representations, and execute them on the synthesizable hardware simulators.
+Welcome to the **BBZoo** educational workspace! This guide explains how to write custom assembly programs, compile them into machine hex representations, and execute them on the synthesizable hardware simulators.
 
 ---
 
 ## 1. Architectural Paradigms in the Zoo
 
-BrooksZoo hosts 45 classic architectures classified into different "Houses" based on their design paradigm:
+BBZoo hosts 45 classic architectures classified into different "Houses" based on their design paradigm:
 
 | House | Paradigm | Examples | Register File Structure |
 |---|---|---|---|

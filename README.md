@@ -1,6 +1,6 @@
-# BrooksZoo 🦁
+# BBZoo 🦁
 
-Welcome to **BrooksZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit Blaauw and Frederick Brooks.This repository implements **39 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
+Welcome to **BBZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit A. Blaauw and Frederick P. Brooks, Jr. This repository implements **45 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
 
 ---
 
@@ -10,84 +10,85 @@ The architectures in the zoo are organized into ten distinct "houses" based on t
 
 ### 1. Pioneer House
 *Characterized by the earliest explorations of stored-program, mechanical, or relay-based calculation.*
-- ⚙️ **Babbage Analytical Engine** (Charles Babbage, 1837) — [babbage](file:///home/jglossner/GitRepos/BrooksZoo/babbage) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/babbage/arch.md)
-- 🧮 **Harvard Mark I** (Howard Aiken, 1944) — [harvardmark1](file:///home/jglossner/GitRepos/BrooksZoo/harvardmark1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/harvardmark1/arch.md)
-- 💾 **Zuse Z1** (Konrad Zuse, 1938) — [zusez1](file:///home/jglossner/GitRepos/BrooksZoo/zusez1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/zusez1/arch.md)
-- 👶 **Manchester Baby** (Frederic Williams & Tom Kilburn, 1948) — [manchestermu1](file:///home/jglossner/GitRepos/BrooksZoo/manchestermu1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/manchestermu1/arch.md)
-- 📼 **Univac I** (J. Presper Eckert & John Mauchly, 1951) — [univac1](file:///home/jglossner/GitRepos/BrooksZoo/univac1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/univac1/arch.md)
+- ⚙️ **Babbage Analytical Engine** (Charles Babbage, 1837) — [babbage](babbage) / [arch.md](babbage/arch.md)
+- 🧮 **Harvard Mark I** (Howard Aiken, 1944) — [harvardmark1](harvardmark1) / [arch.md](harvardmark1/arch.md)
+- 💾 **Zuse Z1** (Konrad Zuse, 1938) — [zusez1](zusez1) / [arch.md](zusez1/arch.md)
+- 👶 **Manchester MU1** (Frederic Williams & Tom Kilburn, 1948) — [manchestermu1](manchestermu1) / [arch.md](manchestermu1/arch.md)
+- 📼 **Univac I** (J. Presper Eckert & John Mauchly, 1951) — [univac1](univac1) / [arch.md](univac1/arch.md)
 
 ### 2. Von Neumann House
 *Featuring the classic accumulator-based stored-program organization with unified program and data memory.*
-- 🏫 **Princeton IAS** (John von Neumann, 1952) — [princetonias](file:///home/jglossner/GitRepos/BrooksZoo/princetonias) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/princetonias/arch.md)
-- 📡 **EDSAC** (Maurice Wilkes, 1949) — [cambridgeedsac](file:///home/jglossner/GitRepos/BrooksZoo/cambridgeedsac) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/cambridgeedsac/arch.md)
-- 🔬 **IBM 701** (Nathaniel Rochester, 1952) — [ibm701](file:///home/jglossner/GitRepos/BrooksZoo/ibm701) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm701/arch.md)
-- 📈 **IBM 704** (Gene Amdahl, 1954) — [ibm704](file:///home/jglossner/GitRepos/BrooksZoo/ibm704) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm704/arch.md)
+- 🏫 **Princeton IAS** (John von Neumann, 1952) — [princetonias](princetonias) / [arch.md](princetonias/arch.md)
+- 📡 **EDSAC** (Maurice Wilkes, 1949) — [cambridgeedsac](cambridgeedsac) / [arch.md](cambridgeedsac/arch.md)
+- 🔬 **IBM 701** (Nathaniel Rochester, 1952) — [ibm701](ibm701) / [arch.md](ibm701/arch.md)
+- 📈 **IBM 704** (Gene Amdahl, 1954) — [ibm704](ibm704) / [arch.md](ibm704/arch.md)
 
 ### 3. IBM House
 *Representing the commercial business and variable-word-length scientific computer evolution.*
-- 🚂 **IBM 650** (Frank Hamilton, Ernest Hughes, & James Birkenstock, 1953) — [ibm650](file:///home/jglossner/GitRepos/BrooksZoo/ibm650) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm650/arch.md)
-- 🏢 **IBM 705** (Werner Buchholz, 1954) — [ibm705](file:///home/jglossner/GitRepos/BrooksZoo/ibm705) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm705/arch.md)
-- 📇 **IBM 1401** (Chuck Branscomb, 1959) — [ibm1401](file:///home/jglossner/GitRepos/BrooksZoo/ibm1401) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm1401/arch.md)
+- 🚂 **IBM 650** (Frank Hamilton, Ernest Hughes, & James Birkenstock, 1953) — [ibm650](ibm650) / [arch.md](ibm650/arch.md)
+- 🏢 **IBM 705** (Werner Buchholz, 1954) — [ibm705](ibm705) / [arch.md](ibm705/arch.md)
+- 📇 **IBM 1401** (Chuck Branscomb, 1959) — [ibm1401](ibm1401) / [arch.md](ibm1401/arch.md)
+- 🏢 **IBM System/360** (Gene Amdahl, Fred Brooks, & G. A. Blaauw, 1964) — [ibm360](ibm360) / [arch.md](ibm360/arch.md)
 
 ### 4. Explorer House
 *Highly experimental architectures that introduced radically new paradigms such as micro-programming, multitasking, and indexing/lookahead.*
-- 🦓 **STC ZEBRA** (Willem van der Poel, 1958) — [stczebra](file:///home/jglossner/GitRepos/BrooksZoo/stczebra) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/stczebra/arch.md)
-- 🐂 **Bull Gamma 60** (Machines Bull Team, 1960) — [bullgamma60](file:///home/jglossner/GitRepos/BrooksZoo/bullgamma60) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/bullgamma60/arch.md)
-- 🚀 **IBM Stretch** (Stephen Dunwell, 1961) — [ibmstretch](file:///home/jglossner/GitRepos/BrooksZoo/ibmstretch) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibmstretch/arch.md)
+- 🦓 **STC ZEBRA** (Willem van der Poel, 1958) — [stczebra](stczebra) / [arch.md](stczebra/arch.md)
+- 🐂 **Bull Gamma 60** (Machines Bull Team, 1960) — [bullgamma60](bullgamma60) / [arch.md](bullgamma60/arch.md)
+- 🚀 **IBM Stretch** (Stephen Dunwell, 1961) — [ibmstretch](ibmstretch) / [arch.md](ibmstretch/arch.md)
 
 ### 5. Stack House
 *Zero-address architectures utilizing evaluation stacks to minimize instruction size and simplify code generation.*
-- 🥞 **Burroughs B5500** (Robert S. Barton, 1964) — [burroughsb5500](file:///home/jglossner/GitRepos/BrooksZoo/burroughsb5500) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/burroughsb5500/arch.md)
-- 📠 **HP 3000** (HP, 1972) — [hp3000](file:///home/jglossner/GitRepos/BrooksZoo/hp3000) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/hp3000/arch.md)
-- 📐 **Ethlilith** (Niklaus Wirth, 1980) — [ethlilith](file:///home/jglossner/GitRepos/BrooksZoo/ethlilith) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ethlilith/arch.md)
-- ☕ **UCSD Pascal P-Machine** (UCSD, 1978) — [ucsdp](file:///home/jglossner/GitRepos/BrooksZoo/ucsdp) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ucsdp/arch.md)
+- 🥞 **Burroughs B5500** (Robert S. Barton, 1964) — [burroughsb5500](burroughsb5500) / [arch.md](burroughsb5500/arch.md)
+- 📠 **HP 3000** (HP, 1972) — [hp3000](hp3000) / [arch.md](hp3000/arch.md)
+- 📐 **Ethlilith** (Niklaus Wirth, 1980) — [ethlilith](ethlilith) / [arch.md](ethlilith/arch.md)
+- ☕ **UCSD Pascal P-Machine** (UCSD, 1978) — [ucsdp](ucsdp) / [arch.md](ucsdp/arch.md)
 
 ### 6. Bell House
 *Representing the architectural evolution of Digital Equipment Corporation (DEC) systems, led or influenced by C. Gordon Bell.*
-- 📉 **DEC PDP-8** (C. Gordon Bell & Edson de Castro, 1965) — [decpdp8](file:///home/jglossner/GitRepos/BrooksZoo/decpdp8) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/decpdp8/arch.md)
-- 🖥️ **DEC PDP-11** (C. Gordon Bell, 1970) — [decpdp11](file:///home/jglossner/GitRepos/BrooksZoo/decpdp11) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/decpdp11/arch.md)
-- 💾 **DEC VAX** (C. Gordon Bell & DEC Team, 1977) — [decvax](file:///home/jglossner/GitRepos/BrooksZoo/decvax) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/decvax/arch.md)
+- 📉 **DEC PDP-8** (C. Gordon Bell & Edson de Castro, 1965) — [decpdp8](decpdp8) / [arch.md](decpdp8/arch.md)
+- 🖥️ **DEC PDP-11** (C. Gordon Bell, 1970) — [decpdp11](decpdp11) / [arch.md](decpdp11/arch.md)
+- 💾 **DEC VAX** (C. Gordon Bell & DEC Team, 1977) — [decvax](decvax) / [arch.md](decvax/arch.md)
 
 ### 7. General Register House
 *Modern paradigms utilizing symmetric register files to decouple calculations from a single accumulator.*
-- 🏢 **IBM System/360** (Gene Amdahl, Fred Brooks, & G. A. Blaauw, 1964) — [ibm360](file:///home/jglossner/GitRepos/BrooksZoo/ibm360) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm360/arch.md)
-- 📟 **Motorola 68000** (Motorola Team, 1979) — [motorola68000](file:///home/jglossner/GitRepos/BrooksZoo/motorola68000) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/motorola68000/arch.md)
+- 🏢 **IBM System/360** (Gene Amdahl, Fred Brooks, & G. A. Blaauw, 1964) — [ibm360](ibm360) / [arch.md](ibm360/arch.md)
+- 📟 **Motorola 68000** (Motorola Team, 1979) — [motorola68000](motorola68000) / [arch.md](motorola68000/arch.md)
 
 ### 8. Cray House
 *Optimized for high-throughput arithmetic, scientific calculations, and pipelining, designed or influenced by Seymour Cray.*
-- 📠 **Univac 1103A** (Seymour Cray, 1956) — [univac1103a](file:///home/jglossner/GitRepos/BrooksZoo/univac1103a) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/univac1103a/arch.md)
-- 🎛️ **CDC 6600 PPU** (Seymour Cray, 1964) — [cdc6600ppu](file:///home/jglossner/GitRepos/BrooksZoo/cdc6600ppu) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/cdc6600ppu/arch.md)
-- ⚡ **CDC 6600** (Seymour Cray, 1964) — [cdc6600](file:///home/jglossner/GitRepos/BrooksZoo/cdc6600) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/cdc6600/arch.md)
-- 🌀 **Cray-1** (Seymour Cray, 1976) — [cray1](file:///home/jglossner/GitRepos/BrooksZoo/cray1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/cray1/arch.md)
+- 📠 **Univac 1103A** (Seymour Cray, 1956) — [univac1103a](univac1103a) / [arch.md](univac1103a/arch.md)
+- 🎛️ **CDC 6600 PPU** (Seymour Cray, 1964) — [cdc6600ppu](cdc6600ppu) / [arch.md](cdc6600ppu/arch.md)
+- ⚡ **CDC 6600** (Seymour Cray, 1964) — [cdc6600](cdc6600) / [arch.md](cdc6600/arch.md)
+- 🌀 **Cray-1** (Seymour Cray, 1976) — [cray1](cray1) / [arch.md](cray1/arch.md)
 
 ### 9. Microcomputer House
 *Constrained accumulator and index-register architectures designed for low-cost, mainstream microcomputing.*
-- 🕹️ **MOS 6502** (Chuck Peddle, 1975) — [mos6502](file:///home/jglossner/GitRepos/BrooksZoo/mos6502) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/mos6502/arch.md)
-- 💻 **Intel 8080A** (Federico Faggin & Masatoshi Shima, 1974) — [intel8080a](file:///home/jglossner/GitRepos/BrooksZoo/intel8080a) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/intel8080a/arch.md)
-- 🔌 **Motorola 6800** (Tom Bennett, 1974) — [motorola6800](file:///home/jglossner/GitRepos/BrooksZoo/motorola6800) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/motorola6800/arch.md)
+- 🕹️ **MOS 6502** (Chuck Peddle, 1975) — [mos6502](mos6502) / [arch.md](mos6502/arch.md)
+- 💻 **Intel 8080A** (Federico Faggin & Masatoshi Shima, 1974) — [intel8080a](intel8080a) / [arch.md](intel8080a/arch.md)
+- 🔌 **Motorola 6800** (Tom Bennett, 1974) — [motorola6800](motorola6800) / [arch.md](motorola6800/arch.md)
 
 ### 10. RISC House
 *Reduced Instruction Set Computer designs prioritizing simplified formats, load-store memory access, and single-cycle executions.*
-- 💼 **IBM 6150 ROMP** (John Cocke & IBM Team, 1986) — [ibm6150](file:///home/jglossner/GitRepos/BrooksZoo/ibm6150) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm6150/arch.md)
-- 🚀 **MIPS I (R2000)** (John Hennessy, 1986) — [mips1](file:///home/jglossner/GitRepos/BrooksZoo/mips1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/mips1/arch.md)
-- 📱 **ARM1** (Sophie Wilson & Steve Furber, 1985) — [arm1](file:///home/jglossner/GitRepos/BrooksZoo/arm1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/arm1/arch.md)
-- 🎓 **Berkeley RISC-I** (David Patterson & Carlo H. Séquin, 1981) — [berkeleyrisc](file:///home/jglossner/GitRepos/BrooksZoo/berkeleyrisc) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/berkeleyrisc/arch.md)
+- 💼 **IBM 6150 ROMP** (John Cocke & IBM Team, 1986) — [ibm6150](ibm6150) / [arch.md](ibm6150/arch.md)
+- 🚀 **MIPS I (R2000)** (John Hennessy, 1986) — [mips1](mips1) / [arch.md](mips1/arch.md)
+- 📱 **ARM1** (Sophie Wilson & Steve Furber, 1985) — [arm1](arm1) / [arch.md](arm1/arch.md)
+- 🎓 **Berkeley RISC-I** (David Patterson & Carlo H. Séquin, 1981) — [berkeleyrisc](berkeleyrisc) / [arch.md](berkeleyrisc/arch.md)
 
 ### 11. DSP House
 *Digital Signal Processors optimized for math, multiply-accumulate operations, and high-performance real-time processing.*
-- 🎛️ **NEC µPD7720** (NEC, 1980) — [upd7720](file:///home/jglossner/GitRepos/BrooksZoo/upd7720) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/upd7720/arch.md)
-- 🧮 **TI TMS32010** (Texas Instruments, 1982) — [tms32010](file:///home/jglossner/GitRepos/BrooksZoo/tms32010) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/tms32010/arch.md)
-- 🔊 **ADI ADSP-2100** (Analog Devices, 1986) — [adsp2100](file:///home/jglossner/GitRepos/BrooksZoo/adsp2100) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/adsp2100/arch.md)
-- 🌊 **IBM MWave** (IBM, 1992) — [ibmmwave](file:///home/jglossner/GitRepos/BrooksZoo/ibmmwave) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibmmwave/arch.md)
+- 🎛️ **NEC µPD7720** (NEC, 1980) — [upd7720](upd7720) / [arch.md](upd7720/arch.md)
+- 🧮 **TI TMS32010** (Texas Instruments, 1982) — [tms32010](tms32010) / [arch.md](tms32010/arch.md)
+- 🔊 **ADI ADSP-2100** (Analog Devices, 1986) — [adsp2100](adsp2100) / [arch.md](adsp2100/arch.md)
+- 🌊 **IBM MWave** (IBM, 1992) — [ibmmwave](ibmmwave) / [arch.md](ibmmwave/arch.md)
 
 ### 12. GPU House
 *Graphics Processing Units and accelerators designed for hardware rasterization, texture mapping, tile-based rendering, and VLIW instruction slots.*
-- 🎨 **3dfx Voodoo1** (3dfx Interactive, 1996) — [voodoo1](file:///home/jglossner/GitRepos/BrooksZoo/voodoo1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/voodoo1/arch.md)
-- 👁️ **NVIDIA GeForce 256** (NVIDIA, 1999) — [geforce256](file:///home/jglossner/GitRepos/BrooksZoo/geforce256) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/geforce256/arch.md)
-- 🐉 **ATI Radeon R100** (ATI, 2000) — [radeonr100](file:///home/jglossner/GitRepos/BrooksZoo/radeonr100) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/radeonr100/arch.md)
-- ⚡ **PowerVR Series 1** (Imagination Technologies, 1996) — [powervr1](file:///home/jglossner/GitRepos/BrooksZoo/powervr1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/powervr1/arch.md)
-- 🌀 **ARM Mali-200** (ARM, 2007) — [mali200](file:///home/jglossner/GitRepos/BrooksZoo/mali200) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/mali200/arch.md)
-- 🔬 **AMD R600** (AMD, 2007) — [amdr600](file:///home/jglossner/GitRepos/BrooksZoo/amdr600) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/amdr600/arch.md)
+- 🎨 **3dfx Voodoo1** (3dfx Interactive, 1996) — [voodoo1](voodoo1) / [arch.md](voodoo1/arch.md)
+- 👁️ **NVIDIA GeForce 256** (NVIDIA, 1999) — [geforce256](geforce256) / [arch.md](geforce256/arch.md)
+- 🐉 **ATI Radeon R100** (ATI, 2000) — [radeonr100](radeonr100) / [arch.md](radeonr100/arch.md)
+- ⚡ **PowerVR Series 1** (Imagination Technologies, 1996) — [powervr1](powervr1) / [arch.md](powervr1/arch.md)
+- 🌀 **ARM Mali-200** (ARM, 2007) — [mali200](mali200) / [arch.md](mali200/arch.md)
+- 🔬 **AMD R600** (AMD, 2007) — [amdr600](amdr600) / [arch.md](amdr600/arch.md)
 
 ---
 
@@ -98,11 +99,6 @@ Make sure your development container or local path has:
 - **Scala** and **sbt**
 - **Verilator** and **firtool** (required for Chisel hardware simulation)
 
-Ensure you source the dev container environment script if simulating:
-```bash
-source /home/jglossner/GitRepos/KryptoNyte/.devcontainer/dev_env.sh
-```
-
 ### Running All Tests
 Execute the entire test suite using sbt:
 ```bash
@@ -111,10 +107,10 @@ sbt test
 
 ### 🖥️ Writing and Simulating Custom Assembly
 
-BrooksZoo provides an educational command-line tool to assemble and execute custom programs on the simulated cores.
+BBzoo provides an educational command-line tool to assemble and execute custom programs on the simulated cores.
 
 #### 1. Compile Assembly
-Example programs are provided in the [examples](file:///home/jglossner/GitRepos/BrooksZoo/examples) directory. Use the Python assembler to compile assembly files (`.asm`) into hexadecimal files (`.hex`):
+Example programs are provided in the [examples](examples) directory. Use the Python assembler to compile assembly files (`.asm`) into hexadecimal files (`.hex`):
 ```bash
 python3 common/sw/zoo_assembler.py -arch <arch_name> -in <source.asm> -out <output.hex>
 ```
@@ -143,14 +139,66 @@ To compare the execution statistics of the vector addition workload across all 4
 ```bash
 sbt "project root" "testOnly zoo.common.ProfilerSpec"
 ```
-The comparison report will be written directly to `pmu_report.md`.
+The comparison report will be updated directly at the bottom of `README.md`.
 
 #### Rationale for 4-Element Vector Size
 The unified benchmark uses a **4-element vector addition** workload as a universal architectural Rosetta Stone. While a larger vector size (e.g. 64 elements) would better exercise modern vector pipelines (like the Cray-1 or ARM Mali-200), many of the oldest simulated architectures in the zoo (such as the PDP-8, Cambridge EDSAC, and Zuse Z1) operate with extremely tight memory constraints (typically limited to 256 words of addressable memory). 
 
 A 4-element vector size is the optimal design compromise: it is compact enough to fit comfortably within the memory limits of the 1940s-1970s hardware, yet sufficiently expressive to require looping, address calculation, memory reads/writes, and ALU datapath execution, highlighting the direct performance and bandwidth improvements introduced by modern architectural paradigms.
 
-#### Rationale for Instruction Set Simplification
-BrooksZoo is designed as an educational simulation playground rather than a full-system emulator suite. The simulated hardware cores implement a **minimal, representative subset of instructions** for each historical machine rather than their complete, native instruction sets (omitting complex features like supervisor modes, MMUs, page-fault handling, BCD formats, or hundreds of CISC instruction variants). 
+#### Instruction Set Simplification
+BBzoo is designed as an educational simulation playground rather than a full-system emulator suite. The simulated hardware cores implement a **minimal, representative subset of instructions** for each historical machine rather than their complete, native instruction sets (omitting complex features like supervisor modes, MMUs, page-fault handling, BCD formats, or hundreds of CISC instruction variants). 
 
 This design choice keeps the RTL implementation of each core clean, highly readable (typically 100–300 lines of Chisel), and focused on the core datapath differences of each architectural paradigm (e.g. Stack, Register, Accumulator) while ensuring sbt and Verilator hardware compilation remains fast and performant.
+
+---
+
+## 📊 Architecture Comparison Report
+
+| Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI | Code Footprint (words) | ALU Duty Cycle | Mem BW Efficiency | Register Port Stress |
+|---------------------|-------------------|------------------|----------------------|--------------|---------------|-----|------------------------|----------------|-------------------|----------------------|
+| Babbage Anal. Eng.  | 64                | 38              | 13                   | 21            | 4             | 2.92 | 32 | 10.5% | 15.38 B/inst | 0.5 regs/inst |
+| Harvard Mark I      | 64                | 26              | 9                   | 9            | 0             | 2.89 | 9 | 15.4% | 8.00 B/inst | 0.5 regs/inst |
+| Zuse Z1             | 22                | 54              | 21                   | 29            | 4             | 2.57 | 52 | 7.4% | 4.32 B/inst | 0.5 regs/inst |
+| Manchester Baby     | 32                | 62              | 21                   | 33            | 8             | 2.95 | 52 | 6.5% | 7.81 B/inst | 0.5 regs/inst |
+| Univac I            | 72                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 17.31 B/inst | 0.5 regs/inst |
+| Princeton IAS       | 40                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 9.62 B/inst | 0.5 regs/inst |
+| EDSAC               | 17                | 50              | 17                   | 25            | 8             | 2.94 | 53 | 8.0% | 4.13 B/inst | 0.5 regs/inst |
+| IBM 701             | 36                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 8.65 B/inst | 1.0 regs/inst |
+| IBM 704             | 36                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 8.65 B/inst | 1.0 regs/inst |
+| IBM 650             | 40                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 9.62 B/inst | 1.0 regs/inst |
+| IBM 705             | 35                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 8.41 B/inst | 1.0 regs/inst |
+| IBM 1401            | 36                | 38              | 9                   | 21            | 8             | 4.22 | 52 | 10.5% | 14.50 B/inst | 1.0 regs/inst |
+| STC ZEBRA           | 33                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 7.93 B/inst | 1.0 regs/inst |
+| Bull Gamma 60        | 24                | 45              | 16                   | 24            | 4             | 2.81 | 52 | 8.9% | 5.25 B/inst | 1.0 regs/inst |
+| IBM Stretch         | 64                | 46              | 17                   | 25            | 4             | 2.71 | 52 | 8.7% | 13.65 B/inst | 1.0 regs/inst |
+| MOS 6502            | 8                 | 70              | 17                   | 49            | 4             | 4.12 | 72 | 5.7% | 3.12 B/inst | 1.2 regs/inst |
+| DEC PDP-8           | 12                | 133              | 33                   | 69            | 20             | 4.03 | 26 | 3.0% | 4.05 B/inst | 1.2 regs/inst |
+| DEC PDP-11          | 16                | 81              | 16                   | 31            | 4             | 5.06 | 32 | 4.9% | 4.38 B/inst | 2.5 regs/inst |
+| IBM System/360      | 32                | 56              | 12                   | 20            | 4             | 4.67 | 100 | 7.1% | 8.00 B/inst | 1.0 regs/inst |
+| Motorola 68000      | 32                | 157              | 28                   | 68            | 8             | 5.61 | 92 | 2.5% | 10.86 B/inst | 2.5 regs/inst |
+| Burroughs B5500     | 48                | 46              | 17                   | 25            | 4             | 2.71 | 32 | 13.0% | 10.24 B/inst | 0.5 regs/inst |
+| CDC 6600            | 60                | 46              | 17                   | 25            | 4             | 2.71 | 32 | 8.7% | 12.79 B/inst | 1.0 regs/inst |
+| Cray-1              | 64 (Vector)       | 40              | 10                   | 18            | 4             | 4.00 | 28 | 10.0% | 17.60 B/inst | 4.5 regs/inst |
+| Univac 1103A        | 36                | 38              | 9                   | 21            | 8             | 4.22 | 52 | 10.5% | 14.50 B/inst | 1.0 regs/inst |
+| CDC 6600 PPU        | 12                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 2.88 B/inst | 1.0 regs/inst |
+| DEC VAX             | 32                | 81              | 16                   | 31            | 4             | 5.06 | 32 | 4.9% | 8.75 B/inst | 2.5 regs/inst |
+| Intel 8080A         | 8                 | 78              | 21                   | 53            | 4             | 3.71 | 92 | 5.1% | 2.71 B/inst | 1.2 regs/inst |
+| Motorola 6800       | 8                 | 62              | 13                   | 45            | 4             | 4.77 | 92 | 6.5% | 3.77 B/inst | 1.2 regs/inst |
+| IBM 6150 ROMP       | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
+| MIPS I (R2000)      | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
+| ARM1                | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
+| Berkeley RISC-I     | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
+| HP 3000             | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 4.82 B/inst | 0.5 regs/inst |
+| Ethlilith           | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 4.82 B/inst | 0.5 regs/inst |
+| UCSD Pascal P-Mach  | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 10.3% | 4.82 B/inst | 0.5 regs/inst |
+| NEC uPD7720 DSP     | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 4.82 B/inst | 1.2 regs/inst |
+| TI TMS32010 DSP     | 16                | 50              | 13                   | 33            | 4             | 3.85 | 52 | 8.0% | 5.69 B/inst | 1.2 regs/inst |
+| ADI ADSP-2100 DSP   | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 4.82 B/inst | 1.2 regs/inst |
+| IBM MWave DSP       | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 4.82 B/inst | 1.2 regs/inst |
+| 3dfx Voodoo1        | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 9.65 B/inst | 4.5 regs/inst |
+| NVIDIA GeForce 256  | 32                | 66              | 19                   | 43            | 4             | 3.47 | 53 | 6.1% | 9.89 B/inst | 4.5 regs/inst |
+| ATI Radeon R100     | 32                | 62              | 18                   | 40            | 4             | 3.44 | 53 | 6.5% | 9.78 B/inst | 4.5 regs/inst |
+| PowerVR Series 1    | 32                | 62              | 18                   | 40            | 4             | 3.44 | 53 | 6.5% | 9.78 B/inst | 4.5 regs/inst |
+| ARM Mali-200 GPU    | 32                | 25              | 5                   | 16            | 4             | 5.00 | 52 | 4.0% | 16.00 B/inst | 4.5 regs/inst |
+| AMD R600 GPU        | 32                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 7.69 B/inst | 4.5 regs/inst |

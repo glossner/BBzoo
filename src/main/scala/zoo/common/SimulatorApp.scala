@@ -72,7 +72,7 @@ object SimulatorApp {
   }
 
   def printHelp(): Unit = {
-    println("BrooksZoo Standalone Core Simulator")
+    println("BBZoo Standalone Core Simulator")
     println("Usage: sbt \"run --arch <arch_name> --hex <hex_file> [--trace] [--cycles <limit>]\"")
     println("\nSupported architectures:")
     println("  babbage, harvard, zuse, manchestermu1, univac, princetonias, cambridgeedsac,")

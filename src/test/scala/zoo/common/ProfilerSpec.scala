@@ -68,7 +68,7 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     if (foundFile.exists()) foundFile else new File(relativePath)
   }
 
-  it should "profile and compare execution statistics for all 39 cores" in {
+  it should "profile and compare execution statistics for all 45 cores" in {
     println("\n=== RUNNING BENCHMARKS & GATHERING PMU STATS ===")
 
     // 1. DEC PDP-8
@@ -2433,11 +2433,22 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     println(table)
     println("===================================================\n")
 
-    // Save report to file for the user
-    val reportFile = findWorkspaceFile("pmu_report.md")
-    val writer = new java.io.PrintWriter(reportFile)
-    writer.write("# Architecture Comparison Report\n")
-    writer.write(table)
-    writer.close()
+    // Save report directly to the bottom of README.md
+    val readmeFile = findWorkspaceFile("README.md")
+    if (readmeFile.exists()) {
+      val lines = scala.io.Source.fromFile(readmeFile).getLines().toList
+      val targetHeader = "## 📊 Architecture Comparison Report"
+      val index = lines.indexWhere(_.trim.startsWith(targetHeader))
+      val prefix = if (index >= 0) lines.take(index) else lines
+      
+      val writer = new java.io.PrintWriter(readmeFile)
+      prefix.foreach(l => writer.write(l + "\n"))
+      if (prefix.lastOption.exists(_.trim.nonEmpty)) {
+        writer.write("\n")
+      }
+      writer.write(targetHeader + "\n\n")
+      writer.write(table)
+      writer.close()
+    }
   }
 }

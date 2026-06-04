@@ -10,10 +10,22 @@ class CoreSpec extends AnyFlatSpec with Matchers {
   behavior of "Ibm360Core"
 
   it should "execute variable-length instructions and perform addition correctly" in {
+    def findWorkspaceFile(relativePath: String): java.io.File = {
+      var dir = new java.io.File(System.getProperty("user.dir"))
+      var foundFile = new java.io.File(dir, relativePath)
+      while (dir != null && !foundFile.exists()) {
+        dir = dir.getParentFile
+        if (dir != null) {
+          foundFile = new java.io.File(dir, relativePath)
+        }
+      }
+      if (foundFile.exists()) foundFile else new java.io.File(relativePath)
+    }
+
     simulate(new Ibm360Core) { c =>
       // Load program from hex file as bytes
-      val hexFilePath = "/home/jglossner/GitRepos/BrooksZoo/ibm360/sw/test_add.hex"
-      val lines = Source.fromFile(hexFilePath).getLines()
+      val hexFile = findWorkspaceFile("ibm360/sw/test_add.hex")
+      val lines = Source.fromFile(hexFile).getLines()
         .map(_.trim)
         .filterNot(line => line.isEmpty || line.startsWith("#"))
         .map(line => Integer.parseInt(line, 16).toByte)

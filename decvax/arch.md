@@ -12,7 +12,7 @@
 
 ## Instruction Formats
 
-To stay compatible with the word-aligned BrooksZoo simulation environment, VAX instructions are packed into 32-bit words:
+To stay compatible with the word-aligned BBZoo simulation environment, VAX instructions are packed into 32-bit words:
 ```text
  31          24 23          16 15           8 7            0
 +--------------+--------------+--------------+--------------+

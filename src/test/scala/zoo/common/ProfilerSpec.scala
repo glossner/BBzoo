@@ -56,6 +56,11 @@ import zoo.amd2901.Amd2901Core
 import zoo.intel3002.Intel3002Core
 import zoo.imp16.Imp16Core
 import zoo.mc10800.Mc10800Core
+import zoo.illiac4.{Core => Illiac4Core}
+import zoo.icldap.{Core => IcldapCore}
+import zoo.goodmpp.{Core => GoodmppCore}
+import zoo.cm1.{Core => Cm1Core}
+import zoo.ibmmfast.{Core => IbmmfastCore}
 
 class ProfilerSpec extends AnyFlatSpec with Matchers {
   behavior of "ZooArchitectureProfiler"
@@ -2492,6 +2497,246 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       mem(68) shouldBe 44
     }
 
+    // 50. ILLIAC IV
+    val illiac4Hex = findWorkspaceFile("illiac4/sw/test_vector.hex")
+    val illiac4Bytes = Source.fromFile(illiac4Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseLong(l.trim, 16)).toArray
+    var illiac4Cycles = 0L
+    var illiac4Insts = 0L
+    var illiac4Reads = 0L
+    var illiac4Writes = 0L
+
+    simulate(new Illiac4Core) { c =>
+      val mem = Array.fill(256)(0L)
+      for (i <- illiac4Bytes.indices) mem(i) = illiac4Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 1500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toLong
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      illiac4Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      illiac4Insts  = c.io.pmu_insts.peek().litValue.toLong
+      illiac4Reads  = c.io.pmu_reads.peek().litValue.toLong
+      illiac4Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(18) shouldBe 11
+      mem(19) shouldBe 22
+      mem(20) shouldBe 33
+      mem(21) shouldBe 44
+    }
+
+    // 51. ICL DAP
+    val icldapHex = findWorkspaceFile("icldap/sw/test_vector.hex")
+    val icldapBytes = Source.fromFile(icldapHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var icldapCycles = 0L
+    var icldapInsts = 0L
+    var icldapReads = 0L
+    var icldapWrites = 0L
+
+    simulate(new IcldapCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- icldapBytes.indices) mem(i) = icldapBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 1500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      icldapCycles = c.io.pmu_cycles.peek().litValue.toLong
+      icldapInsts  = c.io.pmu_insts.peek().litValue.toLong
+      icldapReads  = c.io.pmu_reads.peek().litValue.toLong
+      icldapWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(154) shouldBe 11
+      mem(155) shouldBe 22
+      mem(156) shouldBe 33
+      mem(157) shouldBe 44
+    }
+
+    // 52. Goodyear MPP
+    val goodmppHex = findWorkspaceFile("goodmpp/sw/test_vector.hex")
+    val goodmppBytes = Source.fromFile(goodmppHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var goodmppCycles = 0L
+    var goodmppInsts = 0L
+    var goodmppReads = 0L
+    var goodmppWrites = 0L
+
+    simulate(new GoodmppCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- goodmppBytes.indices) mem(i) = goodmppBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 1500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      goodmppCycles = c.io.pmu_cycles.peek().litValue.toLong
+      goodmppInsts  = c.io.pmu_insts.peek().litValue.toLong
+      goodmppReads  = c.io.pmu_reads.peek().litValue.toLong
+      goodmppWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(161) shouldBe 11
+      mem(162) shouldBe 22
+      mem(163) shouldBe 33
+      mem(164) shouldBe 44
+    }
+
+    // 53. Connection Machine CM-1
+    val cm1Hex = findWorkspaceFile("cm1/sw/test_vector.hex")
+    val cm1Bytes = Source.fromFile(cm1Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var cm1Cycles = 0L
+    var cm1Insts = 0L
+    var cm1Reads = 0L
+    var cm1Writes = 0L
+
+    simulate(new Cm1Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- cm1Bytes.indices) mem(i) = cm1Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 1500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      cm1Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      cm1Insts  = c.io.pmu_insts.peek().litValue.toLong
+      cm1Reads  = c.io.pmu_reads.peek().litValue.toLong
+      cm1Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(154) shouldBe 11
+      mem(155) shouldBe 22
+      mem(156) shouldBe 33
+      mem(157) shouldBe 44
+    }
+
+    // 54. IBM MFAST
+    val ibmmfastHex = findWorkspaceFile("ibmmfast/sw/test_vector.hex")
+    val ibmmfastBytes = Source.fromFile(ibmmfastHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var ibmmfastCycles = 0L
+    var ibmmfastInsts = 0L
+    var ibmmfastReads = 0L
+    var ibmmfastWrites = 0L
+
+    simulate(new IbmmfastCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- ibmmfastBytes.indices) mem(i) = ibmmfastBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      ibmmfastCycles = c.io.pmu_cycles.peek().litValue.toLong
+      ibmmfastInsts  = c.io.pmu_insts.peek().litValue.toLong
+      ibmmfastReads  = c.io.pmu_reads.peek().litValue.toLong
+      ibmmfastWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(24) shouldBe 11
+      mem(25) shouldBe 22
+      mem(26) shouldBe 33
+      mem(27) shouldBe 44
+    }
+
     // Print Consolidated Comparative Table
     // Print Consolidated Comparative Table
     def aluDutyCycle(arch: String, cycles: Long): String = {
@@ -2505,7 +2750,8 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
         case "powervr1" => 4.0
         case "mips1" | "arm1" | "berkeleyrisc" | "ibm6150" | "hp3000" | "ethlilith" => 8.0
         case "b5500" | "ucsdp" => 6.0
-        case "mos" | "intel8080a" | "motorola6800" | "pdp8" | "upd7720" | "tms32010" | "adsp2100" | "ibmmwave" | "amd2901" | "intel3002" | "imp16" | "mc10800" => 4.0
+        case "mos" | "intel8080a" | "motorola6800" | "pdp8" | "upd7720" | "tms32010" | "adsp2100" | "ibmmwave" | "amd2901" | "intel3002" | "imp16" | "mc10800" | "icldap" | "goodmpp" | "cm1" => 4.0
+        case "illiac4" | "ibmmfast" => 8.0
         case _ => 4.0
       }
       if (cycles > 0) String.format("%.1f%%", Double.box((aluCycles / cycles.toDouble) * 100.0)) else "N/A"
@@ -2521,8 +2767,9 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     def regPortStress(arch: String): String = {
       val factor = arch match {
         case "cray" | "mali200" | "amdr600" | "geforce256" | "radeonr100" | "voodoo1" | "powervr1" => 4.5
+        case "illiac4" | "ibmmfast" => 4.5
         case "mips1" | "arm1" | "berkeleyrisc" | "ibm6150" | "decvax" | "pdp11" | "m68k" => 2.5
-        case "mos" | "intel8080a" | "motorola6800" | "pdp8" | "upd7720" | "tms32010" | "adsp2100" | "ibmmwave" | "amd2901" | "intel3002" | "imp16" | "mc10800" => 1.2
+        case "mos" | "intel8080a" | "motorola6800" | "pdp8" | "upd7720" | "tms32010" | "adsp2100" | "ibmmwave" | "amd2901" | "intel3002" | "imp16" | "mc10800" | "icldap" | "goodmpp" | "cm1" => 1.2
         case "b5500" | "ucsdp" | "hp3000" | "ethlilith" | "cambridgeedsac" | "manchestermu1" | "babbage" | "harvard" | "zuse" | "univac" | "princetonias" => 0.5
         case _ => 1.0
       }
@@ -2578,6 +2825,11 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     val intel3002Cpi = if (intel3002Insts > 0) String.format("%.2f", Double.box(intel3002Cycles.toDouble / intel3002Insts)) else "N/A"
     val imp16Cpi = if (imp16Insts > 0) String.format("%.2f", Double.box(imp16Cycles.toDouble / imp16Insts)) else "N/A"
     val mc10800Cpi = if (mc10800Insts > 0) String.format("%.2f", Double.box(mc10800Cycles.toDouble / mc10800Insts)) else "N/A"
+    val illiac4Cpi = if (illiac4Insts > 0) String.format("%.2f", Double.box(illiac4Cycles.toDouble / illiac4Insts)) else "N/A"
+    val icldapCpi = if (icldapInsts > 0) String.format("%.2f", Double.box(icldapCycles.toDouble / icldapInsts)) else "N/A"
+    val goodmppCpi = if (goodmppInsts > 0) String.format("%.2f", Double.box(goodmppCycles.toDouble / goodmppInsts)) else "N/A"
+    val cm1Cpi = if (cm1Insts > 0) String.format("%.2f", Double.box(cm1Cycles.toDouble / cm1Insts)) else "N/A"
+    val ibmmfastCpi = if (ibmmfastInsts > 0) String.format("%.2f", Double.box(ibmmfastCycles.toDouble / ibmmfastInsts)) else "N/A"
 
     val table = s"""
 | Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI | Code Footprint (words) | ALU Duty Cycle | Mem BW Efficiency | Register Port Stress |
@@ -2631,6 +2883,11 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
 | Intel 3002          | 16                | $intel3002Cycles              | $intel3002Insts                   | $intel3002Reads            | $intel3002Writes             | $intel3002Cpi | ${intel3002Bytes.length} | ${aluDutyCycle("intel3002", intel3002Cycles)} | ${memBwEfficiency(16.0, intel3002Reads, intel3002Writes, intel3002Insts)} | ${regPortStress("intel3002")} |
 | NS IMP-16           | 16                | $imp16Cycles              | $imp16Insts                   | $imp16Reads            | $imp16Writes             | $imp16Cpi | ${imp16Bytes.length} | ${aluDutyCycle("imp16", imp16Cycles)} | ${memBwEfficiency(16.0, imp16Reads, imp16Writes, imp16Insts)} | ${regPortStress("imp16")} |
 | Motorola MC10800    | 16                | $mc10800Cycles              | $mc10800Insts                   | $mc10800Reads            | $mc10800Writes             | $mc10800Cpi | ${mc10800Bytes.length} | ${aluDutyCycle("mc10800", mc10800Cycles)} | ${memBwEfficiency(16.0, mc10800Reads, mc10800Writes, mc10800Insts)} | ${regPortStress("mc10800")} |
+| ILLIAC IV           | 64 (SIMD)         | $illiac4Cycles              | $illiac4Insts                   | $illiac4Reads            | $illiac4Writes             | $illiac4Cpi | ${illiac4Bytes.length} | ${aluDutyCycle("illiac4", illiac4Cycles)} | ${memBwEfficiency(64.0, illiac4Reads, illiac4Writes, illiac4Insts)} | ${regPortStress("illiac4")} |
+| ICL DAP             | 1 (Bit-Serial)    | $icldapCycles              | $icldapInsts                   | $icldapReads            | $icldapWrites             | $icldapCpi | ${icldapBytes.length} | ${aluDutyCycle("icldap", icldapCycles)} | ${memBwEfficiency(16.0, icldapReads, icldapWrites, icldapInsts)} | ${regPortStress("icldap")} |
+| Goodyear MPP        | 1 (Bit-Serial)    | $goodmppCycles              | $goodmppInsts                   | $goodmppReads            | $goodmppWrites             | $goodmppCpi | ${goodmppBytes.length} | ${aluDutyCycle("goodmpp", goodmppCycles)} | ${memBwEfficiency(16.0, goodmppReads, goodmppWrites, goodmppInsts)} | ${regPortStress("goodmpp")} |
+| Connection Machine  | 1 (Bit-Serial)    | $cm1Cycles              | $cm1Insts                   | $cm1Reads            | $cm1Writes             | $cm1Cpi | ${cm1Bytes.length} | ${aluDutyCycle("cm1", cm1Cycles)} | ${memBwEfficiency(16.0, cm1Reads, cm1Writes, cm1Insts)} | ${regPortStress("cm1")} |
+| IBM MFAST           | 16 (VLIW)         | $ibmmfastCycles              | $ibmmfastInsts                   | $ibmmfastReads            | $ibmmfastWrites             | $ibmmfastCpi | ${ibmmfastBytes.length} | ${aluDutyCycle("ibmmfast", ibmmfastCycles)} | ${memBwEfficiency(16.0, ibmmfastReads, ibmmfastWrites, ibmmfastInsts)} | ${regPortStress("ibmmfast")} |
 """
 
     println("\n=== COMPARATIVE ARCHITECTURE PERFORMANCE REPORT ===")

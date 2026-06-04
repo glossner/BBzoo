@@ -1,12 +1,12 @@
 # BBZoo 🦁
 
-Welcome to **BBZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit A. Blaauw and Frederick P. Brooks, Jr. This repository implements **49 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
+Welcome to **BBZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit A. Blaauw and Frederick P. Brooks, Jr. This repository implements **54 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
 
 ---
 
 ## 🏛️ Architectural Houses
 
-The architectures in the zoo are organized into 13 distinct "houses" based on their core datapath and register organization paradigms:
+The architectures in the zoo are organized into 14 distinct "houses" based on their core datapath and register organization paradigms:
 
 ### 1. Pioneer House
 *Characterized by the earliest explorations of stored-program, mechanical, or relay-based calculation.*
@@ -96,6 +96,14 @@ The architectures in the zoo are organized into 13 distinct "houses" based on th
 - 💾 **Intel 3002** (Intel, 1974) — [intel3002](intel3002) / [arch.md](intel3002/arch.md)
 - 🎛️ **NS IMP-16** (National Semiconductor, 1973) — [imp16](imp16) / [arch.md](imp16/arch.md)
 - 🔌 **Motorola MC10800** (Motorola, 1976) — [mc10800](mc10800) / [arch.md](mc10800/arch.md)
+
+### 14. Array Processor House
+*SIMD, Bit-Serial, and VLIW architectures featuring arrays of parallel processing elements managed by a central control unit.*
+- 🖥️ **ILLIAC IV** (UIUC / Burroughs, 1966) — [illiac4](illiac4) / [arch.md](illiac4/arch.md)
+- 📡 **ICL DAP** (ICL, 1979) — [icldap](icldap) / [arch.md](icldap/arch.md)
+- 🛰️ **Goodyear MPP** (Goodyear / NASA, 1983) — [goodmpp](goodmpp) / [arch.md](goodmpp/arch.md)
+- 🕸️ **Thinking Machines CM-1** (Thinking Machines, 1985) — [cm1](cm1) / [arch.md](cm1/arch.md)
+- ⚡ **IBM MFAST** (IBM, 1998) — [ibmmfast](ibmmfast) / [arch.md](ibmmfast/arch.md)
 
 ---
 
@@ -214,3 +222,8 @@ This design choice keeps the RTL implementation of each core clean, highly reada
 | Intel 3002          | 16                | 152              | 43                   | 67            | 4             | 3.53 | 41 | 2.6% | 3.30 B/inst | 1.2 regs/inst |
 | NS IMP-16           | 16                | 478              | 113                   | 253            | 28             | 4.23 | 69 | 0.8% | 4.97 B/inst | 1.2 regs/inst |
 | Motorola MC10800    | 16                | 478              | 113                   | 253            | 28             | 4.23 | 69 | 0.8% | 4.97 B/inst | 1.2 regs/inst |
+| ILLIAC IV           | 64 (SIMD)         | 32              | 7                   | 8            | 4             | 4.57 | 22 | 25.0% | 13.71 B/inst | 4.5 regs/inst |
+| ICL DAP             | 1 (Bit-Serial)    | 548              | 98                   | 128            | 64             | 5.59 | 158 | 0.7% | 3.92 B/inst | 1.2 regs/inst |
+| Goodyear MPP        | 1 (Bit-Serial)    | 558              | 100                   | 132            | 64             | 5.58 | 165 | 0.7% | 3.92 B/inst | 1.2 regs/inst |
+| Connection Machine  | 1 (Bit-Serial)    | 548              | 98                   | 128            | 64             | 5.59 | 158 | 0.7% | 3.92 B/inst | 1.2 regs/inst |
+| IBM MFAST           | 16 (VLIW)         | 39              | 8                   | 8            | 4             | 4.88 | 28 | 20.5% | 3.00 B/inst | 4.5 regs/inst |

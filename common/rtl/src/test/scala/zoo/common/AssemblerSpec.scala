@@ -92,6 +92,12 @@ class AssemblerSpec extends AnyFlatSpec with Matchers {
   verifyHex("intel3002", "intel3002/sw/test_vector.asm", "intel3002/sw/test_vector.hex", new Intel3002Assembler())
   verifyHex("imp16", "imp16/sw/test_vector.asm", "imp16/sw/test_vector.hex", new Imp16Assembler())
   verifyHex("mc10800", "mc10800/sw/test_vector.asm", "mc10800/sw/test_vector.hex", new Mc10800Assembler())
+
+  verifyHex("illiac4", "illiac4/sw/test_vector.asm", "illiac4/sw/test_vector.hex", new Illiac4Assembler())
+  verifyHex("icldap", "icldap/sw/test_vector.asm", "icldap/sw/test_vector.hex", new IcldapAssembler())
+  verifyHex("goodmpp", "goodmpp/sw/test_vector.asm", "goodmpp/sw/test_vector.hex", new GoodmppAssembler())
+  verifyHex("cm1", "cm1/sw/test_vector.asm", "cm1/sw/test_vector.hex", new Cm1Assembler())
+  verifyHex("ibmmfast", "ibmmfast/sw/test_vector.asm", "ibmmfast/sw/test_vector.hex", new IbmmfastAssembler())
 }
 
 

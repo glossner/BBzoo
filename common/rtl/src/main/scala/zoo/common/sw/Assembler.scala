@@ -6,7 +6,7 @@ import scala.io.Source
 object Assembler {
   def main(args: Array[String]): Unit = {
     if (args.length < 5 || args(0) != "-arch") {
-      println("Usage: sbt \"common/runMain zoo.common.sw.Assembler -arch <pdp8|ibm360|cray1|m68k|burroughsb5500|decpdp11|cdc6600|mos6502|babbage|harvardmark1|zusez1|manchester|univac1|ias|edsac|ibm701|ibm704> <input.asm> -o <output.hex>\"")
+      println("Usage: sbt \"common/runMain zoo.common.sw.Assembler -arch <pdp8|ibm360|cray1|m68k|burroughsb5500|decpdp11|cdc6600|mos6502|babbage|harvardmark1|zusez1|manchester|univac1|ias|edsac|ibm701|ibm704|ibm650|ibm705|ibm1401> <input.asm> -o <output.hex>\"")
       sys.exit(1)
     }
 
@@ -32,6 +32,9 @@ object Assembler {
       case "edsac"           => new EdsacAssembler()
       case "ibm701"          => new Ibm701Assembler()
       case "ibm704"          => new Ibm704Assembler()
+      case "ibm650"          => new Ibm650Assembler()
+      case "ibm705"          => new Ibm705Assembler()
+      case "ibm1401"         => new Ibm1401Assembler()
       case _ =>
         println(s"Unknown architecture: $arch")
         sys.exit(1)

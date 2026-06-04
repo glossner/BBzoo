@@ -25,22 +25,28 @@ The architectures in the zoo are organized into six distinct "houses" based on t
 - 🔬 **IBM 701** (Nathaniel Rochester, 1952) — [ibm701](file:///home/jglossner/GitRepos/BrooksZoo/ibm701) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm701/arch.md)
 - 📈 **IBM 704** (Gene Amdahl, 1954) — [ibm704](file:///home/jglossner/GitRepos/BrooksZoo/ibm704) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm704/arch.md)
 
-### 3. Accumulator-Minicomputer House
+### 3. IBM House
+*Representing the commercial business and variable-word-length scientific computer evolution.*
+- 🚂 **IBM 650** (Frank Hamilton, Ernest Hughes, & James Birkenstock, 1953) — [ibm650](file:///home/jglossner/GitRepos/BrooksZoo/ibm650) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm650/arch.md)
+- 🏢 **IBM 705** (Werner Buchholz, 1954) — [ibm705](file:///home/jglossner/GitRepos/BrooksZoo/ibm705) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm705/arch.md)
+- 📇 **IBM 1401** (Chuck Branscomb, 1959) — [ibm1401](file:///home/jglossner/GitRepos/BrooksZoo/ibm1401) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm1401/arch.md)
+
+### 4. Accumulator-Minicomputer House
 *Highly constrained accumulator architectures designed for low-cost, mainstream mini and microcomputing.*
 - 📉 **DEC PDP-8** (C. Gordon Bell & Edson de Castro, 1965) — [decpdp8](file:///home/jglossner/GitRepos/BrooksZoo/decpdp8) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/decpdp8/arch.md)
 - 🕹️ **MOS 6502** (Chuck Peddle, 1975) — [mos6502](file:///home/jglossner/GitRepos/BrooksZoo/mos6502) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/mos6502/arch.md)
 
-### 4. General Register House
+### 5. General Register House
 *Modern paradigms utilizing symmetric register files to decouple calculations from a single accumulator.*
 - 🖥️ **DEC PDP-11** (C. Gordon Bell, 1970) — [decpdp11](file:///home/jglossner/GitRepos/BrooksZoo/decpdp11) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/decpdp11/arch.md)
 - 🏢 **IBM System/360** (Gene Amdahl, Fred Brooks, & G. A. Blaauw, 1964) — [ibm360](file:///home/jglossner/GitRepos/BrooksZoo/ibm360) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm360/arch.md)
 - 📟 **Motorola 68000** (Motorola Team, 1979) — [motorola68000](file:///home/jglossner/GitRepos/BrooksZoo/motorola68000) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/motorola68000/arch.md)
 
-### 5. Stack House
+### 6. Stack House
 *Zero-address architectures utilizing a hardware-managed evaluation stack for operations.*
 - 🥞 **Burroughs B5500** (Robert S. Barton, 1961) — [burroughsb5500](file:///home/jglossner/GitRepos/BrooksZoo/burroughsb5500) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/burroughsb5500/arch.md)
 
-### 6. Supercomputer / Load-Store House
+### 7. Supercomputer / Load-Store House
 *Optimized for high-throughput arithmetic, scientific calculations, and pipelining.*
 - ⚡ **CDC 6600** (Seymour Cray, 1964) — [cdc6600](file:///home/jglossner/GitRepos/BrooksZoo/cdc6600) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/cdc6600/arch.md)
 - 🌀 **Cray-1** (Seymour Cray, 1976) — [cray1](file:///home/jglossner/GitRepos/BrooksZoo/cray1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/cray1/arch.md)

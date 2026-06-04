@@ -1,3 +1,12 @@
+# 06/04/2026 06:30 IBM House Expansion: IBM 650, IBM 705, and IBM 1401
+- Implemented three classic IBM House CPU architectures (IBM 650, IBM 705, and IBM 1401) with fully functional multi-cycle datapath cores, instruction decoders, and test suites.
+- Added synthesizable Performance Monitoring Units (PMUs) to all 3 new cores to track cycles, instruction retirement, and memory read/write traffic.
+- Designed unique custom execution paradigms for each machine: next-instruction-address drum chaining for IBM 650, character-oriented 35-bit word logic for IBM 705, and memory-to-memory evaluation with no accumulator register for IBM 1401.
+- Built Scala and Python assemblers for all 3 new architectures and integrated them into the pluggable assembler framework.
+- Created architectural documentation (`arch.md`) for all 3 new machines detailing introduction year, designers (Frank Hamilton, Ernest Hughes, James Birkenstock, Werner Buchholz, Chuck Branscomb), unique architectural features, instruction formats, and implemented/unimplemented instructions.
+- Expanded the unified 4-element Vector Addition benchmark (`ProfilerSpec.scala`) to include the 3 new cores, verifying correct computation and generating comparative PMU execution metrics.
+- Updated `README.md` to catalog all 20 machines, organizing them by their architectural families/houses while preserving the flat `companyMachine` top-level directory structure.
+
 # 06/04/2026 05:55 Von Neumann House Expansion: Princeton IAS, EDSAC, IBM 701, and IBM 704
 - Implemented four classic Von Neumann House CPU architectures (Princeton IAS, EDSAC, IBM 701, and IBM 704) with fully functional multi-cycle datapath cores, instruction decoders, and test suites.
 - Added synthesizable Performance Monitoring Units (PMUs) to all 4 new cores to track cycles, instruction retirement, and memory read/write traffic.

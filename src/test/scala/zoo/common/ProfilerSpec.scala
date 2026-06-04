@@ -24,6 +24,9 @@ import zoo.ias.IasCore
 import zoo.edsac.EdsacCore
 import zoo.ibm701.Ibm701Core
 import zoo.ibm704.Ibm704Core
+import zoo.ibm650.Ibm650Core
+import zoo.ibm705.Ibm705Core
+import zoo.ibm1401.Ibm1401Core
 
 class ProfilerSpec extends AnyFlatSpec with Matchers {
   behavior of "ZooArchitectureProfiler"
@@ -906,6 +909,151 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       mem(51) shouldBe 44L
     }
 
+    // 18. IBM 650
+    val ibm650Hex = findWorkspaceFile("ibm650/sw/test_vector.hex")
+    val ibm650Bytes = Source.fromFile(ibm650Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
+    var ibm650Cycles = 0L
+    var ibm650Insts = 0L
+    var ibm650Reads = 0L
+    var ibm650Writes = 0L
+
+    simulate(new Ibm650Core) { c =>
+      val mem = Array.fill(4096)(0L)
+      for (i <- ibm650Bytes.indices) mem(i) = ibm650Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toLong
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      ibm650Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      ibm650Insts  = c.io.pmu_insts.peek().litValue.toLong
+      ibm650Reads  = c.io.pmu_reads.peek().litValue.toLong
+      ibm650Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11L
+      mem(49) shouldBe 22L
+      mem(50) shouldBe 33L
+      mem(51) shouldBe 44L
+    }
+
+    // 19. IBM 705
+    val ibm705Hex = findWorkspaceFile("ibm705/sw/test_vector.hex")
+    val ibm705Bytes = Source.fromFile(ibm705Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
+    var ibm705Cycles = 0L
+    var ibm705Insts = 0L
+    var ibm705Reads = 0L
+    var ibm705Writes = 0L
+
+    simulate(new Ibm705Core) { c =>
+      val mem = Array.fill(4096)(0L)
+      for (i <- ibm705Bytes.indices) mem(i) = ibm705Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toLong
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      ibm705Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      ibm705Insts  = c.io.pmu_insts.peek().litValue.toLong
+      ibm705Reads  = c.io.pmu_reads.peek().litValue.toLong
+      ibm705Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11L
+      mem(49) shouldBe 22L
+      mem(50) shouldBe 33L
+      mem(51) shouldBe 44L
+    }
+
+    // 20. IBM 1401
+    val ibm1401Hex = findWorkspaceFile("ibm1401/sw/test_vector.hex")
+    val ibm1401Bytes = Source.fromFile(ibm1401Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
+    var ibm1401Cycles = 0L
+    var ibm1401Insts = 0L
+    var ibm1401Reads = 0L
+    var ibm1401Writes = 0L
+
+    simulate(new Ibm1401Core) { c =>
+      val mem = Array.fill(4096)(0L)
+      for (i <- ibm1401Bytes.indices) mem(i) = ibm1401Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toLong
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      ibm1401Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      ibm1401Insts  = c.io.pmu_insts.peek().litValue.toLong
+      ibm1401Reads  = c.io.pmu_reads.peek().litValue.toLong
+      ibm1401Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11L
+      mem(49) shouldBe 22L
+      mem(50) shouldBe 33L
+      mem(51) shouldBe 44L
+    }
+
+
     // Print Consolidated Comparative Table
     val pdp8Cpi  = if (pdp8Insts > 0)  String.format("%.2f", Double.box(pdp8Cycles.toDouble / pdp8Insts))  else "N/A"
     val pdp11Cpi = if (pdp11Insts > 0) String.format("%.2f", Double.box(pdp11Cycles.toDouble / pdp11Insts)) else "N/A"
@@ -924,6 +1072,9 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     val edsacCpi   = if (edsacInsts > 0)   String.format("%.2f", Double.box(edsacCycles.toDouble / edsacInsts))   else "N/A"
     val ibm701Cpi  = if (ibm701Insts > 0)  String.format("%.2f", Double.box(ibm701Cycles.toDouble / ibm701Insts))   else "N/A"
     val ibm704Cpi  = if (ibm704Insts > 0)  String.format("%.2f", Double.box(ibm704Cycles.toDouble / ibm704Insts))   else "N/A"
+    val ibm650Cpi  = if (ibm650Insts > 0)  String.format("%.2f", Double.box(ibm650Cycles.toDouble / ibm650Insts))   else "N/A"
+    val ibm705Cpi  = if (ibm705Insts > 0)  String.format("%.2f", Double.box(ibm705Cycles.toDouble / ibm705Insts))   else "N/A"
+    val ibm1401Cpi = if (ibm1401Insts > 0) String.format("%.2f", Double.box(ibm1401Cycles.toDouble / ibm1401Insts)) else "N/A"
 
     val table = s"""
 | Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI |
@@ -937,6 +1088,9 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
 | EDSAC               | 17                | $edsacCycles              | $edsacInsts                   | $edsacReads            | $edsacWrites             | $edsacCpi |
 | IBM 701             | 36                | $ibm701Cycles              | $ibm701Insts                   | $ibm701Reads            | $ibm701Writes             | $ibm701Cpi |
 | IBM 704             | 36                | $ibm704Cycles              | $ibm704Insts                   | $ibm704Reads            | $ibm704Writes             | $ibm704Cpi |
+| IBM 650             | 40                | $ibm650Cycles              | $ibm650Insts                   | $ibm650Reads            | $ibm650Writes             | $ibm650Cpi |
+| IBM 705             | 35                | $ibm705Cycles              | $ibm705Insts                   | $ibm705Reads            | $ibm705Writes             | $ibm705Cpi |
+| IBM 1401            | 36                | $ibm1401Cycles              | $ibm1401Insts                   | $ibm1401Reads            | $ibm1401Writes             | $ibm1401Cpi |
 | MOS 6502            | 8                 | $mosCycles              | $mosInsts                   | $mosReads            | $mosWrites             | $mosCpi |
 | DEC PDP-8           | 12                | $pdp8Cycles              | $pdp8Insts                   | $pdp8Reads            | $pdp8Writes             | $pdp8Cpi |
 | DEC PDP-11          | 16                | $pdp11Cycles              | $pdp11Insts                   | $pdp11Reads            | $pdp11Writes             | $pdp11Cpi |

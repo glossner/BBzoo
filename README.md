@@ -80,6 +80,15 @@ The architectures in the zoo are organized into ten distinct "houses" based on t
 - 🔊 **ADI ADSP-2100** (Analog Devices, 1986) — [adsp2100](file:///home/jglossner/GitRepos/BrooksZoo/adsp2100) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/adsp2100/arch.md)
 - 🌊 **IBM MWave** (IBM, 1992) — [ibmmwave](file:///home/jglossner/GitRepos/BrooksZoo/ibmmwave) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibmmwave/arch.md)
 
+### 12. GPU House
+*Graphics Processing Units and accelerators designed for hardware rasterization, texture mapping, tile-based rendering, and VLIW instruction slots.*
+- 🎨 **3dfx Voodoo1** (3dfx Interactive, 1996) — [voodoo1](file:///home/jglossner/GitRepos/BrooksZoo/voodoo1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/voodoo1/arch.md)
+- 👁️ **NVIDIA GeForce 256** (NVIDIA, 1999) — [geforce256](file:///home/jglossner/GitRepos/BrooksZoo/geforce256) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/geforce256/arch.md)
+- 🐉 **ATI Radeon R100** (ATI, 2000) — [radeonr100](file:///home/jglossner/GitRepos/BrooksZoo/radeonr100) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/radeonr100/arch.md)
+- ⚡ **PowerVR Series 1** (Imagination Technologies, 1996) — [powervr1](file:///home/jglossner/GitRepos/BrooksZoo/powervr1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/powervr1/arch.md)
+- 🌀 **ARM Mali-200** (ARM, 2007) — [mali200](file:///home/jglossner/GitRepos/BrooksZoo/mali200) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/mali200/arch.md)
+- 🔬 **AMD R600** (AMD, 2007) — [amdr600](file:///home/jglossner/GitRepos/BrooksZoo/amdr600) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/amdr600/arch.md)
+
 ---
 
 ## 🛠️ Getting Started
@@ -101,7 +110,7 @@ sbt test
 ```
 
 ### PMU Benchmarks
-To compare the execution statistics of the vector addition workload across all 39 architectures, run the comparative profiler test:
+To compare the execution statistics of the vector addition workload across all 45 architectures, run the comparative profiler test:
 ```bash
 sbt "project root" "testOnly zoo.common.ProfilerSpec"
 ```

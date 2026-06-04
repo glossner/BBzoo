@@ -1,3 +1,20 @@
+# 06/04/2026 09:54 GPU House Expansion & Architecture Renaming: 3dfx Voodoo1, NVIDIA GeForce 256, ATI Radeon R100, PowerVR Series 1, ARM Mali-200, AMD R600
+- Implemented six iconic early graphics architectures under the new **GPU House**: 3dfx Voodoo1, NVIDIA GeForce 256, ATI Radeon R100, PowerVR Series 1, ARM Mali-200, and AMD R600.
+- Built synthesizable multi-cycle datapath cores, instruction decoders, and sbt test suites for all 6 GPU architectures.
+- Added synthesizable Performance Monitoring Units (PMUs) to all 6 new cores to track cycles, instruction retirement, and memory read/write traffic.
+- Developed Python and Scala assemblers for all 6 new GPU architectures and integrated them into the global assembler registries.
+- Created architectural documentation (`arch.md`) and assembly vector addition test codes for all 6 architectures.
+- Integrated the new GPU cores into the unified 4-element Vector Addition benchmark (`ProfilerSpec.scala`), compiling them, verifying correct computation, and generating comparison PMU metrics.
+- Reorganized `README.md` to catalog all 45 architectures, establishing the new **GPU House** category.
+- Renamed and refactored seven existing architectures for consistency and naming alignment:
+  - `mwave` -> `ibmmwave`
+  - `ias` -> `princetonias`
+  - `manchester` -> `manchestermu1`
+  - `berkrisc` -> `berkeleyrisc`
+  - `edsac` -> `cambridgeedsac`
+  - `mipsi` -> `mips1`
+  - `lilith` -> `ethlilith`
+
 # 06/04/2026 08:35 DSP House Expansion: NEC uPD7720, TI TMS32010, ADI ADSP-2100, and IBM MWave
 - Implemented four classic digital signal processors under the new **DSP House**: NEC µPD7720, TI TMS32010, ADI ADSP-2100, and IBM MWave.
 - Built synthesizable multi-cycle datapath cores, instruction decoders, and sbt test suites for all 4 DSP architectures.

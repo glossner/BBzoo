@@ -46,6 +46,12 @@ import zoo.upd7720.Upd7720Core
 import zoo.tms32010.Tms32010Core
 import zoo.adsp2100.Adsp2100Core
 import zoo.ibmmwave.IbmmwaveCore
+import zoo.voodoo1.Voodoo1Core
+import zoo.geforce256.Geforce256Core
+import zoo.radeonr100.Radeonr100Core
+import zoo.powervr1.Powervr1Core
+import zoo.mali200.Mali200Core
+import zoo.amdr600.Amdr600Core
 
 class ProfilerSpec extends AnyFlatSpec with Matchers {
   behavior of "ZooArchitectureProfiler"
@@ -1984,6 +1990,312 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       mem(51) shouldBe 44
     }
 
+    // 40. 3dfx Voodoo1
+    val voodoo1Hex = findWorkspaceFile("voodoo1/sw/test_vector.hex")
+    val voodoo1Bytes = Source.fromFile(voodoo1Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => {
+      if (l.trim.length > 8) java.lang.Long.parseLong(l.trim.substring(l.trim.length - 8), 16).toInt
+      else java.lang.Long.parseLong(l.trim, 16).toInt
+    }).toArray
+    var voodoo1Cycles = 0L
+    var voodoo1Insts = 0L
+    var voodoo1Reads = 0L
+    var voodoo1Writes = 0L
+
+    simulate(new Voodoo1Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- voodoo1Bytes.indices) mem(i) = voodoo1Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      voodoo1Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      voodoo1Insts  = c.io.pmu_insts.peek().litValue.toLong
+      voodoo1Reads  = c.io.pmu_reads.peek().litValue.toLong
+      voodoo1Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 41. NVIDIA GeForce 256
+    val geforce256Hex = findWorkspaceFile("geforce256/sw/test_vector.hex")
+    val geforce256Bytes = Source.fromFile(geforce256Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => {
+      if (l.trim.length > 8) java.lang.Long.parseLong(l.trim.substring(l.trim.length - 8), 16).toInt
+      else java.lang.Long.parseLong(l.trim, 16).toInt
+    }).toArray
+    var geforce256Cycles = 0L
+    var geforce256Insts = 0L
+    var geforce256Reads = 0L
+    var geforce256Writes = 0L
+
+    simulate(new Geforce256Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- geforce256Bytes.indices) mem(i) = geforce256Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      geforce256Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      geforce256Insts  = c.io.pmu_insts.peek().litValue.toLong
+      geforce256Reads  = c.io.pmu_reads.peek().litValue.toLong
+      geforce256Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 42. ATI Radeon R100
+    val radeonr100Hex = findWorkspaceFile("radeonr100/sw/test_vector.hex")
+    val radeonr100Bytes = Source.fromFile(radeonr100Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => {
+      if (l.trim.length > 8) java.lang.Long.parseLong(l.trim.substring(l.trim.length - 8), 16).toInt
+      else java.lang.Long.parseLong(l.trim, 16).toInt
+    }).toArray
+    var radeonr100Cycles = 0L
+    var radeonr100Insts = 0L
+    var radeonr100Reads = 0L
+    var radeonr100Writes = 0L
+
+    simulate(new Radeonr100Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- radeonr100Bytes.indices) mem(i) = radeonr100Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      radeonr100Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      radeonr100Insts  = c.io.pmu_insts.peek().litValue.toLong
+      radeonr100Reads  = c.io.pmu_reads.peek().litValue.toLong
+      radeonr100Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 43. PowerVR Series 1
+    val powervr1Hex = findWorkspaceFile("powervr1/sw/test_vector.hex")
+    val powervr1Bytes = Source.fromFile(powervr1Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => {
+      if (l.trim.length > 8) java.lang.Long.parseLong(l.trim.substring(l.trim.length - 8), 16).toInt
+      else java.lang.Long.parseLong(l.trim, 16).toInt
+    }).toArray
+    var powervr1Cycles = 0L
+    var powervr1Insts = 0L
+    var powervr1Reads = 0L
+    var powervr1Writes = 0L
+
+    simulate(new Powervr1Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- powervr1Bytes.indices) mem(i) = powervr1Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      powervr1Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      powervr1Insts  = c.io.pmu_insts.peek().litValue.toLong
+      powervr1Reads  = c.io.pmu_reads.peek().litValue.toLong
+      powervr1Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 44. ARM Mali-200
+    val mali200Hex = findWorkspaceFile("mali200/sw/test_vector.hex")
+    val mali200Bytes = Source.fromFile(mali200Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => {
+      if (l.trim.length > 8) java.lang.Long.parseLong(l.trim.substring(l.trim.length - 8), 16).toInt
+      else java.lang.Long.parseLong(l.trim, 16).toInt
+    }).toArray
+    var mali200Cycles = 0L
+    var mali200Insts = 0L
+    var mali200Reads = 0L
+    var mali200Writes = 0L
+
+    simulate(new Mali200Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- mali200Bytes.indices) mem(i) = mali200Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      mali200Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      mali200Insts  = c.io.pmu_insts.peek().litValue.toLong
+      mali200Reads  = c.io.pmu_reads.peek().litValue.toLong
+      mali200Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 45. AMD R600
+    val amdr600Hex = findWorkspaceFile("amdr600/sw/test_vector.hex")
+    val amdr600Bytes = Source.fromFile(amdr600Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => {
+      if (l.trim.length > 8) java.lang.Long.parseLong(l.trim.substring(l.trim.length - 8), 16).toInt
+      else java.lang.Long.parseLong(l.trim, 16).toInt
+    }).toArray
+    var amdr600Cycles = 0L
+    var amdr600Insts = 0L
+    var amdr600Reads = 0L
+    var amdr600Writes = 0L
+
+    simulate(new Amdr600Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- amdr600Bytes.indices) mem(i) = amdr600Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      amdr600Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      amdr600Insts  = c.io.pmu_insts.peek().litValue.toLong
+      amdr600Reads  = c.io.pmu_reads.peek().litValue.toLong
+      amdr600Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
     // Print Consolidated Comparative Table
     val pdp8Cpi  = if (pdp8Insts > 0)  String.format("%.2f", Double.box(pdp8Cycles.toDouble / pdp8Insts))  else "N/A"
     val pdp11Cpi = if (pdp11Insts > 0) String.format("%.2f", Double.box(pdp11Cycles.toDouble / pdp11Insts)) else "N/A"
@@ -2024,6 +2336,12 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     val tms32010Cpi = if (tms32010Insts > 0) String.format("%.2f", Double.box(tms32010Cycles.toDouble / tms32010Insts)) else "N/A"
     val adsp2100Cpi = if (adsp2100Insts > 0) String.format("%.2f", Double.box(adsp2100Cycles.toDouble / adsp2100Insts)) else "N/A"
     val ibmmwaveCpi = if (ibmmwaveInsts > 0) String.format("%.2f", Double.box(ibmmwaveCycles.toDouble / ibmmwaveInsts)) else "N/A"
+    val voodoo1Cpi = if (voodoo1Insts > 0) String.format("%.2f", Double.box(voodoo1Cycles.toDouble / voodoo1Insts)) else "N/A"
+    val geforce256Cpi = if (geforce256Insts > 0) String.format("%.2f", Double.box(geforce256Cycles.toDouble / geforce256Insts)) else "N/A"
+    val radeonr100Cpi = if (radeonr100Insts > 0) String.format("%.2f", Double.box(radeonr100Cycles.toDouble / radeonr100Insts)) else "N/A"
+    val powervr1Cpi = if (powervr1Insts > 0) String.format("%.2f", Double.box(powervr1Cycles.toDouble / powervr1Insts)) else "N/A"
+    val mali200Cpi = if (mali200Insts > 0) String.format("%.2f", Double.box(mali200Cycles.toDouble / mali200Insts)) else "N/A"
+    val amdr600Cpi = if (amdr600Insts > 0) String.format("%.2f", Double.box(amdr600Cycles.toDouble / amdr600Insts)) else "N/A"
 
     val table = s"""
 | Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI |
@@ -2067,6 +2385,12 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
 | TI TMS32010 DSP     | 16                | $tms32010Cycles              | $tms32010Insts                   | $tms32010Reads            | $tms32010Writes             | $tms32010Cpi |
 | ADI ADSP-2100 DSP   | 16                | $adsp2100Cycles              | $adsp2100Insts                   | $adsp2100Reads            | $adsp2100Writes             | $adsp2100Cpi |
 | IBM MWave DSP       | 16                | $ibmmwaveCycles              | $ibmmwaveInsts                   | $ibmmwaveReads            | $ibmmwaveWrites             | $ibmmwaveCpi |
+| 3dfx Voodoo1        | 32                | $voodoo1Cycles              | $voodoo1Insts                   | $voodoo1Reads            | $voodoo1Writes             | $voodoo1Cpi |
+| NVIDIA GeForce 256  | 32                | $geforce256Cycles              | $geforce256Insts                   | $geforce256Reads            | $geforce256Writes             | $geforce256Cpi |
+| ATI Radeon R100     | 32                | $radeonr100Cycles              | $radeonr100Insts                   | $radeonr100Reads            | $radeonr100Writes             | $radeonr100Cpi |
+| PowerVR Series 1    | 32                | $powervr1Cycles              | $powervr1Insts                   | $powervr1Reads            | $powervr1Writes             | $powervr1Cpi |
+| ARM Mali-200 GPU    | 32                | $mali200Cycles              | $mali200Insts                   | $mali200Reads            | $mali200Writes             | $mali200Cpi |
+| AMD R600 GPU        | 32                | $amdr600Cycles              | $amdr600Insts                   | $amdr600Reads            | $amdr600Writes             | $amdr600Cpi |
 """
 
     println("\n=== COMPARATIVE ARCHITECTURE PERFORMANCE REPORT ===")

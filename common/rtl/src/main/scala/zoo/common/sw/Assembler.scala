@@ -6,7 +6,7 @@ import scala.io.Source
 object Assembler {
   def main(args: Array[String]): Unit = {
     if (args.length < 5 || args(0) != "-arch") {
-      println("Usage: sbt \"common/runMain zoo.common.sw.Assembler -arch <pdp8|ibm360|cray1|m68k|burroughsb5500|decpdp11|cdc6600|mos6502|babbage|harvardmark1|zusez1|manchestermu1|univac1|princetonias|cambridgeedsac|ibm701|ibm704|ibm650|ibm705|ibm1401|stczebra|bullgamma60|ibmstretch|univac1103a|cdc6600ppu|decvax|intel8080a|motorola6800|ibm6150|mips1|arm1|berkeleyrisc|hp3000|ethlilith|ucsdp|upd7720|tms32010|adsp2100|ibmmwave> <input.asm> -o <output.hex>\"")
+      println("Usage: sbt \"common/runMain zoo.common.sw.Assembler -arch <pdp8|ibm360|cray1|m68k|burroughsb5500|decpdp11|cdc6600|mos6502|babbage|harvardmark1|zusez1|manchestermu1|univac1|princetonias|cambridgeedsac|ibm701|ibm704|ibm650|ibm705|ibm1401|stczebra|bullgamma60|ibmstretch|univac1103a|cdc6600ppu|decvax|intel8080a|motorola6800|ibm6150|mips1|arm1|berkeleyrisc|hp3000|ethlilith|ucsdp|upd7720|tms32010|adsp2100|ibmmwave|voodoo1|geforce256|radeonr100|powervr1|mali200|amdr600> <input.asm> -o <output.hex>\"")
       sys.exit(1)
     }
 
@@ -54,6 +54,12 @@ object Assembler {
       case "tms32010"        => new Tms32010Assembler()
       case "adsp2100"        => new Adsp2100Assembler()
       case "ibmmwave"        => new IbmmwaveAssembler()
+      case "voodoo1"         => new Voodoo1Assembler()
+      case "geforce256"      => new Geforce256Assembler()
+      case "radeonr100"      => new Radeonr100Assembler()
+      case "powervr1"        => new Powervr1Assembler()
+      case "mali200"         => new Mali200Assembler()
+      case "amdr600"         => new Amdr600Assembler()
       case _ =>
         println(s"Unknown architecture: $arch")
         sys.exit(1)

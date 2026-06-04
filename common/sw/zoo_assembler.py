@@ -127,7 +127,7 @@ class BaseAssembler:
 
 def main():
     parser = argparse.ArgumentParser(description='Brooks Zoo Assembler')
-    parser.add_argument('-arch', required=True, choices=['pdp8', 'ibm360', 'cray1', 'm68k', 'burroughsb5500', 'decpdp11', 'cdc6600', 'mos6502', 'babbage', 'harvardmark1', 'zusez1', 'manchestermu1', 'univac1', 'princetonias', 'cambridgeedsac', 'ibm701', 'ibm704', 'ibm650', 'ibm705', 'ibm1401', 'stczebra', 'bullgamma60', 'ibmstretch', 'univac1103a', 'cdc6600ppu', 'decvax', 'intel8080a', 'motorola6800', 'ibm6150', 'mips1', 'arm1', 'berkeleyrisc', 'hp3000', 'ethlilith', 'ucsdp', 'upd7720', 'tms32010', 'adsp2100', 'ibmmwave'], help='Target architecture')
+    parser.add_argument('-arch', required=True, choices=['pdp8', 'ibm360', 'cray1', 'm68k', 'burroughsb5500', 'decpdp11', 'cdc6600', 'mos6502', 'babbage', 'harvardmark1', 'zusez1', 'manchestermu1', 'univac1', 'princetonias', 'cambridgeedsac', 'ibm701', 'ibm704', 'ibm650', 'ibm705', 'ibm1401', 'stczebra', 'bullgamma60', 'ibmstretch', 'univac1103a', 'cdc6600ppu', 'decvax', 'intel8080a', 'motorola6800', 'ibm6150', 'mips1', 'arm1', 'berkeleyrisc', 'hp3000', 'ethlilith', 'ucsdp', 'upd7720', 'tms32010', 'adsp2100', 'ibmmwave', 'voodoo1', 'geforce256', 'radeonr100', 'powervr1', 'mali200', 'amdr600'], help='Target architecture')
     parser.add_argument('input', help='Input assembly file')
     parser.add_argument('-o', required=True, help='Output hex file')
     args = parser.parse_args()

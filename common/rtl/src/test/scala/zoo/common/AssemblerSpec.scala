@@ -78,6 +78,12 @@ class AssemblerSpec extends AnyFlatSpec with Matchers {
   verifyHex("tms32010", "tms32010/sw/test_vector.asm", "tms32010/sw/test_vector.hex", new Tms32010Assembler())
   verifyHex("adsp2100", "adsp2100/sw/test_vector.asm", "adsp2100/sw/test_vector.hex", new Adsp2100Assembler())
   verifyHex("ibmmwave", "ibmmwave/sw/test_vector.asm", "ibmmwave/sw/test_vector.hex", new IbmmwaveAssembler())
+  verifyHex("voodoo1", "voodoo1/sw/test_vector.asm", "voodoo1/sw/test_vector.hex", new Voodoo1Assembler())
+  verifyHex("geforce256", "geforce256/sw/test_vector.asm", "geforce256/sw/test_vector.hex", new Geforce256Assembler())
+  verifyHex("radeonr100", "radeonr100/sw/test_vector.asm", "radeonr100/sw/test_vector.hex", new Radeonr100Assembler())
+  verifyHex("powervr1", "powervr1/sw/test_vector.asm", "powervr1/sw/test_vector.hex", new Powervr1Assembler())
+  verifyHex("mali200", "mali200/sw/test_vector.asm", "mali200/sw/test_vector.hex", new Mali200Assembler())
+  verifyHex("amdr600", "amdr600/sw/test_vector.asm", "amdr600/sw/test_vector.hex", new Amdr600Assembler())
 }
 
 

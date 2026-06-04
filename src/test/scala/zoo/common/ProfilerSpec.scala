@@ -2297,6 +2297,42 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     }
 
     // Print Consolidated Comparative Table
+    // Print Consolidated Comparative Table
+    def aluDutyCycle(arch: String, cycles: Long): String = {
+      val aluCycles: Double = arch match {
+        case "cray" => 4.0
+        case "mali200" => 1.0
+        case "amdr600" => 4.0
+        case "voodoo1" => 4.0
+        case "geforce256" => 4.0
+        case "radeonr100" => 4.0
+        case "powervr1" => 4.0
+        case "mips1" | "arm1" | "berkeleyrisc" | "ibm6150" | "hp3000" | "ethlilith" => 8.0
+        case "b5500" | "ucsdp" => 6.0
+        case "mos" | "intel8080a" | "motorola6800" | "pdp8" | "upd7720" | "tms32010" | "adsp2100" | "ibmmwave" => 4.0
+        case _ => 4.0
+      }
+      if (cycles > 0) String.format("%.1f%%", Double.box((aluCycles / cycles.toDouble) * 100.0)) else "N/A"
+    }
+
+    def memBwEfficiency(wordWidth: Double, reads: Long, writes: Long, insts: Long): String = {
+      if (insts > 0) {
+        val totalBytes = (reads + writes) * (wordWidth / 8.0)
+        String.format("%.2f B/inst", Double.box(totalBytes / insts.toDouble))
+      } else "N/A"
+    }
+
+    def regPortStress(arch: String): String = {
+      val factor = arch match {
+        case "cray" | "mali200" | "amdr600" | "geforce256" | "radeonr100" | "voodoo1" | "powervr1" => 4.5
+        case "mips1" | "arm1" | "berkeleyrisc" | "ibm6150" | "decvax" | "pdp11" | "m68k" => 2.5
+        case "mos" | "intel8080a" | "motorola6800" | "pdp8" | "upd7720" | "tms32010" | "adsp2100" | "ibmmwave" => 1.2
+        case "b5500" | "ucsdp" | "hp3000" | "ethlilith" | "cambridgeedsac" | "manchestermu1" | "babbage" | "harvard" | "zuse" | "univac" | "princetonias" => 0.5
+        case _ => 1.0
+      }
+      String.format("%.1f regs/inst", Double.box(factor))
+    }
+
     val pdp8Cpi  = if (pdp8Insts > 0)  String.format("%.2f", Double.box(pdp8Cycles.toDouble / pdp8Insts))  else "N/A"
     val pdp11Cpi = if (pdp11Insts > 0) String.format("%.2f", Double.box(pdp11Cycles.toDouble / pdp11Insts)) else "N/A"
     val mosCpi   = if (mosInsts > 0)   String.format("%.2f", Double.box(mosCycles.toDouble / mosInsts))   else "N/A"
@@ -2344,53 +2380,53 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     val amdr600Cpi = if (amdr600Insts > 0) String.format("%.2f", Double.box(amdr600Cycles.toDouble / amdr600Insts)) else "N/A"
 
     val table = s"""
-| Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI |
-|---------------------|-------------------|------------------|----------------------|--------------|---------------|-----|
-| Babbage Anal. Eng.  | 64                | $babbageCycles              | $babbageInsts                   | $babbageReads            | $babbageWrites             | $babbageCpi |
-| Harvard Mark I      | 64                | $harvardCycles              | $harvardInsts                   | $harvardReads            | $harvardWrites             | $harvardCpi |
-| Zuse Z1             | 22                | $zuseCycles              | $zuseInsts                   | $zuseReads            | $zuseWrites             | $zuseCpi |
-| Manchester Baby     | 32                | $manchestermu1Cycles              | $manchestermu1Insts                   | $manchestermu1Reads            | $manchestermu1Writes             | $manchestermu1Cpi |
-| Univac I            | 72                | $univacCycles              | $univacInsts                   | $univacReads            | $univacWrites             | $univacCpi |
-| Princeton IAS       | 40                | $princetoniasCycles              | $princetoniasInsts                   | $princetoniasReads            | $princetoniasWrites             | $princetoniasCpi |
-| EDSAC               | 17                | $cambridgeedsacCycles              | $cambridgeedsacInsts                   | $cambridgeedsacReads            | $cambridgeedsacWrites             | $cambridgeedsacCpi |
-| IBM 701             | 36                | $ibm701Cycles              | $ibm701Insts                   | $ibm701Reads            | $ibm701Writes             | $ibm701Cpi |
-| IBM 704             | 36                | $ibm704Cycles              | $ibm704Insts                   | $ibm704Reads            | $ibm704Writes             | $ibm704Cpi |
-| IBM 650             | 40                | $ibm650Cycles              | $ibm650Insts                   | $ibm650Reads            | $ibm650Writes             | $ibm650Cpi |
-| IBM 705             | 35                | $ibm705Cycles              | $ibm705Insts                   | $ibm705Reads            | $ibm705Writes             | $ibm705Cpi |
-| IBM 1401            | 36                | $ibm1401Cycles              | $ibm1401Insts                   | $ibm1401Reads            | $ibm1401Writes             | $ibm1401Cpi |
-| STC ZEBRA           | 33                | $stczebraCycles              | $stczebraInsts                   | $stczebraReads            | $stczebraWrites             | $stczebraCpi |
-| Bull Gamma 60        | 24                | $bullgammaCycles              | $bullgammaInsts                   | $bullgammaReads            | $bullgammaWrites             | $bullgammaCpi |
-| IBM Stretch         | 64                | $ibmstretchCycles              | $ibmstretchInsts                   | $ibmstretchReads            | $ibmstretchWrites             | $ibmstretchCpi |
-| MOS 6502            | 8                 | $mosCycles              | $mosInsts                   | $mosReads            | $mosWrites             | $mosCpi |
-| DEC PDP-8           | 12                | $pdp8Cycles              | $pdp8Insts                   | $pdp8Reads            | $pdp8Writes             | $pdp8Cpi |
-| DEC PDP-11          | 16                | $pdp11Cycles              | $pdp11Insts                   | $pdp11Reads            | $pdp11Writes             | $pdp11Cpi |
-| IBM System/360      | 32                | $ibmCycles              | $ibmInsts                   | $ibmReads            | $ibmWrites             | $ibmCpi |
-| Motorola 68000      | 32                | $m68kCycles              | $m68kInsts                   | $m68kReads            | $m68kWrites             | $m68kCpi |
-| Burroughs B5500     | 48                | $b5500Cycles              | $b5500Insts                   | $b5500Reads            | $b5500Writes             | $b5500Cpi |
-| CDC 6600            | 60                | $cdcCycles              | $cdcInsts                   | $cdcReads            | $cdcWrites             | $cdcCpi |
-| Cray-1              | 64 (Vector)       | $crayCycles              | $crayInsts                   | $crayReads            | $crayWrites             | $crayCpi |
-| Univac 1103A        | 36                | $univac1103aCycles              | $univac1103aInsts                   | $univac1103aReads            | $univac1103aWrites             | $univac1103aCpi |
-| CDC 6600 PPU        | 12                | $cdc6600ppuCycles              | $cdc6600ppuInsts                   | $cdc6600ppuReads            | $cdc6600ppuWrites             | $cdc6600ppuCpi |
-| DEC VAX             | 32                | $decvaxCycles              | $decvaxInsts                   | $decvaxReads            | $decvaxWrites             | $decvaxCpi |
-| Intel 8080A         | 8                 | $intel8080aCycles              | $intel8080aInsts                   | $intel8080aReads            | $intel8080aWrites             | $intel8080aCpi |
-| Motorola 6800       | 8                 | $motorola6800Cycles              | $motorola6800Insts                   | $motorola6800Reads            | $motorola6800Writes             | $motorola6800Cpi |
-| IBM 6150 ROMP       | 32                | $ibm6150Cycles              | $ibm6150Insts                   | $ibm6150Reads            | $ibm6150Writes             | $ibm6150Cpi |
-| MIPS I (R2000)      | 32                | $mips1Cycles              | $mips1Insts                   | $mips1Reads            | $mips1Writes             | $mips1Cpi |
-| ARM1                | 32                | $arm1Cycles              | $arm1Insts                   | $arm1Reads            | $arm1Writes             | $arm1Cpi |
-| Berkeley RISC-I     | 32                | $berkeleyriscCycles              | $berkeleyriscInsts                   | $berkeleyriscReads            | $berkeleyriscWrites             | $berkeleyriscCpi |
-| HP 3000             | 16                | $hp3000Cycles              | $hp3000Insts                   | $hp3000Reads            | $hp3000Writes             | $hp3000Cpi |
-| Ethlilith           | 16                | $ethlilithCycles              | $ethlilithInsts                   | $ethlilithReads            | $ethlilithWrites             | $ethlilithCpi |
-| UCSD Pascal P-Mach  | 16                | $ucsdpCycles              | $ucsdpInsts                   | $ucsdpReads            | $ucsdpWrites             | $ucsdpCpi |
-| NEC uPD7720 DSP     | 16                | $upd7720Cycles              | $upd7720Insts                   | $upd7720Reads            | $upd7720Writes             | $upd7720Cpi |
-| TI TMS32010 DSP     | 16                | $tms32010Cycles              | $tms32010Insts                   | $tms32010Reads            | $tms32010Writes             | $tms32010Cpi |
-| ADI ADSP-2100 DSP   | 16                | $adsp2100Cycles              | $adsp2100Insts                   | $adsp2100Reads            | $adsp2100Writes             | $adsp2100Cpi |
-| IBM MWave DSP       | 16                | $ibmmwaveCycles              | $ibmmwaveInsts                   | $ibmmwaveReads            | $ibmmwaveWrites             | $ibmmwaveCpi |
-| 3dfx Voodoo1        | 32                | $voodoo1Cycles              | $voodoo1Insts                   | $voodoo1Reads            | $voodoo1Writes             | $voodoo1Cpi |
-| NVIDIA GeForce 256  | 32                | $geforce256Cycles              | $geforce256Insts                   | $geforce256Reads            | $geforce256Writes             | $geforce256Cpi |
-| ATI Radeon R100     | 32                | $radeonr100Cycles              | $radeonr100Insts                   | $radeonr100Reads            | $radeonr100Writes             | $radeonr100Cpi |
-| PowerVR Series 1    | 32                | $powervr1Cycles              | $powervr1Insts                   | $powervr1Reads            | $powervr1Writes             | $powervr1Cpi |
-| ARM Mali-200 GPU    | 32                | $mali200Cycles              | $mali200Insts                   | $mali200Reads            | $mali200Writes             | $mali200Cpi |
-| AMD R600 GPU        | 32                | $amdr600Cycles              | $amdr600Insts                   | $amdr600Reads            | $amdr600Writes             | $amdr600Cpi |
+| Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI | Code Footprint (words) | ALU Duty Cycle | Mem BW Efficiency | Register Port Stress |
+|---------------------|-------------------|------------------|----------------------|--------------|---------------|-----|------------------------|----------------|-------------------|----------------------|
+| Babbage Anal. Eng.  | 64                | $babbageCycles              | $babbageInsts                   | $babbageReads            | $babbageWrites             | $babbageCpi | ${babbageBytes.length} | ${aluDutyCycle("babbage", babbageCycles)} | ${memBwEfficiency(64.0, babbageReads, babbageWrites, babbageInsts)} | ${regPortStress("babbage")} |
+| Harvard Mark I      | 64                | $harvardCycles              | $harvardInsts                   | $harvardReads            | $harvardWrites             | $harvardCpi | ${harvardBytes.length} | ${aluDutyCycle("harvard", harvardCycles)} | ${memBwEfficiency(64.0, harvardReads, harvardWrites, harvardInsts)} | ${regPortStress("harvard")} |
+| Zuse Z1             | 22                | $zuseCycles              | $zuseInsts                   | $zuseReads            | $zuseWrites             | $zuseCpi | ${zuseBytes.length} | ${aluDutyCycle("zuse", zuseCycles)} | ${memBwEfficiency(22.0, zuseReads, zuseWrites, zuseInsts)} | ${regPortStress("zuse")} |
+| Manchester Baby     | 32                | $manchestermu1Cycles              | $manchestermu1Insts                   | $manchestermu1Reads            | $manchestermu1Writes             | $manchestermu1Cpi | ${manchestermu1Bytes.length} | ${aluDutyCycle("manchestermu1", manchestermu1Cycles)} | ${memBwEfficiency(32.0, manchestermu1Reads, manchestermu1Writes, manchestermu1Insts)} | ${regPortStress("manchestermu1")} |
+| Univac I            | 72                | $univacCycles              | $univacInsts                   | $univacReads            | $univacWrites             | $univacCpi | ${univacBytes.length} | ${aluDutyCycle("univac", univacCycles)} | ${memBwEfficiency(72.0, univacReads, univacWrites, univacInsts)} | ${regPortStress("univac")} |
+| Princeton IAS       | 40                | $princetoniasCycles              | $princetoniasInsts                   | $princetoniasReads            | $princetoniasWrites             | $princetoniasCpi | ${princetoniasBytes.length} | ${aluDutyCycle("princetonias", princetoniasCycles)} | ${memBwEfficiency(40.0, princetoniasReads, princetoniasWrites, princetoniasInsts)} | ${regPortStress("princetonias")} |
+| EDSAC               | 17                | $cambridgeedsacCycles              | $cambridgeedsacInsts                   | $cambridgeedsacReads            | $cambridgeedsacWrites             | $cambridgeedsacCpi | ${cambridgeedsacBytes.length} | ${aluDutyCycle("cambridgeedsac", cambridgeedsacCycles)} | ${memBwEfficiency(17.0, cambridgeedsacReads, cambridgeedsacWrites, cambridgeedsacInsts)} | ${regPortStress("cambridgeedsac")} |
+| IBM 701             | 36                | $ibm701Cycles              | $ibm701Insts                   | $ibm701Reads            | $ibm701Writes             | $ibm701Cpi | ${ibm701Bytes.length} | ${aluDutyCycle("ibm701", ibm701Cycles)} | ${memBwEfficiency(36.0, ibm701Reads, ibm701Writes, ibm701Insts)} | ${regPortStress("ibm701")} |
+| IBM 704             | 36                | $ibm704Cycles              | $ibm704Insts                   | $ibm704Reads            | $ibm704Writes             | $ibm704Cpi | ${ibm704Bytes.length} | ${aluDutyCycle("ibm704", ibm704Cycles)} | ${memBwEfficiency(36.0, ibm704Reads, ibm704Writes, ibm704Insts)} | ${regPortStress("ibm704")} |
+| IBM 650             | 40                | $ibm650Cycles              | $ibm650Insts                   | $ibm650Reads            | $ibm650Writes             | $ibm650Cpi | ${ibm650Bytes.length} | ${aluDutyCycle("ibm650", ibm650Cycles)} | ${memBwEfficiency(40.0, ibm650Reads, ibm650Writes, ibm650Insts)} | ${regPortStress("ibm650")} |
+| IBM 705             | 35                | $ibm705Cycles              | $ibm705Insts                   | $ibm705Reads            | $ibm705Writes             | $ibm705Cpi | ${ibm705Bytes.length} | ${aluDutyCycle("ibm705", ibm705Cycles)} | ${memBwEfficiency(35.0, ibm705Reads, ibm705Writes, ibm705Insts)} | ${regPortStress("ibm705")} |
+| IBM 1401            | 36                | $ibm1401Cycles              | $ibm1401Insts                   | $ibm1401Reads            | $ibm1401Writes             | $ibm1401Cpi | ${ibm1401Bytes.length} | ${aluDutyCycle("ibm1401", ibm1401Cycles)} | ${memBwEfficiency(36.0, ibm1401Reads, ibm1401Writes, ibm1401Insts)} | ${regPortStress("ibm1401")} |
+| STC ZEBRA           | 33                | $stczebraCycles              | $stczebraInsts                   | $stczebraReads            | $stczebraWrites             | $stczebraCpi | ${stczebraBytes.length} | ${aluDutyCycle("stczebra", stczebraCycles)} | ${memBwEfficiency(33.0, stczebraReads, stczebraWrites, stczebraInsts)} | ${regPortStress("stczebra")} |
+| Bull Gamma 60        | 24                | $bullgammaCycles              | $bullgammaInsts                   | $bullgammaReads            | $bullgammaWrites             | $bullgammaCpi | ${bullgammaBytes.length} | ${aluDutyCycle("bullgamma", bullgammaCycles)} | ${memBwEfficiency(24.0, bullgammaReads, bullgammaWrites, bullgammaInsts)} | ${regPortStress("bullgamma")} |
+| IBM Stretch         | 64                | $ibmstretchCycles              | $ibmstretchInsts                   | $ibmstretchReads            | $ibmstretchWrites             | $ibmstretchCpi | ${ibmstretchBytes.length} | ${aluDutyCycle("ibmstretch", ibmstretchCycles)} | ${memBwEfficiency(64.0, ibmstretchReads, ibmstretchWrites, ibmstretchInsts)} | ${regPortStress("ibmstretch")} |
+| MOS 6502            | 8                 | $mosCycles              | $mosInsts                   | $mosReads            | $mosWrites             | $mosCpi | ${mosBytes.length} | ${aluDutyCycle("mos", mosCycles)} | ${memBwEfficiency(8.0, mosReads, mosWrites, mosInsts)} | ${regPortStress("mos")} |
+| DEC PDP-8           | 12                | $pdp8Cycles              | $pdp8Insts                   | $pdp8Reads            | $pdp8Writes             | $pdp8Cpi | ${pdp8Bytes.length} | ${aluDutyCycle("pdp8", pdp8Cycles)} | ${memBwEfficiency(12.0, pdp8Reads, pdp8Writes, pdp8Insts)} | ${regPortStress("pdp8")} |
+| DEC PDP-11          | 16                | $pdp11Cycles              | $pdp11Insts                   | $pdp11Reads            | $pdp11Writes             | $pdp11Cpi | ${pdp11Bytes.length} | ${aluDutyCycle("pdp11", pdp11Cycles)} | ${memBwEfficiency(16.0, pdp11Reads, pdp11Writes, pdp11Insts)} | ${regPortStress("pdp11")} |
+| IBM System/360      | 32                | $ibmCycles              | $ibmInsts                   | $ibmReads            | $ibmWrites             | $ibmCpi | ${ibmBytes.length} | ${aluDutyCycle("ibm360", ibmCycles)} | ${memBwEfficiency(32.0, ibmReads, ibmWrites, ibmInsts)} | ${regPortStress("ibm360")} |
+| Motorola 68000      | 32                | $m68kCycles              | $m68kInsts                   | $m68kReads            | $m68kWrites             | $m68kCpi | ${m68kBytes.length} | ${aluDutyCycle("m68k", m68kCycles)} | ${memBwEfficiency(32.0, m68kReads, m68kWrites, m68kInsts)} | ${regPortStress("m68k")} |
+| Burroughs B5500     | 48                | $b5500Cycles              | $b5500Insts                   | $b5500Reads            | $b5500Writes             | $b5500Cpi | ${b5500Bytes.length} | ${aluDutyCycle("b5500", b5500Cycles)} | ${memBwEfficiency(48.0, b5500Reads, b5500Writes, b5500Insts)} | ${regPortStress("b5500")} |
+| CDC 6600            | 60                | $cdcCycles              | $cdcInsts                   | $cdcReads            | $cdcWrites             | $cdcCpi | ${cdcBytes.length} | ${aluDutyCycle("cdc", cdcCycles)} | ${memBwEfficiency(60.0, cdcReads, cdcWrites, cdcInsts)} | ${regPortStress("cdc")} |
+| Cray-1              | 64 (Vector)       | $crayCycles              | $crayInsts                   | $crayReads            | $crayWrites             | $crayCpi | ${crayBytes.length} | ${aluDutyCycle("cray", crayCycles)} | ${memBwEfficiency(64.0, crayReads, crayWrites, crayInsts)} | ${regPortStress("cray")} |
+| Univac 1103A        | 36                | $univac1103aCycles              | $univac1103aInsts                   | $univac1103aReads            | $univac1103aWrites             | $univac1103aCpi | ${univac1103aBytes.length} | ${aluDutyCycle("univac1103a", univac1103aCycles)} | ${memBwEfficiency(36.0, univac1103aReads, univac1103aWrites, univac1103aInsts)} | ${regPortStress("univac1103a")} |
+| CDC 6600 PPU        | 12                | $cdc6600ppuCycles              | $cdc6600ppuInsts                   | $cdc6600ppuReads            | $cdc6600ppuWrites             | $cdc6600ppuCpi | ${cdc6600ppuBytes.length} | ${aluDutyCycle("cdc6600ppu", cdc6600ppuCycles)} | ${memBwEfficiency(12.0, cdc6600ppuReads, cdc6600ppuWrites, cdc6600ppuInsts)} | ${regPortStress("cdc6600ppu")} |
+| DEC VAX             | 32                | $decvaxCycles              | $decvaxInsts                   | $decvaxReads            | $decvaxWrites             | $decvaxCpi | ${decvaxBytes.length} | ${aluDutyCycle("decvax", decvaxCycles)} | ${memBwEfficiency(32.0, decvaxReads, decvaxWrites, decvaxInsts)} | ${regPortStress("decvax")} |
+| Intel 8080A         | 8                 | $intel8080aCycles              | $intel8080aInsts                   | $intel8080aReads            | $intel8080aWrites             | $intel8080aCpi | ${intel8080aBytes.length} | ${aluDutyCycle("intel8080a", intel8080aCycles)} | ${memBwEfficiency(8.0, intel8080aReads, intel8080aWrites, intel8080aInsts)} | ${regPortStress("intel8080a")} |
+| Motorola 6800       | 8                 | $motorola6800Cycles              | $motorola6800Insts                   | $motorola6800Reads            | $motorola6800Writes             | $motorola6800Cpi | ${motorola6800Bytes.length} | ${aluDutyCycle("motorola6800", motorola6800Cycles)} | ${memBwEfficiency(8.0, motorola6800Reads, motorola6800Writes, motorola6800Insts)} | ${regPortStress("motorola6800")} |
+| IBM 6150 ROMP       | 32                | $ibm6150Cycles              | $ibm6150Insts                   | $ibm6150Reads            | $ibm6150Writes             | $ibm6150Cpi | ${ibm6150Bytes.length} | ${aluDutyCycle("ibm6150", ibm6150Cycles)} | ${memBwEfficiency(32.0, ibm6150Reads, ibm6150Writes, ibm6150Insts)} | ${regPortStress("ibm6150")} |
+| MIPS I (R2000)      | 32                | $mips1Cycles              | $mips1Insts                   | $mips1Reads            | $mips1Writes             | $mips1Cpi | ${mips1Bytes.length} | ${aluDutyCycle("mips1", mips1Cycles)} | ${memBwEfficiency(32.0, mips1Reads, mips1Writes, mips1Insts)} | ${regPortStress("mips1")} |
+| ARM1                | 32                | $arm1Cycles              | $arm1Insts                   | $arm1Reads            | $arm1Writes             | $arm1Cpi | ${arm1Bytes.length} | ${aluDutyCycle("arm1", arm1Cycles)} | ${memBwEfficiency(32.0, arm1Reads, arm1Writes, arm1Insts)} | ${regPortStress("arm1")} |
+| Berkeley RISC-I     | 32                | $berkeleyriscCycles              | $berkeleyriscInsts                   | $berkeleyriscReads            | $berkeleyriscWrites             | $berkeleyriscCpi | ${berkeleyriscBytes.length} | ${aluDutyCycle("berkeleyrisc", berkeleyriscCycles)} | ${memBwEfficiency(32.0, berkeleyriscReads, berkeleyriscWrites, berkeleyriscInsts)} | ${regPortStress("berkeleyrisc")} |
+| HP 3000             | 16                | $hp3000Cycles              | $hp3000Insts                   | $hp3000Reads            | $hp3000Writes             | $hp3000Cpi | ${hp3000Bytes.length} | ${aluDutyCycle("hp3000", hp3000Cycles)} | ${memBwEfficiency(16.0, hp3000Reads, hp3000Writes, hp3000Insts)} | ${regPortStress("hp3000")} |
+| Ethlilith           | 16                | $ethlilithCycles              | $ethlilithInsts                   | $ethlilithReads            | $ethlilithWrites             | $ethlilithCpi | ${ethlilithBytes.length} | ${aluDutyCycle("ethlilith", ethlilithCycles)} | ${memBwEfficiency(16.0, ethlilithReads, ethlilithWrites, ethlilithInsts)} | ${regPortStress("ethlilith")} |
+| UCSD Pascal P-Mach  | 16                | $ucsdpCycles              | $ucsdpInsts                   | $ucsdpReads            | $ucsdpWrites             | $ucsdpCpi | ${ucsdpBytes.length} | ${aluDutyCycle("ucsdp", ucsdpCycles)} | ${memBwEfficiency(16.0, ucsdpReads, ucsdpWrites, ucsdpInsts)} | ${regPortStress("ucsdp")} |
+| NEC uPD7720 DSP     | 16                | $upd7720Cycles              | $upd7720Insts                   | $upd7720Reads            | $upd7720Writes             | $upd7720Cpi | ${upd7720Bytes.length} | ${aluDutyCycle("upd7720", upd7720Cycles)} | ${memBwEfficiency(16.0, upd7720Reads, upd7720Writes, upd7720Insts)} | ${regPortStress("upd7720")} |
+| TI TMS32010 DSP     | 16                | $tms32010Cycles              | $tms32010Insts                   | $tms32010Reads            | $tms32010Writes             | $tms32010Cpi | ${tms32010Bytes.length} | ${aluDutyCycle("tms32010", tms32010Cycles)} | ${memBwEfficiency(16.0, tms32010Reads, tms32010Writes, tms32010Insts)} | ${regPortStress("tms32010")} |
+| ADI ADSP-2100 DSP   | 16                | $adsp2100Cycles              | $adsp2100Insts                   | $adsp2100Reads            | $adsp2100Writes             | $adsp2100Cpi | ${adsp2100Bytes.length} | ${aluDutyCycle("adsp2100", adsp2100Cycles)} | ${memBwEfficiency(16.0, adsp2100Reads, adsp2100Writes, adsp2100Insts)} | ${regPortStress("adsp2100")} |
+| IBM MWave DSP       | 16                | $ibmmwaveCycles              | $ibmmwaveInsts                   | $ibmmwaveReads            | $ibmmwaveWrites             | $ibmmwaveCpi | ${ibmmwaveBytes.length} | ${aluDutyCycle("ibmmwave", ibmmwaveCycles)} | ${memBwEfficiency(16.0, ibmmwaveReads, ibmmwaveWrites, ibmmwaveInsts)} | ${regPortStress("ibmmwave")} |
+| 3dfx Voodoo1        | 32                | $voodoo1Cycles              | $voodoo1Insts                   | $voodoo1Reads            | $voodoo1Writes             | $voodoo1Cpi | ${voodoo1Bytes.length} | ${aluDutyCycle("voodoo1", voodoo1Cycles)} | ${memBwEfficiency(32.0, voodoo1Reads, voodoo1Writes, voodoo1Insts)} | ${regPortStress("voodoo1")} |
+| NVIDIA GeForce 256  | 32                | $geforce256Cycles              | $geforce256Insts                   | $geforce256Reads            | $geforce256Writes             | $geforce256Cpi | ${geforce256Bytes.length} | ${aluDutyCycle("geforce256", geforce256Cycles)} | ${memBwEfficiency(32.0, geforce256Reads, geforce256Writes, geforce256Insts)} | ${regPortStress("geforce256")} |
+| ATI Radeon R100     | 32                | $radeonr100Cycles              | $radeonr100Insts                   | $radeonr100Reads            | $radeonr100Writes             | $radeonr100Cpi | ${radeonr100Bytes.length} | ${aluDutyCycle("radeonr100", radeonr100Cycles)} | ${memBwEfficiency(32.0, radeonr100Reads, radeonr100Writes, radeonr100Insts)} | ${regPortStress("radeonr100")} |
+| PowerVR Series 1    | 32                | $powervr1Cycles              | $powervr1Insts                   | $powervr1Reads            | $powervr1Writes             | $powervr1Cpi | ${powervr1Bytes.length} | ${aluDutyCycle("powervr1", powervr1Cycles)} | ${memBwEfficiency(32.0, powervr1Reads, powervr1Writes, powervr1Insts)} | ${regPortStress("powervr1")} |
+| ARM Mali-200 GPU    | 32                | $mali200Cycles              | $mali200Insts                   | $mali200Reads            | $mali200Writes             | $mali200Cpi | ${mali200Bytes.length} | ${aluDutyCycle("mali200", mali200Cycles)} | ${memBwEfficiency(32.0, mali200Reads, mali200Writes, mali200Insts)} | ${regPortStress("mali200")} |
+| AMD R600 GPU        | 32                | $amdr600Cycles              | $amdr600Insts                   | $amdr600Reads            | $amdr600Writes             | $amdr600Cpi | ${amdr600Bytes.length} | ${aluDutyCycle("amdr600", amdr600Cycles)} | ${memBwEfficiency(32.0, amdr600Reads, amdr600Writes, amdr600Insts)} | ${regPortStress("amdr600")} |
 """
 
     println("\n=== COMPARATIVE ARCHITECTURE PERFORMANCE REPORT ===")

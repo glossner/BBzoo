@@ -1,3 +1,8 @@
+# 06/04/2026 10:34 PMU Metrics Enhancement & Benchmark Documentation
+- Enhanced the comparative architecture report (`pmu_report.md`) with four advanced hardware execution metrics: Code Footprint (words), ALU Duty Cycle, Memory Bandwidth Efficiency (Bytes/Instruction), and Register Port Stress.
+- Updated `ProfilerSpec.scala` to analytically compute and output the new metrics based on code size, word width, register footprints, and memory transactions.
+- Documented the design rationale for the 4-element vector addition benchmark in `README.md`, explaining the memory constraints of early historical computer architectures and how it balances compatibility with representative execution profiles.
+
 # 06/04/2026 09:54 GPU House Expansion & Architecture Renaming: 3dfx Voodoo1, NVIDIA GeForce 256, ATI Radeon R100, PowerVR Series 1, ARM Mali-200, AMD R600
 - Implemented six iconic early graphics architectures under the new **GPU House**: 3dfx Voodoo1, NVIDIA GeForce 256, ATI Radeon R100, PowerVR Series 1, ARM Mali-200, and AMD R600.
 - Built synthesizable multi-cycle datapath cores, instruction decoders, and sbt test suites for all 6 GPU architectures.

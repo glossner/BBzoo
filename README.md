@@ -115,3 +115,8 @@ To compare the execution statistics of the vector addition workload across all 4
 sbt "project root" "testOnly zoo.common.ProfilerSpec"
 ```
 The comparison report will be written directly to `pmu_report.md`.
+
+#### Rationale for 4-Element Vector Size
+The unified benchmark uses a **4-element vector addition** workload as a universal architectural Rosetta Stone. While a larger vector size (e.g. 64 elements) would better exercise modern vector pipelines (like the Cray-1 or ARM Mali-200), many of the oldest simulated architectures in the zoo (such as the PDP-8, Cambridge EDSAC, and Zuse Z1) operate with extremely tight memory constraints (typically limited to 256 words of addressable memory). 
+
+A 4-element vector size is the optimal design compromise: it is compact enough to fit comfortably within the memory limits of the 1940s-1970s hardware, yet sufficiently expressive to require looping, address calculation, memory reads/writes, and ALU datapath execution, highlighting the direct performance and bandwidth improvements introduced by modern architectural paradigms.

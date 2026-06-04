@@ -1,3 +1,12 @@
+# 06/04/2026 06:45 Explorer House Expansion: STC ZEBRA, Bull Gamma 60, and IBM Stretch
+- Implemented three new Explorer House CPU architectures (STC ZEBRA, Bull Gamma 60, and IBM Stretch) with fully functional multi-cycle datapath cores, instruction decoders, and test suites.
+- Added synthesizable Performance Monitoring Units (PMUs) to all 3 new cores to track cycles, instruction retirement, and memory read/write traffic.
+- Designed unique custom execution paradigms for each machine: functional-bits microprogramming control layout for STC ZEBRA, multithreaded time-multiplexing concurrent thread coordination (FORK/JOIN) for Bull Gamma 60, and 16 index register address calculations for IBM Stretch.
+- Built Scala and Python assemblers for all 3 new architectures and integrated them into the global pluggable assembler registry.
+- Created architectural documentation (`arch.md`) for all 3 new machines detailing introduction year, designers (Willem van der Poel, Compagnie des Machines Bull, Stephen Dunwell), unique architectural features, instruction formats, and implemented/unimplemented instructions.
+- Expanded the unified 4-element Vector Addition benchmark (`ProfilerSpec.scala`) to include the 3 new cores, verifying correct computation and generating comparative PMU execution metrics.
+- Updated `README.md` to catalog all 23 machines, organizing them by their architectural families/houses (specifically creating the new Explorer House grouping containing STC ZEBRA, Bull Gamma 60, IBM Stretch, and Burroughs B5500) while preserving the flat `companyMachine` top-level directory structure.
+
 # 06/04/2026 06:30 IBM House Expansion: IBM 650, IBM 705, and IBM 1401
 - Implemented three classic IBM House CPU architectures (IBM 650, IBM 705, and IBM 1401) with fully functional multi-cycle datapath cores, instruction decoders, and test suites.
 - Added synthesizable Performance Monitoring Units (PMUs) to all 3 new cores to track cycles, instruction retirement, and memory read/write traffic.

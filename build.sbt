@@ -205,14 +205,39 @@ lazy val ibm1401 = (project in file("ibm1401/rtl"))
   )
   .settings(commonSettings: _*)
 
+// 22. STC ZEBRA Project
+lazy val stczebra = (project in file("stczebra/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Stczebra"
+  )
+  .settings(commonSettings: _*)
+
+// 23. Bull Gamma 60 Project
+lazy val bullgamma60 = (project in file("bullgamma60/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Bullgamma60"
+  )
+  .settings(commonSettings: _*)
+
+// 24. IBM Stretch Project
+lazy val ibmstretch = (project in file("ibmstretch/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Ibmstretch"
+  )
+  .settings(commonSettings: _*)
+
 // ***************************
 // * ROOT PROJECT
 // ***************************
 lazy val root = (project in file("."))
-  .aggregate(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchester, univac1, ias, edsac, ibm701, ibm704, ibm650, ibm705, ibm1401)
-  .dependsOn(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchester, univac1, ias, edsac, ibm701, ibm704, ibm650, ibm705, ibm1401)
+  .aggregate(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchester, univac1, ias, edsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch)
+  .dependsOn(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchester, univac1, ias, edsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch)
   .settings(
     name := "BrooksZoo"
   )
   .settings(commonSettings: _*)
+
 

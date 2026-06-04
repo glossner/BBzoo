@@ -27,6 +27,9 @@ import zoo.ibm704.Ibm704Core
 import zoo.ibm650.Ibm650Core
 import zoo.ibm705.Ibm705Core
 import zoo.ibm1401.Ibm1401Core
+import zoo.stczebra.StczebraCore
+import zoo.bullgamma60.Bullgamma60Core
+import zoo.ibmstretch.IbmstretchCore
 
 class ProfilerSpec extends AnyFlatSpec with Matchers {
   behavior of "ZooArchitectureProfiler"
@@ -43,7 +46,7 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     if (foundFile.exists()) foundFile else new File(relativePath)
   }
 
-  it should "profile and compare execution statistics for all 8 cores" in {
+  it should "profile and compare execution statistics for all 23 cores" in {
     println("\n=== RUNNING BENCHMARKS & GATHERING PMU STATS ===")
 
     // 1. DEC PDP-8
@@ -1053,6 +1056,149 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       mem(51) shouldBe 44L
     }
 
+    // 21. STC ZEBRA
+    val stczebraHex = findWorkspaceFile("stczebra/sw/test_vector.hex")
+    val stczebraBytes = Source.fromFile(stczebraHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
+    var stczebraCycles = 0L
+    var stczebraInsts = 0L
+    var stczebraReads = 0L
+    var stczebraWrites = 0L
+
+    simulate(new StczebraCore) { c =>
+      val mem = Array.fill(256)(0L)
+      for (i <- stczebraBytes.indices) mem(i) = stczebraBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toLong
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      stczebraCycles = c.io.pmu_cycles.peek().litValue.toLong
+      stczebraInsts  = c.io.pmu_insts.peek().litValue.toLong
+      stczebraReads  = c.io.pmu_reads.peek().litValue.toLong
+      stczebraWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11L
+      mem(49) shouldBe 22L
+      mem(50) shouldBe 33L
+      mem(51) shouldBe 44L
+    }
+
+    // 22. Bull Gamma 60
+    val bullgammaHex = findWorkspaceFile("bullgamma60/sw/test_vector.hex")
+    val bullgammaBytes = Source.fromFile(bullgammaHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
+    var bullgammaCycles = 0L
+    var bullgammaInsts = 0L
+    var bullgammaReads = 0L
+    var bullgammaWrites = 0L
+
+    simulate(new Bullgamma60Core) { c =>
+      val mem = Array.fill(256)(0L)
+      for (i <- bullgammaBytes.indices) mem(i) = bullgammaBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 1000
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toLong
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      bullgammaCycles = c.io.pmu_cycles.peek().litValue.toLong
+      bullgammaInsts  = c.io.pmu_insts.peek().litValue.toLong
+      bullgammaReads  = c.io.pmu_reads.peek().litValue.toLong
+      bullgammaWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11L
+      mem(49) shouldBe 22L
+      mem(50) shouldBe 33L
+      mem(51) shouldBe 44L
+    }
+
+    // 23. IBM Stretch
+    val ibmstretchHex = findWorkspaceFile("ibmstretch/sw/test_vector.hex")
+    val ibmstretchBytes = Source.fromFile(ibmstretchHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
+    var ibmstretchCycles = 0L
+    var ibmstretchInsts = 0L
+    var ibmstretchReads = 0L
+    var ibmstretchWrites = 0L
+
+    simulate(new IbmstretchCore) { c =>
+      val mem = Array.fill(256)(0L)
+      for (i <- ibmstretchBytes.indices) mem(i) = ibmstretchBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 1000
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toLong
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      ibmstretchCycles = c.io.pmu_cycles.peek().litValue.toLong
+      ibmstretchInsts  = c.io.pmu_insts.peek().litValue.toLong
+      ibmstretchReads  = c.io.pmu_reads.peek().litValue.toLong
+      ibmstretchWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11L
+      mem(49) shouldBe 22L
+      mem(50) shouldBe 33L
+      mem(51) shouldBe 44L
+    }
 
     // Print Consolidated Comparative Table
     val pdp8Cpi  = if (pdp8Insts > 0)  String.format("%.2f", Double.box(pdp8Cycles.toDouble / pdp8Insts))  else "N/A"
@@ -1075,6 +1221,9 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     val ibm650Cpi  = if (ibm650Insts > 0)  String.format("%.2f", Double.box(ibm650Cycles.toDouble / ibm650Insts))   else "N/A"
     val ibm705Cpi  = if (ibm705Insts > 0)  String.format("%.2f", Double.box(ibm705Cycles.toDouble / ibm705Insts))   else "N/A"
     val ibm1401Cpi = if (ibm1401Insts > 0) String.format("%.2f", Double.box(ibm1401Cycles.toDouble / ibm1401Insts)) else "N/A"
+    val stczebraCpi = if (stczebraInsts > 0) String.format("%.2f", Double.box(stczebraCycles.toDouble / stczebraInsts)) else "N/A"
+    val bullgammaCpi = if (bullgammaInsts > 0) String.format("%.2f", Double.box(bullgammaCycles.toDouble / bullgammaInsts)) else "N/A"
+    val ibmstretchCpi = if (ibmstretchInsts > 0) String.format("%.2f", Double.box(ibmstretchCycles.toDouble / ibmstretchInsts)) else "N/A"
 
     val table = s"""
 | Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI |
@@ -1091,6 +1240,9 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
 | IBM 650             | 40                | $ibm650Cycles              | $ibm650Insts                   | $ibm650Reads            | $ibm650Writes             | $ibm650Cpi |
 | IBM 705             | 35                | $ibm705Cycles              | $ibm705Insts                   | $ibm705Reads            | $ibm705Writes             | $ibm705Cpi |
 | IBM 1401            | 36                | $ibm1401Cycles              | $ibm1401Insts                   | $ibm1401Reads            | $ibm1401Writes             | $ibm1401Cpi |
+| STC ZEBRA           | 33                | $stczebraCycles              | $stczebraInsts                   | $stczebraReads            | $stczebraWrites             | $stczebraCpi |
+| Bull Gamma 60        | 24                | $bullgammaCycles              | $bullgammaInsts                   | $bullgammaReads            | $bullgammaWrites             | $bullgammaCpi |
+| IBM Stretch         | 64                | $ibmstretchCycles              | $ibmstretchInsts                   | $ibmstretchReads            | $ibmstretchWrites             | $ibmstretchCpi |
 | MOS 6502            | 8                 | $mosCycles              | $mosInsts                   | $mosReads            | $mosWrites             | $mosCpi |
 | DEC PDP-8           | 12                | $pdp8Cycles              | $pdp8Insts                   | $pdp8Reads            | $pdp8Writes             | $pdp8Cpi |
 | DEC PDP-11          | 16                | $pdp11Cycles              | $pdp11Insts                   | $pdp11Reads            | $pdp11Writes             | $pdp11Cpi |

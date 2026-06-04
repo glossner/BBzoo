@@ -2,13 +2,13 @@
 
 Welcome to **BrooksZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit Blaauw and Frederick Brooks. 
 
-This repository implements **17 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
+This repository implements **23 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
 
 ---
 
 ## 🏛️ Architectural Houses
 
-The architectures in the zoo are organized into six distinct "houses" based on their core datapath and register organization paradigms:
+The architectures in the zoo are organized into seven distinct "houses" based on their core datapath and register organization paradigms:
 
 ### 1. Pioneer House
 *Characterized by the earliest explorations of stored-program, mechanical, or relay-based calculation.*
@@ -31,25 +31,29 @@ The architectures in the zoo are organized into six distinct "houses" based on t
 - 🏢 **IBM 705** (Werner Buchholz, 1954) — [ibm705](file:///home/jglossner/GitRepos/BrooksZoo/ibm705) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm705/arch.md)
 - 📇 **IBM 1401** (Chuck Branscomb, 1959) — [ibm1401](file:///home/jglossner/GitRepos/BrooksZoo/ibm1401) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm1401/arch.md)
 
-### 4. Accumulator-Minicomputer House
+### 4. Explorer House
+*Highly experimental architectures that introduced radically new paradigms such as stack-based operation, micro-programming, multitasking, and indexing/lookahead.*
+- 🦓 **STC ZEBRA** (Willem van der Poel, 1958) — [stczebra](file:///home/jglossner/GitRepos/BrooksZoo/stczebra) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/stczebra/arch.md)
+- 🐂 **Bull Gamma 60** (Machines Bull Team, 1960) — [bullgamma60](file:///home/jglossner/GitRepos/BrooksZoo/bullgamma60) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/bullgamma60/arch.md)
+- 🚀 **IBM Stretch** (Stephen Dunwell, 1961) — [ibmstretch](file:///home/jglossner/GitRepos/BrooksZoo/ibmstretch) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibmstretch/arch.md)
+- 🥞 **Burroughs B5500** (Robert S. Barton, 1964) — [burroughsb5500](file:///home/jglossner/GitRepos/BrooksZoo/burroughsb5500) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/burroughsb5500/arch.md)
+
+### 5. Accumulator-Minicomputer House
 *Highly constrained accumulator architectures designed for low-cost, mainstream mini and microcomputing.*
 - 📉 **DEC PDP-8** (C. Gordon Bell & Edson de Castro, 1965) — [decpdp8](file:///home/jglossner/GitRepos/BrooksZoo/decpdp8) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/decpdp8/arch.md)
 - 🕹️ **MOS 6502** (Chuck Peddle, 1975) — [mos6502](file:///home/jglossner/GitRepos/BrooksZoo/mos6502) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/mos6502/arch.md)
 
-### 5. General Register House
+### 6. General Register House
 *Modern paradigms utilizing symmetric register files to decouple calculations from a single accumulator.*
 - 🖥️ **DEC PDP-11** (C. Gordon Bell, 1970) — [decpdp11](file:///home/jglossner/GitRepos/BrooksZoo/decpdp11) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/decpdp11/arch.md)
 - 🏢 **IBM System/360** (Gene Amdahl, Fred Brooks, & G. A. Blaauw, 1964) — [ibm360](file:///home/jglossner/GitRepos/BrooksZoo/ibm360) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm360/arch.md)
 - 📟 **Motorola 68000** (Motorola Team, 1979) — [motorola68000](file:///home/jglossner/GitRepos/BrooksZoo/motorola68000) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/motorola68000/arch.md)
 
-### 6. Stack House
-*Zero-address architectures utilizing a hardware-managed evaluation stack for operations.*
-- 🥞 **Burroughs B5500** (Robert S. Barton, 1961) — [burroughsb5500](file:///home/jglossner/GitRepos/BrooksZoo/burroughsb5500) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/burroughsb5500/arch.md)
-
 ### 7. Supercomputer / Load-Store House
 *Optimized for high-throughput arithmetic, scientific calculations, and pipelining.*
 - ⚡ **CDC 6600** (Seymour Cray, 1964) — [cdc6600](file:///home/jglossner/GitRepos/BrooksZoo/cdc6600) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/cdc6600/arch.md)
 - 🌀 **Cray-1** (Seymour Cray, 1976) — [cray1](file:///home/jglossner/GitRepos/BrooksZoo/cray1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/cray1/arch.md)
+
 
 ---
 

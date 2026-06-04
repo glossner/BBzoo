@@ -42,6 +42,10 @@ import zoo.berkrisc.BerkriscCore
 import zoo.hp3000.Hp3000Core
 import zoo.lilith.LilithCore
 import zoo.ucsdp.UcsdpCore
+import zoo.upd7720.Upd7720Core
+import zoo.tms32010.Tms32010Core
+import zoo.adsp2100.Adsp2100Core
+import zoo.mwave.MwaveCore
 
 class ProfilerSpec extends AnyFlatSpec with Matchers {
   behavior of "ZooArchitectureProfiler"
@@ -58,7 +62,7 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     if (foundFile.exists()) foundFile else new File(relativePath)
   }
 
-  it should "profile and compare execution statistics for all 23 cores" in {
+  it should "profile and compare execution statistics for all 39 cores" in {
     println("\n=== RUNNING BENCHMARKS & GATHERING PMU STATS ===")
 
     // 1. DEC PDP-8
@@ -1788,6 +1792,198 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       mem(51) shouldBe 44
     }
 
+    // 36. NEC uPD7720
+    val upd7720Hex = findWorkspaceFile("upd7720/sw/test_vector.hex")
+    val upd7720Bytes = Source.fromFile(upd7720Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var upd7720Cycles = 0L
+    var upd7720Insts = 0L
+    var upd7720Reads = 0L
+    var upd7720Writes = 0L
+
+    simulate(new Upd7720Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- upd7720Bytes.indices) mem(i) = upd7720Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      upd7720Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      upd7720Insts  = c.io.pmu_insts.peek().litValue.toLong
+      upd7720Reads  = c.io.pmu_reads.peek().litValue.toLong
+      upd7720Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 37. TI TMS32010
+    val tms32010Hex = findWorkspaceFile("tms32010/sw/test_vector.hex")
+    val tms32010Bytes = Source.fromFile(tms32010Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var tms32010Cycles = 0L
+    var tms32010Insts = 0L
+    var tms32010Reads = 0L
+    var tms32010Writes = 0L
+
+    simulate(new Tms32010Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- tms32010Bytes.indices) mem(i) = tms32010Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      tms32010Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      tms32010Insts  = c.io.pmu_insts.peek().litValue.toLong
+      tms32010Reads  = c.io.pmu_reads.peek().litValue.toLong
+      tms32010Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 38. ADI ADSP-2100
+    val adsp2100Hex = findWorkspaceFile("adsp2100/sw/test_vector.hex")
+    val adsp2100Bytes = Source.fromFile(adsp2100Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var adsp2100Cycles = 0L
+    var adsp2100Insts = 0L
+    var adsp2100Reads = 0L
+    var adsp2100Writes = 0L
+
+    simulate(new Adsp2100Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- adsp2100Bytes.indices) mem(i) = adsp2100Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      adsp2100Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      adsp2100Insts  = c.io.pmu_insts.peek().litValue.toLong
+      adsp2100Reads  = c.io.pmu_reads.peek().litValue.toLong
+      adsp2100Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 39. IBM MWave
+    val mwaveHex = findWorkspaceFile("mwave/sw/test_vector.hex")
+    val mwaveBytes = Source.fromFile(mwaveHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var mwaveCycles = 0L
+    var mwaveInsts = 0L
+    var mwaveReads = 0L
+    var mwaveWrites = 0L
+
+    simulate(new MwaveCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- mwaveBytes.indices) mem(i) = mwaveBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      mwaveCycles = c.io.pmu_cycles.peek().litValue.toLong
+      mwaveInsts  = c.io.pmu_insts.peek().litValue.toLong
+      mwaveReads  = c.io.pmu_reads.peek().litValue.toLong
+      mwaveWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
     // Print Consolidated Comparative Table
     val pdp8Cpi  = if (pdp8Insts > 0)  String.format("%.2f", Double.box(pdp8Cycles.toDouble / pdp8Insts))  else "N/A"
     val pdp11Cpi = if (pdp11Insts > 0) String.format("%.2f", Double.box(pdp11Cycles.toDouble / pdp11Insts)) else "N/A"
@@ -1824,6 +2020,10 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     val hp3000Cpi = if (hp3000Insts > 0) String.format("%.2f", Double.box(hp3000Cycles.toDouble / hp3000Insts)) else "N/A"
     val lilithCpi = if (lilithInsts > 0) String.format("%.2f", Double.box(lilithCycles.toDouble / lilithInsts)) else "N/A"
     val ucsdpCpi = if (ucsdpInsts > 0) String.format("%.2f", Double.box(ucsdpCycles.toDouble / ucsdpInsts)) else "N/A"
+    val upd7720Cpi = if (upd7720Insts > 0) String.format("%.2f", Double.box(upd7720Cycles.toDouble / upd7720Insts)) else "N/A"
+    val tms32010Cpi = if (tms32010Insts > 0) String.format("%.2f", Double.box(tms32010Cycles.toDouble / tms32010Insts)) else "N/A"
+    val adsp2100Cpi = if (adsp2100Insts > 0) String.format("%.2f", Double.box(adsp2100Cycles.toDouble / adsp2100Insts)) else "N/A"
+    val mwaveCpi = if (mwaveInsts > 0) String.format("%.2f", Double.box(mwaveCycles.toDouble / mwaveInsts)) else "N/A"
 
     val table = s"""
 | Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI |
@@ -1863,6 +2063,10 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
 | HP 3000             | 16                | $hp3000Cycles              | $hp3000Insts                   | $hp3000Reads            | $hp3000Writes             | $hp3000Cpi |
 | Lilith              | 16                | $lilithCycles              | $lilithInsts                   | $lilithReads            | $lilithWrites             | $lilithCpi |
 | UCSD Pascal P-Mach  | 16                | $ucsdpCycles              | $ucsdpInsts                   | $ucsdpReads            | $ucsdpWrites             | $ucsdpCpi |
+| NEC uPD7720 DSP     | 16                | $upd7720Cycles              | $upd7720Insts                   | $upd7720Reads            | $upd7720Writes             | $upd7720Cpi |
+| TI TMS32010 DSP     | 16                | $tms32010Cycles              | $tms32010Insts                   | $tms32010Reads            | $tms32010Writes             | $tms32010Cpi |
+| ADI ADSP-2100 DSP   | 16                | $adsp2100Cycles              | $adsp2100Insts                   | $adsp2100Reads            | $adsp2100Writes             | $adsp2100Cpi |
+| IBM MWave DSP       | 16                | $mwaveCycles              | $mwaveInsts                   | $mwaveReads            | $mwaveWrites             | $mwaveCpi |
 """
 
     println("\n=== COMPARATIVE ARCHITECTURE PERFORMANCE REPORT ===")

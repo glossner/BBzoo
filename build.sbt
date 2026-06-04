@@ -325,12 +325,44 @@ lazy val ucsdp = (project in file("ucsdp/rtl"))
   )
   .settings(commonSettings: _*)
 
+// 37. NEC uPD7720 DSP Project
+lazy val upd7720 = (project in file("upd7720/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Upd7720"
+  )
+  .settings(commonSettings: _*)
+
+// 38. TI TMS32010 DSP Project
+lazy val tms32010 = (project in file("tms32010/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Tms32010"
+  )
+  .settings(commonSettings: _*)
+
+// 39. ADI ADSP-2100 DSP Project
+lazy val adsp2100 = (project in file("adsp2100/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Adsp2100"
+  )
+  .settings(commonSettings: _*)
+
+// 40. IBM MWave DSP Project
+lazy val mwave = (project in file("mwave/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Mwave"
+  )
+  .settings(commonSettings: _*)
+
 // ***************************
 // * ROOT PROJECT
 // ***************************
 lazy val root = (project in file("."))
-  .aggregate(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchester, univac1, ias, edsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150, mipsi, arm1, berkrisc, hp3000, lilith, ucsdp)
-  .dependsOn(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchester, univac1, ias, edsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150, mipsi, arm1, berkrisc, hp3000, lilith, ucsdp)
+  .aggregate(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchester, univac1, ias, edsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150, mipsi, arm1, berkrisc, hp3000, lilith, ucsdp, upd7720, tms32010, adsp2100, mwave)
+  .dependsOn(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchester, univac1, ias, edsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150, mipsi, arm1, berkrisc, hp3000, lilith, ucsdp, upd7720, tms32010, adsp2100, mwave)
   .settings(
     name := "BrooksZoo"
   )

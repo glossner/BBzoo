@@ -1,6 +1,6 @@
 # BrooksZoo 🦁
 
-Welcome to **BrooksZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit Blaauw and Frederick Brooks.This repository implements **35 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
+Welcome to **BrooksZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit Blaauw and Frederick Brooks.This repository implements **39 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
 
 ---
 
@@ -73,6 +73,13 @@ The architectures in the zoo are organized into ten distinct "houses" based on t
 - 📱 **ARM1** (Sophie Wilson & Steve Furber, 1985) — [arm1](file:///home/jglossner/GitRepos/BrooksZoo/arm1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/arm1/arch.md)
 - 🎓 **Berkeley RISC-I** (David Patterson & Carlo H. Séquin, 1981) — [berkrisc](file:///home/jglossner/GitRepos/BrooksZoo/berkrisc) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/berkrisc/arch.md)
 
+### 11. DSP House
+*Digital Signal Processors optimized for math, multiply-accumulate operations, and high-performance real-time processing.*
+- 🎛️ **NEC µPD7720** (NEC, 1980) — [upd7720](file:///home/jglossner/GitRepos/BrooksZoo/upd7720) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/upd7720/arch.md)
+- 🧮 **TI TMS32010** (Texas Instruments, 1982) — [tms32010](file:///home/jglossner/GitRepos/BrooksZoo/tms32010) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/tms32010/arch.md)
+- 🔊 **ADI ADSP-2100** (Analog Devices, 1986) — [adsp2100](file:///home/jglossner/GitRepos/BrooksZoo/adsp2100) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/adsp2100/arch.md)
+- 🌊 **IBM MWave** (IBM, 1992) — [mwave](file:///home/jglossner/GitRepos/BrooksZoo/mwave) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/mwave/arch.md)
+
 ---
 
 ## 🛠️ Getting Started
@@ -94,7 +101,7 @@ sbt test
 ```
 
 ### PMU Benchmarks
-To compare the execution statistics of the vector addition workload across all 35 architectures, run the comparative profiler test:
+To compare the execution statistics of the vector addition workload across all 39 architectures, run the comparative profiler test:
 ```bash
 sbt "project root" "testOnly zoo.common.ProfilerSpec"
 ```

@@ -1,0 +1,21 @@
+{
+  "name": "BBzoo Dev Container",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/workspaces/BBzoo/.venv/bin/python"
+      },
+      "extensions": [
+        "scalameta.metals",
+        "ms-python.python",
+        "charliermarsh.ruff"
+      ]
+    }
+  },
+  "postCreateCommand": "uv sync && sbt compile",
+  "remoteUser": "vscode"
+}

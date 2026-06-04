@@ -1,8 +1,6 @@
 # BrooksZoo 🦁
 
-Welcome to **BrooksZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit Blaauw and Frederick Brooks. 
-
-This repository implements **26 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
+Welcome to **BrooksZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit Blaauw and Frederick Brooks.This repository implements **29 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
 
 ---
 
@@ -59,7 +57,9 @@ The architectures in the zoo are organized into seven distinct "houses" based on
 ### 8. Microcomputer House
 *Constrained accumulator and index-register architectures designed for low-cost, mainstream microcomputing.*
 - 🕹️ **MOS 6502** (Chuck Peddle, 1975) — [mos6502](file:///home/jglossner/GitRepos/BrooksZoo/mos6502) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/mos6502/arch.md)
-
+- 💻 **Intel 8080A** (Federico Faggin & Masatoshi Shima, 1974) — [intel8080a](file:///home/jglossner/GitRepos/BrooksZoo/intel8080a) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/intel8080a/arch.md)
+- 🔌 **Motorola 6800** (Tom Bennett, 1974) — [motorola6800](file:///home/jglossner/GitRepos/BrooksZoo/motorola6800) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/motorola6800/arch.md)
+- 💼 **IBM 6150 ROMP** (John Cocke & IBM Team, 1986) — [ibm6150](file:///home/jglossner/GitRepos/BrooksZoo/ibm6150) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm6150/arch.md)
 
 ---
 
@@ -82,7 +82,7 @@ sbt test
 ```
 
 ### PMU Benchmarks
-To compare the execution statistics of the vector addition workload across all 26 architectures, run the comparative profiler test:
+To compare the execution statistics of the vector addition workload across all 29 architectures, run the comparative profiler test:
 ```bash
 sbt "project root" "testOnly zoo.common.ProfilerSpec"
 ```

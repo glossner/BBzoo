@@ -33,6 +33,9 @@ import zoo.ibmstretch.IbmstretchCore
 import zoo.univac1103a.Univac1103aCore
 import zoo.cdc6600ppu.Cdc6600ppuCore
 import zoo.decvax.DecvaxCore
+import zoo.intel8080a.Intel8080aCore
+import zoo.motorola6800.Motorola6800Core
+import zoo.ibm6150.Ibm6150Core
 
 class ProfilerSpec extends AnyFlatSpec with Matchers {
   behavior of "ZooArchitectureProfiler"
@@ -1347,6 +1350,150 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       mem(31) shouldBe 44L
     }
 
+    // 27. Intel 8080A
+    val intel8080aHex = findWorkspaceFile("intel8080a/sw/test_vector.hex")
+    val intel8080aBytes = Source.fromFile(intel8080aHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var intel8080aCycles = 0L
+    var intel8080aInsts = 0L
+    var intel8080aReads = 0L
+    var intel8080aWrites = 0L
+
+    simulate(new Intel8080aCore) { c =>
+      val mem = Array.fill(65536)(0)
+      for (i <- intel8080aBytes.indices) mem(i) = intel8080aBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      intel8080aCycles = c.io.pmu_cycles.peek().litValue.toLong
+      intel8080aInsts  = c.io.pmu_insts.peek().litValue.toLong
+      intel8080aReads  = c.io.pmu_reads.peek().litValue.toLong
+      intel8080aWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(88) shouldBe 11
+      mem(89) shouldBe 22
+      mem(90) shouldBe 33
+      mem(91) shouldBe 44
+    }
+
+    // 28. Motorola 6800
+    val motorola6800Hex = findWorkspaceFile("motorola6800/sw/test_vector.hex")
+    val motorola6800Bytes = Source.fromFile(motorola6800Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var motorola6800Cycles = 0L
+    var motorola6800Insts = 0L
+    var motorola6800Reads = 0L
+    var motorola6800Writes = 0L
+
+    simulate(new Motorola6800Core) { c =>
+      val mem = Array.fill(65536)(0)
+      for (i <- motorola6800Bytes.indices) mem(i) = motorola6800Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      motorola6800Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      motorola6800Insts  = c.io.pmu_insts.peek().litValue.toLong
+      motorola6800Reads  = c.io.pmu_reads.peek().litValue.toLong
+      motorola6800Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(88) shouldBe 11
+      mem(89) shouldBe 22
+      mem(90) shouldBe 33
+      mem(91) shouldBe 44
+    }
+
+    // 29. IBM 6150 (ROMP)
+    val ibm6150Hex = findWorkspaceFile("ibm6150/sw/test_vector.hex")
+    val ibm6150Bytes = Source.fromFile(ibm6150Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
+    var ibm6150Cycles = 0L
+    var ibm6150Insts = 0L
+    var ibm6150Reads = 0L
+    var ibm6150Writes = 0L
+
+    simulate(new Ibm6150Core) { c =>
+      val mem = Array.fill(256)(0L)
+      for (i <- ibm6150Bytes.indices) mem(i) = ibm6150Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toLong
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      ibm6150Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      ibm6150Insts  = c.io.pmu_insts.peek().litValue.toLong
+      ibm6150Reads  = c.io.pmu_reads.peek().litValue.toLong
+      ibm6150Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11L
+      mem(49) shouldBe 22L
+      mem(50) shouldBe 33L
+      mem(51) shouldBe 44L
+    }
+
     // Print Consolidated Comparative Table
     val pdp8Cpi  = if (pdp8Insts > 0)  String.format("%.2f", Double.box(pdp8Cycles.toDouble / pdp8Insts))  else "N/A"
     val pdp11Cpi = if (pdp11Insts > 0) String.format("%.2f", Double.box(pdp11Cycles.toDouble / pdp11Insts)) else "N/A"
@@ -1374,6 +1521,9 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     val univac1103aCpi = if (univac1103aInsts > 0) String.format("%.2f", Double.box(univac1103aCycles.toDouble / univac1103aInsts)) else "N/A"
     val cdc6600ppuCpi  = if (cdc6600ppuInsts > 0)  String.format("%.2f", Double.box(cdc6600ppuCycles.toDouble / cdc6600ppuInsts))  else "N/A"
     val decvaxCpi = if (decvaxInsts > 0) String.format("%.2f", Double.box(decvaxCycles.toDouble / decvaxInsts)) else "N/A"
+    val intel8080aCpi = if (intel8080aInsts > 0) String.format("%.2f", Double.box(intel8080aCycles.toDouble / intel8080aInsts)) else "N/A"
+    val motorola6800Cpi = if (motorola6800Insts > 0) String.format("%.2f", Double.box(motorola6800Cycles.toDouble / motorola6800Insts)) else "N/A"
+    val ibm6150Cpi = if (ibm6150Insts > 0) String.format("%.2f", Double.box(ibm6150Cycles.toDouble / ibm6150Insts)) else "N/A"
 
     val table = s"""
 | Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI |
@@ -1404,7 +1554,9 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
 | Univac 1103A        | 36                | $univac1103aCycles              | $univac1103aInsts                   | $univac1103aReads            | $univac1103aWrites             | $univac1103aCpi |
 | CDC 6600 PPU        | 12                | $cdc6600ppuCycles              | $cdc6600ppuInsts                   | $cdc6600ppuReads            | $cdc6600ppuWrites             | $cdc6600ppuCpi |
 | DEC VAX             | 32                | $decvaxCycles              | $decvaxInsts                   | $decvaxReads            | $decvaxWrites             | $decvaxCpi |
-
+| Intel 8080A         | 8                 | $intel8080aCycles              | $intel8080aInsts                   | $intel8080aReads            | $intel8080aWrites             | $intel8080aCpi |
+| Motorola 6800       | 8                 | $motorola6800Cycles              | $motorola6800Insts                   | $motorola6800Reads            | $motorola6800Writes             | $motorola6800Cpi |
+| IBM 6150 ROMP       | 32                | $ibm6150Cycles              | $ibm6150Insts                   | $ibm6150Reads            | $ibm6150Writes             | $ibm6150Cpi |
 """
 
     println("\n=== COMPARATIVE ARCHITECTURE PERFORMANCE REPORT ===")

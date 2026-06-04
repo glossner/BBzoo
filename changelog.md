@@ -1,3 +1,12 @@
+# 06/04/2026 08:05 Microcomputer House Expansion: Intel 8080A, Motorola 6800, and IBM 6150
+- Implemented three new Microcomputer House architectures (Intel 8080A, Motorola 6800, and IBM 6150 ROMP) with fully functional multi-cycle datapath cores, instruction decoders, and test suites.
+- Added synthesizable Performance Monitoring Units (PMUs) to all 3 new cores to track cycles, instruction retirement, and memory read/write traffic.
+- Designed unique custom execution paradigms for each machine: 8-bit accumulator and little-endian address decoding for Intel 8080A, 8-bit accumulator and big-endian address decoding for Motorola 6800, and 32-bit load-store RISC register-to-register logic for IBM 6150 ROMP.
+- Built Scala and Python assemblers for all 3 new architectures and integrated them into the global pluggable assembler registry.
+- Created architectural documentation (`arch.md`) for all 3 new machines detailing introduction year, designers (Federico Faggin & Masatoshi Shima, Tom Bennett, John Cocke & IBM Team), unique architectural features, instruction formats, and implemented/unimplemented instructions.
+- Expanded the unified 4-element Vector Addition benchmark (`ProfilerSpec.scala`) to include the 3 new cores, verifying correct computation and generating comparative PMU execution metrics.
+- Updated `README.md` to catalog all 29 machines and group MOS 6502, Intel 8080A, Motorola 6800, and IBM 6150 ROMP under the **Microcomputer House**.
+
 # 06/04/2026 07:50 Bell House Completion: DEC VAX
 - Implemented the classic DEC VAX CISC architecture with a fully functional multi-cycle datapath core, instruction decoder, and test suite.
 - Added synthesizable Performance Monitoring Unit (PMU) to the VAX core to track cycles, instruction retirement, and memory read/write traffic.

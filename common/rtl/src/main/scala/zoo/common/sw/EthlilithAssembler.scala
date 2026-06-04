@@ -3,7 +3,7 @@ package zoo.common.sw
 import zoo.common.architecture._
 import scala.collection.mutable
 
-class LilithAssembler extends BaseAssembler with StackArchitecture with VariableLengthFormat with FixedPointOperations {
+class EthlilithAssembler extends BaseAssembler with StackArchitecture with VariableLengthFormat with FixedPointOperations {
   commentPattern = "(;|//).*"
   override val wordWidth: Int = 16
   override val addressWidth: Int = 16
@@ -53,13 +53,13 @@ class LilithAssembler extends BaseAssembler with StackArchitecture with Variable
         Seq(0x30 << 8, addr)
 
       case _ =>
-        throw new Exception(s"Unknown Lilith instruction: $s")
+        throw new Exception(s"Unknown Ethlilith instruction: $s")
     }
   }
 
   override def formatOutput(values: Seq[Int]): String = {
     val out = mutable.Buffer[String]()
-    out += "# Compiled Lilith Hex File"
+    out += "# Compiled Ethlilith Hex File"
     for (v <- values) {
       out += f"${v & 0xFFFF}%04X"
     }

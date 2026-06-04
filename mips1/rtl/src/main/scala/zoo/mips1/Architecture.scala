@@ -1,4 +1,4 @@
-package zoo.mipsi
+package zoo.mips1
 
 import zoo.common.architecture._
 
@@ -6,7 +6,7 @@ import zoo.common.architecture._
  * MIPS I (R2000) Architectural Specification.
  * Designed by John L. Hennessy & MIPS team in 1986.
  */
-class MipsiArchitecture extends GeneralRegisterArchitecture with VariableLengthFormat with FixedPointOperations {
+class Mips1Architecture extends GeneralRegisterArchitecture with VariableLengthFormat with FixedPointOperations {
   override val wordWidth: Int = 32
   override val addressWidth: Int = 32
   override val numGPRs: Int = 32

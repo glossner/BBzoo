@@ -5,7 +5,7 @@ from architecture.storage_hierarchy import GeneralRegisterArchitecture
 from architecture.instruction_format import VariableLengthFormat
 from architecture.operations import FixedPointOperations
 
-class MwaveAssembler(BaseAssembler, GeneralRegisterArchitecture, VariableLengthFormat, FixedPointOperations):
+class IbmmwaveAssembler(BaseAssembler, GeneralRegisterArchitecture, VariableLengthFormat, FixedPointOperations):
     word_width = 16
     address_width = 16
     num_gprs = 16
@@ -65,7 +65,7 @@ class MwaveAssembler(BaseAssembler, GeneralRegisterArchitecture, VariableLengthF
             elif reg == "R2":
                 return [0x31 << 8, addr]
             else:
-                raise Exception(f"Invalid register for LD in MWave: {reg}")
+                raise Exception(f"Invalid register for LD in IBM MWave: {reg}")
 
         elif mnemonic == "ST":
             if len(ops) != 2:
@@ -75,14 +75,14 @@ class MwaveAssembler(BaseAssembler, GeneralRegisterArchitecture, VariableLengthF
             if reg == "R1":
                 return [0x33 << 8, addr]
             else:
-                raise Exception(f"Invalid register for ST in MWave: {reg}")
+                raise Exception(f"Invalid register for ST in IBM MWave: {reg}")
 
         else:
-            raise Exception(f"Unknown MWave instruction: {line}")
+            raise Exception(f"Unknown IBM MWave instruction: {line}")
 
     def format_output(self, values):
         out = []
-        out.append("# Compiled MWave Hex File")
+        out.append("# Compiled IBM MWave Hex File")
         for val in values:
             out.append(f"{val & 0xFFFF:04X}")
         return "\n".join(out) + "\n"

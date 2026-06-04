@@ -13,13 +13,13 @@ The architectures in the zoo are organized into ten distinct "houses" based on t
 - ⚙️ **Babbage Analytical Engine** (Charles Babbage, 1837) — [babbage](file:///home/jglossner/GitRepos/BrooksZoo/babbage) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/babbage/arch.md)
 - 🧮 **Harvard Mark I** (Howard Aiken, 1944) — [harvardmark1](file:///home/jglossner/GitRepos/BrooksZoo/harvardmark1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/harvardmark1/arch.md)
 - 💾 **Zuse Z1** (Konrad Zuse, 1938) — [zusez1](file:///home/jglossner/GitRepos/BrooksZoo/zusez1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/zusez1/arch.md)
-- 👶 **Manchester Baby** (Frederic Williams & Tom Kilburn, 1948) — [manchester](file:///home/jglossner/GitRepos/BrooksZoo/manchester) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/manchester/arch.md)
+- 👶 **Manchester Baby** (Frederic Williams & Tom Kilburn, 1948) — [manchestermu1](file:///home/jglossner/GitRepos/BrooksZoo/manchestermu1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/manchestermu1/arch.md)
 - 📼 **Univac I** (J. Presper Eckert & John Mauchly, 1951) — [univac1](file:///home/jglossner/GitRepos/BrooksZoo/univac1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/univac1/arch.md)
 
 ### 2. Von Neumann House
 *Featuring the classic accumulator-based stored-program organization with unified program and data memory.*
-- 🏫 **Princeton IAS** (John von Neumann, 1952) — [ias](file:///home/jglossner/GitRepos/BrooksZoo/ias) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ias/arch.md)
-- 📡 **EDSAC** (Maurice Wilkes, 1949) — [edsac](file:///home/jglossner/GitRepos/BrooksZoo/edsac) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/edsac/arch.md)
+- 🏫 **Princeton IAS** (John von Neumann, 1952) — [princetonias](file:///home/jglossner/GitRepos/BrooksZoo/princetonias) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/princetonias/arch.md)
+- 📡 **EDSAC** (Maurice Wilkes, 1949) — [cambridgeedsac](file:///home/jglossner/GitRepos/BrooksZoo/cambridgeedsac) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/cambridgeedsac/arch.md)
 - 🔬 **IBM 701** (Nathaniel Rochester, 1952) — [ibm701](file:///home/jglossner/GitRepos/BrooksZoo/ibm701) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm701/arch.md)
 - 📈 **IBM 704** (Gene Amdahl, 1954) — [ibm704](file:///home/jglossner/GitRepos/BrooksZoo/ibm704) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm704/arch.md)
 
@@ -39,7 +39,7 @@ The architectures in the zoo are organized into ten distinct "houses" based on t
 *Zero-address architectures utilizing evaluation stacks to minimize instruction size and simplify code generation.*
 - 🥞 **Burroughs B5500** (Robert S. Barton, 1964) — [burroughsb5500](file:///home/jglossner/GitRepos/BrooksZoo/burroughsb5500) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/burroughsb5500/arch.md)
 - 📠 **HP 3000** (HP, 1972) — [hp3000](file:///home/jglossner/GitRepos/BrooksZoo/hp3000) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/hp3000/arch.md)
-- 📐 **Lilith** (Niklaus Wirth, 1980) — [lilith](file:///home/jglossner/GitRepos/BrooksZoo/lilith) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/lilith/arch.md)
+- 📐 **Ethlilith** (Niklaus Wirth, 1980) — [ethlilith](file:///home/jglossner/GitRepos/BrooksZoo/ethlilith) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ethlilith/arch.md)
 - ☕ **UCSD Pascal P-Machine** (UCSD, 1978) — [ucsdp](file:///home/jglossner/GitRepos/BrooksZoo/ucsdp) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ucsdp/arch.md)
 
 ### 6. Bell House
@@ -69,16 +69,16 @@ The architectures in the zoo are organized into ten distinct "houses" based on t
 ### 10. RISC House
 *Reduced Instruction Set Computer designs prioritizing simplified formats, load-store memory access, and single-cycle executions.*
 - 💼 **IBM 6150 ROMP** (John Cocke & IBM Team, 1986) — [ibm6150](file:///home/jglossner/GitRepos/BrooksZoo/ibm6150) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibm6150/arch.md)
-- 🚀 **MIPS I (R2000)** (John Hennessy, 1986) — [mipsi](file:///home/jglossner/GitRepos/BrooksZoo/mipsi) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/mipsi/arch.md)
+- 🚀 **MIPS I (R2000)** (John Hennessy, 1986) — [mips1](file:///home/jglossner/GitRepos/BrooksZoo/mips1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/mips1/arch.md)
 - 📱 **ARM1** (Sophie Wilson & Steve Furber, 1985) — [arm1](file:///home/jglossner/GitRepos/BrooksZoo/arm1) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/arm1/arch.md)
-- 🎓 **Berkeley RISC-I** (David Patterson & Carlo H. Séquin, 1981) — [berkrisc](file:///home/jglossner/GitRepos/BrooksZoo/berkrisc) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/berkrisc/arch.md)
+- 🎓 **Berkeley RISC-I** (David Patterson & Carlo H. Séquin, 1981) — [berkeleyrisc](file:///home/jglossner/GitRepos/BrooksZoo/berkeleyrisc) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/berkeleyrisc/arch.md)
 
 ### 11. DSP House
 *Digital Signal Processors optimized for math, multiply-accumulate operations, and high-performance real-time processing.*
 - 🎛️ **NEC µPD7720** (NEC, 1980) — [upd7720](file:///home/jglossner/GitRepos/BrooksZoo/upd7720) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/upd7720/arch.md)
 - 🧮 **TI TMS32010** (Texas Instruments, 1982) — [tms32010](file:///home/jglossner/GitRepos/BrooksZoo/tms32010) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/tms32010/arch.md)
 - 🔊 **ADI ADSP-2100** (Analog Devices, 1986) — [adsp2100](file:///home/jglossner/GitRepos/BrooksZoo/adsp2100) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/adsp2100/arch.md)
-- 🌊 **IBM MWave** (IBM, 1992) — [mwave](file:///home/jglossner/GitRepos/BrooksZoo/mwave) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/mwave/arch.md)
+- 🌊 **IBM MWave** (IBM, 1992) — [ibmmwave](file:///home/jglossner/GitRepos/BrooksZoo/ibmmwave) / [arch.md](file:///home/jglossner/GitRepos/BrooksZoo/ibmmwave/arch.md)
 
 ---
 

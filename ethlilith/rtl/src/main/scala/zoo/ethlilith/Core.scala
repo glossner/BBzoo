@@ -1,14 +1,14 @@
-package zoo.lilith
+package zoo.ethlilith
 
 import chisel3._
 import chisel3.util._
 import zoo.common.components._
 
 /**
- * Lilith Core Processor.
+ * Ethlilith Core Processor.
  * A 16-bit stack-based core with stack cache registers.
  */
-class LilithCore extends Module {
+class EthlilithCore extends Module {
   val io = IO(new Bundle {
     val mem = new SimpleMemIO(addrWidth = 16, dataWidth = 16)
     val hlt = Output(Bool())
@@ -27,7 +27,7 @@ class LilithCore extends Module {
   })
 
   // Sub-modules
-  val decoder = Module(new LilithDecoder)
+  val decoder = Module(new EthlilithDecoder)
   val alu     = Module(new ParameterizedALU(width = 16))
   val stack   = Module(new StackMemory(depth = 16, width = 16))
 

@@ -1,9 +1,9 @@
-package zoo.ias
+package zoo.princetonias
 
 import chisel3._
 import chisel3.util._
 
-class IasCtrlSignals extends Bundle {
+class PrincetoniasCtrlSignals extends Bundle {
   val mem_read  = Bool()
   val mem_write = Bool()
   val is_ld     = Bool()
@@ -13,10 +13,10 @@ class IasCtrlSignals extends Bundle {
   val is_hlt    = Bool()
 }
 
-class IasDecoder extends Module {
+class PrincetoniasDecoder extends Module {
   val io = IO(new Bundle {
     val inst = Input(UInt(40.W))
-    val ctrl = Output(new IasCtrlSignals)
+    val ctrl = Output(new PrincetoniasCtrlSignals)
     val addr = Output(UInt(12.W))
   })
 

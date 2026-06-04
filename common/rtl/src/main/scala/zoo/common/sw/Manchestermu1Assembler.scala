@@ -3,7 +3,7 @@ package zoo.common.sw
 import zoo.common.architecture._
 import scala.collection.mutable
 
-class ManchesterAssembler extends BaseAssembler with AccumulatorArchitecture with FixedLengthFormat with FixedPointOperations {
+class Manchestermu1Assembler extends BaseAssembler with AccumulatorArchitecture with FixedLengthFormat with FixedPointOperations {
   override val wordWidth: Int = 32
   override val addressWidth: Int = 13
   override val hasLinkBit: Boolean = false
@@ -47,13 +47,13 @@ class ManchesterAssembler extends BaseAssembler with AccumulatorArchitecture wit
       Seq(parseNumericOrSymbol(s))
     } catch {
       case _: Exception =>
-        throw new Exception(s"Unknown Manchester instruction: $s")
+        throw new Exception(s"Unknown Manchestermu1 instruction: $s")
     }
   }
 
   override def formatOutput(values: Seq[Int]): String = {
     val out = mutable.Buffer[String]()
-    out += "# Compiled Manchester Hex File"
+    out += "# Compiled Manchestermu1 Hex File"
     for (valWord <- values) {
       out += f"${valWord & 0xFFFFFFFFL}%08X"
     }

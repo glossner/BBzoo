@@ -1,9 +1,9 @@
-package zoo.mwave
+package zoo.ibmmwave
 
 import chisel3._
 import chisel3.util._
 
-class MwaveCtrlSignals extends Bundle {
+class IbmmwaveCtrlSignals extends Bundle {
   val opcode  = UInt(8.W)
   val is_ldr1 = Bool()
   val is_ldr2 = Bool()
@@ -12,10 +12,10 @@ class MwaveCtrlSignals extends Bundle {
   val is_hlt  = Bool()
 }
 
-class MwaveDecoder extends Module {
+class IbmmwaveDecoder extends Module {
   val io = IO(new Bundle {
     val inst = Input(UInt(16.W))
-    val ctrl = Output(new MwaveCtrlSignals)
+    val ctrl = Output(new IbmmwaveCtrlSignals)
   })
 
   val op = io.inst(15, 8)

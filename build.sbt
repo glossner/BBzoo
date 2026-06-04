@@ -134,10 +134,10 @@ lazy val zusez1 = (project in file("zusez1/rtl"))
   .settings(commonSettings: _*)
 
 // 13. Manchester Baby Project
-lazy val manchester = (project in file("manchester/rtl"))
+lazy val manchestermu1 = (project in file("manchestermu1/rtl"))
   .dependsOn(common)
   .settings(
-    name := "Manchester"
+    name := "Manchestermu1"
   )
   .settings(commonSettings: _*)
 
@@ -150,18 +150,18 @@ lazy val univac1 = (project in file("univac1/rtl"))
   .settings(commonSettings: _*)
 
 // 15. Princeton IAS Project
-lazy val ias = (project in file("ias/rtl"))
+lazy val princetonias = (project in file("princetonias/rtl"))
   .dependsOn(common)
   .settings(
-    name := "Ias"
+    name := "Princetonias"
   )
   .settings(commonSettings: _*)
 
 // 16. EDSAC Project
-lazy val edsac = (project in file("edsac/rtl"))
+lazy val cambridgeedsac = (project in file("cambridgeedsac/rtl"))
   .dependsOn(common)
   .settings(
-    name := "Edsac"
+    name := "Cambridgeedsac"
   )
   .settings(commonSettings: _*)
 
@@ -278,10 +278,10 @@ lazy val ibm6150 = (project in file("ibm6150/rtl"))
   .settings(commonSettings: _*)
 
 // 31. MIPS I Project
-lazy val mipsi = (project in file("mipsi/rtl"))
+lazy val mips1 = (project in file("mips1/rtl"))
   .dependsOn(common)
   .settings(
-    name := "Mipsi"
+    name := "Mips1"
   )
   .settings(commonSettings: _*)
 
@@ -294,10 +294,10 @@ lazy val arm1 = (project in file("arm1/rtl"))
   .settings(commonSettings: _*)
 
 // 33. Berkeley RISC-I Project
-lazy val berkrisc = (project in file("berkrisc/rtl"))
+lazy val berkeleyrisc = (project in file("berkeleyrisc/rtl"))
   .dependsOn(common)
   .settings(
-    name := "Berkrisc"
+    name := "Berkeleyrisc"
   )
   .settings(commonSettings: _*)
 
@@ -309,11 +309,11 @@ lazy val hp3000 = (project in file("hp3000/rtl"))
   )
   .settings(commonSettings: _*)
 
-// 35. Lilith Project
-lazy val lilith = (project in file("lilith/rtl"))
+// 35. Ethlilith Project
+lazy val ethlilith = (project in file("ethlilith/rtl"))
   .dependsOn(common)
   .settings(
-    name := "Lilith"
+    name := "Ethlilith"
   )
   .settings(commonSettings: _*)
 
@@ -350,10 +350,10 @@ lazy val adsp2100 = (project in file("adsp2100/rtl"))
   .settings(commonSettings: _*)
 
 // 40. IBM MWave DSP Project
-lazy val mwave = (project in file("mwave/rtl"))
+lazy val ibmmwave = (project in file("ibmmwave/rtl"))
   .dependsOn(common)
   .settings(
-    name := "Mwave"
+    name := "Ibmmwave"
   )
   .settings(commonSettings: _*)
 
@@ -361,8 +361,8 @@ lazy val mwave = (project in file("mwave/rtl"))
 // * ROOT PROJECT
 // ***************************
 lazy val root = (project in file("."))
-  .aggregate(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchester, univac1, ias, edsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150, mipsi, arm1, berkrisc, hp3000, lilith, ucsdp, upd7720, tms32010, adsp2100, mwave)
-  .dependsOn(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchester, univac1, ias, edsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150, mipsi, arm1, berkrisc, hp3000, lilith, ucsdp, upd7720, tms32010, adsp2100, mwave)
+  .aggregate(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchestermu1, univac1, princetonias, cambridgeedsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150, mips1, arm1, berkeleyrisc, hp3000, ethlilith, ucsdp, upd7720, tms32010, adsp2100, ibmmwave)
+  .dependsOn(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchestermu1, univac1, princetonias, cambridgeedsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150, mips1, arm1, berkeleyrisc, hp3000, ethlilith, ucsdp, upd7720, tms32010, adsp2100, ibmmwave)
   .settings(
     name := "BrooksZoo"
   )

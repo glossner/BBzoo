@@ -3,7 +3,7 @@ package zoo.common.sw
 import zoo.common.architecture._
 import scala.collection.mutable
 
-class BerkriscAssembler extends BaseAssembler with GeneralRegisterArchitecture with VariableLengthFormat with FixedPointOperations {
+class BerkeleyriscAssembler extends BaseAssembler with GeneralRegisterArchitecture with VariableLengthFormat with FixedPointOperations {
   commentPattern = "(;|//).*"
   override val wordWidth: Int = 32
   override val addressWidth: Int = 32
@@ -18,7 +18,7 @@ class BerkriscAssembler extends BaseAssembler with GeneralRegisterArchitecture w
     if (s.startsWith("R") || s.startsWith("r")) {
       s.substring(1).toInt
     } else {
-      throw new Exception(s"Invalid Berkeley RISC-I register operand: $s")
+      throw new Exception(s"Invalid Berkeleyrisc register operand: $s")
     }
   }
 
@@ -76,13 +76,13 @@ class BerkriscAssembler extends BaseAssembler with GeneralRegisterArchitecture w
         Seq(inst)
 
       case _ =>
-        throw new Exception(s"Unknown Berkeley RISC-I instruction: $s")
+        throw new Exception(s"Unknown Berkeleyrisc instruction: $s")
     }
   }
 
   override def formatOutput(values: Seq[Int]): String = {
     val out = mutable.Buffer[String]()
-    out += "# Compiled Berkeley RISC-I Hex File"
+    out += "# Compiled Berkeleyrisc Hex File"
     for (v <- values) {
       out += f"${v & 0xFFFFFFFFL}%08X"
     }

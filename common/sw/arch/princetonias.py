@@ -5,7 +5,7 @@ from architecture.storage_hierarchy import AccumulatorArchitecture
 from architecture.instruction_format import FixedLengthFormat
 from architecture.operations import FixedPointOperations
 
-class IasAssembler(BaseAssembler, AccumulatorArchitecture, FixedLengthFormat, FixedPointOperations):
+class PrincetoniasAssembler(BaseAssembler, AccumulatorArchitecture, FixedLengthFormat, FixedPointOperations):
     word_width = 40
     address_width = 12
     has_link_bit = False
@@ -41,11 +41,11 @@ class IasAssembler(BaseAssembler, AccumulatorArchitecture, FixedLengthFormat, Fi
         try:
             return [self.parse_numeric_or_symbol(line)]
         except ValueError:
-            raise Exception(f"Unknown IAS instruction: {line}")
+            raise Exception(f"Unknown Princetonias instruction: {line}")
 
     def format_output(self, values):
         out = []
-        out.append("# Compiled IAS Hex File")
+        out.append("# Compiled Princetonias Hex File")
         for val in values:
             out.append(f"{val & 0xFFFFFFFFFF:010X}")
         return "\n".join(out) + "\n"

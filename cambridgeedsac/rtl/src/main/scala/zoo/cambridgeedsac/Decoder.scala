@@ -1,9 +1,9 @@
-package zoo.edsac
+package zoo.cambridgeedsac
 
 import chisel3._
 import chisel3.util._
 
-class EdsacCtrlSignals extends Bundle {
+class CambridgeedsacCtrlSignals extends Bundle {
   val mem_read  = Bool()
   val mem_write = Bool()
   val is_add    = Bool()
@@ -13,10 +13,10 @@ class EdsacCtrlSignals extends Bundle {
   val is_z      = Bool() // Halt
 }
 
-class EdsacDecoder extends Module {
+class CambridgeedsacDecoder extends Module {
   val io = IO(new Bundle {
     val inst = Input(UInt(17.W))
-    val ctrl = Output(new EdsacCtrlSignals)
+    val ctrl = Output(new CambridgeedsacCtrlSignals)
     val addr = Output(UInt(10.W))
   })
 

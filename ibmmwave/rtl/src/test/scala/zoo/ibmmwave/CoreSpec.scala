@@ -1,4 +1,4 @@
-package zoo.mwave
+package zoo.ibmmwave
 
 import chisel3._
 import chisel3.simulator.EphemeralSimulator._
@@ -7,7 +7,7 @@ import org.scalatest.matchers.should.Matchers
 import scala.io.Source
 
 class CoreSpec extends AnyFlatSpec with Matchers {
-  behavior of "MwaveCore"
+  behavior of "IbmmwaveCore"
 
   it should "execute LD, ST, ADD, HALT instructions correctly to perform vector addition" in {
     def findWorkspaceFile(relativePath: String): java.io.File = {
@@ -22,7 +22,7 @@ class CoreSpec extends AnyFlatSpec with Matchers {
       if (foundFile.exists()) foundFile else new java.io.File(relativePath)
     }
 
-    val hexFile = findWorkspaceFile("mwave/sw/test_vector.hex")
+    val hexFile = findWorkspaceFile("ibmmwave/sw/test_vector.hex")
     val lines = Source.fromFile(hexFile).getLines()
       .map(_.trim)
       .filter(line => line.nonEmpty && !line.startsWith("#"))
@@ -35,7 +35,7 @@ class CoreSpec extends AnyFlatSpec with Matchers {
       mem(i) = lines(i)
     }
 
-    simulate(new MwaveCore) { c =>
+    simulate(new IbmmwaveCore) { c =>
       c.io.mem.ready.poke(false.B)
       c.io.mem.rdata.poke(0.U)
 

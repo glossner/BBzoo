@@ -1,9 +1,9 @@
-package zoo.mipsi
+package zoo.mips1
 
 import chisel3._
 import chisel3.util._
 
-class MipsiCtrlSignals extends Bundle {
+class Mips1CtrlSignals extends Bundle {
   val opcode   = UInt(6.W)
   val rs       = UInt(5.W)
   val rt       = UInt(5.W)
@@ -15,10 +15,10 @@ class MipsiCtrlSignals extends Bundle {
   val is_hlt   = Bool()
 }
 
-class MipsiDecoder extends Module {
+class Mips1Decoder extends Module {
   val io = IO(new Bundle {
     val inst = Input(UInt(32.W))
-    val ctrl = Output(new MipsiCtrlSignals)
+    val ctrl = Output(new Mips1CtrlSignals)
   })
 
   val op = io.inst(31, 26)

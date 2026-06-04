@@ -1,12 +1,12 @@
-package zoo.lilith
+package zoo.ethlilith
 
 import zoo.common.architecture._
 
 /**
- * Lilith Architectural Specification.
+ * Ethlilith Architectural Specification.
  * Designed by Niklaus Wirth in 1980.
  */
-class LilithArchitecture extends StackArchitecture with VariableLengthFormat with FixedPointOperations {
+class EthlilithArchitecture extends StackArchitecture with VariableLengthFormat with FixedPointOperations {
   override val wordWidth: Int = 16
   override val addressWidth: Int = 16
   override val stackDepth: Int = 16

@@ -3,7 +3,7 @@ package zoo.common.sw
 import zoo.common.architecture._
 import scala.collection.mutable
 
-class IasAssembler extends BaseAssembler with AccumulatorArchitecture with FixedLengthFormat with FixedPointOperations {
+class PrincetoniasAssembler extends BaseAssembler with AccumulatorArchitecture with FixedLengthFormat with FixedPointOperations {
   override val wordWidth: Int = 40
   override val addressWidth: Int = 12
   override val hasLinkBit: Boolean = false
@@ -46,13 +46,13 @@ class IasAssembler extends BaseAssembler with AccumulatorArchitecture with Fixed
       Seq(parseNumericOrSymbol(s))
     } catch {
       case _: Exception =>
-        throw new Exception(s"Unknown IAS instruction: $s")
+        throw new Exception(s"Unknown Princetonias instruction: $s")
     }
   }
 
   override def formatOutput(values: Seq[Int]): String = {
     val out = mutable.Buffer[String]()
-    out += "# Compiled IAS Hex File"
+    out += "# Compiled Princetonias Hex File"
     for (valWord <- values) {
       val bigVal = BigInt(valWord.toLong & 0xFFFFFFFFFFL)
       out += f"$bigVal%010X"

@@ -5,7 +5,7 @@ from architecture.storage_hierarchy import AccumulatorArchitecture
 from architecture.instruction_format import FixedLengthFormat
 from architecture.operations import FixedPointOperations
 
-class ManchesterAssembler(BaseAssembler, AccumulatorArchitecture, FixedLengthFormat, FixedPointOperations):
+class Manchestermu1Assembler(BaseAssembler, AccumulatorArchitecture, FixedLengthFormat, FixedPointOperations):
     word_width = 32
     address_width = 13
     has_link_bit = False
@@ -41,11 +41,11 @@ class ManchesterAssembler(BaseAssembler, AccumulatorArchitecture, FixedLengthFor
         try:
             return [self.parse_numeric_or_symbol(line)]
         except ValueError:
-            raise Exception(f"Unknown Manchester instruction: {line}")
+            raise Exception(f"Unknown Manchestermu1 instruction: {line}")
 
     def format_output(self, values):
         out = []
-        out.append("# Compiled Manchester Hex File")
+        out.append("# Compiled Manchestermu1 Hex File")
         for val in values:
             out.append(f"{val & 0xFFFFFFFF:08X}")
         return "\n".join(out) + "\n"

@@ -3,7 +3,7 @@ package zoo.common.sw
 import zoo.common.architecture._
 import scala.collection.mutable
 
-class MwaveAssembler extends BaseAssembler with GeneralRegisterArchitecture with VariableLengthFormat with FixedPointOperations {
+class IbmmwaveAssembler extends BaseAssembler with GeneralRegisterArchitecture with VariableLengthFormat with FixedPointOperations {
   commentPattern = "(;|//).*"
   override val wordWidth: Int = 16
   override val addressWidth: Int = 16
@@ -51,23 +51,23 @@ class MwaveAssembler extends BaseAssembler with GeneralRegisterArchitecture with
         val addr = parseNumericOrSymbol(ops(1))
         if (reg == "R1") Seq(0x30 << 8, addr)
         else if (reg == "R2") Seq(0x31 << 8, addr)
-        else throw new Exception(s"Invalid register for LD in MWave: $reg")
+        else throw new Exception(s"Invalid register for LD in Ibmmwave: $reg")
 
       case "ST" =>
         if (ops.length != 2) throw new Exception(s"ST requires 2 operands: $s")
         val reg = ops(0).trim.toUpperCase
         val addr = parseNumericOrSymbol(ops(1))
         if (reg == "R1") Seq(0x33 << 8, addr)
-        else throw new Exception(s"Invalid register for ST in MWave: $reg")
+        else throw new Exception(s"Invalid register for ST in Ibmmwave: $reg")
 
       case _ =>
-        throw new Exception(s"Unknown MWave instruction: $s")
+        throw new Exception(s"Unknown Ibmmwave instruction: $s")
     }
   }
 
   override def formatOutput(values: Seq[Int]): String = {
     val out = mutable.Buffer[String]()
-    out += "# Compiled MWave Hex File"
+    out += "# Compiled Ibmmwave Hex File"
     for (v <- values) {
       out += f"${v & 0xFFFF}%04X"
     }

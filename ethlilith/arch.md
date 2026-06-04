@@ -1,10 +1,10 @@
-# Lilith Architecture
+# Ethlilith Architecture
 
 - **Designers**: Niklaus Wirth
 - **Year Introduced**: 1980
 
 ## Unique Features
-- **High-Level Language Oriented**: Lilith was designed specifically to execute Wirth's Modula-2 M-code, matching compiler constructs closely to hardware operations.
+- **High-Level Language Oriented**: Ethlilith was designed specifically to execute Wirth's Modula-2 M-code, matching compiler constructs closely to hardware operations.
 - **Stack-based Evaluation**: Operands are evaluated on an evaluation stack, minimizing instruction size and compiler complexity.
 - **16-bit Workstation Architecture**: 16-bit word size and byte addressing.
 

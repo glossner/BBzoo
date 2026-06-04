@@ -3,7 +3,7 @@ package zoo.common.sw
 import zoo.common.architecture._
 import scala.collection.mutable
 
-class EdsacAssembler extends BaseAssembler with AccumulatorArchitecture with FixedLengthFormat with FixedPointOperations {
+class CambridgeedsacAssembler extends BaseAssembler with AccumulatorArchitecture with FixedLengthFormat with FixedPointOperations {
   override val wordWidth: Int = 17
   override val addressWidth: Int = 10
   override val hasLinkBit: Boolean = false
@@ -46,13 +46,13 @@ class EdsacAssembler extends BaseAssembler with AccumulatorArchitecture with Fix
       Seq(parseNumericOrSymbol(s))
     } catch {
       case _: Exception =>
-        throw new Exception(s"Unknown EDSAC instruction: $s")
+        throw new Exception(s"Unknown Cambridgeedsac instruction: $s")
     }
   }
 
   override def formatOutput(values: Seq[Int]): String = {
     val out = mutable.Buffer[String]()
-    out += "# Compiled EDSAC Hex File"
+    out += "# Compiled Cambridgeedsac Hex File"
     for (valWord <- values) {
       val bigVal = BigInt(valWord.toLong & 0x1FFFFL)
       out += f"$bigVal%05X"

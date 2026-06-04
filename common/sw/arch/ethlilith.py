@@ -5,7 +5,7 @@ from architecture.storage_hierarchy import StackArchitecture
 from architecture.instruction_format import VariableLengthFormat
 from architecture.operations import FixedPointOperations
 
-class LilithAssembler(BaseAssembler, StackArchitecture, VariableLengthFormat, FixedPointOperations):
+class EthlilithAssembler(BaseAssembler, StackArchitecture, VariableLengthFormat, FixedPointOperations):
     word_width = 16
     address_width = 16
     stack_depth = 16
@@ -63,11 +63,11 @@ class LilithAssembler(BaseAssembler, StackArchitecture, VariableLengthFormat, Fi
             return [0x30 << 8, addr]
 
         else:
-            raise Exception(f"Unknown Lilith instruction: {line}")
+            raise Exception(f"Unknown Ethlilith instruction: {line}")
 
     def format_output(self, values):
         out = []
-        out.append("# Compiled Lilith Hex File")
+        out.append("# Compiled Ethlilith Hex File")
         for val in values:
             out.append(f"{val & 0xFFFF:04X}")
         return "\n".join(out) + "\n"

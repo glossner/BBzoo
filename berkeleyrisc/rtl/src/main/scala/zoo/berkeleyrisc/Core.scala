@@ -1,4 +1,4 @@
-package zoo.berkrisc
+package zoo.berkeleyrisc
 
 import chisel3._
 import chisel3.util._
@@ -8,7 +8,7 @@ import zoo.common.components._
  * Berkeley RISC-I Core Processor.
  * A 32-bit RISC core with 32 registers (R0-R31), where R0 is hardwired to 0.
  */
-class BerkriscCore extends Module {
+class BerkeleyriscCore extends Module {
   val io = IO(new Bundle {
     val mem = new SimpleMemIO(addrWidth = 32, dataWidth = 32)
     val hlt = Output(Bool())
@@ -30,7 +30,7 @@ class BerkriscCore extends Module {
   val hltReg = RegInit(false.B)
 
   // Sub-modules
-  val decoder = Module(new BerkriscDecoder)
+  val decoder = Module(new BerkeleyriscDecoder)
 
   // Debug outputs
   io.hlt      := hltReg

@@ -1,4 +1,4 @@
-package zoo.manchester
+package zoo.manchestermu1
 
 import chisel3._
 import chisel3.simulator.EphemeralSimulator._
@@ -7,7 +7,7 @@ import org.scalatest.matchers.should.Matchers
 import scala.io.Source
 
 class CoreSpec extends AnyFlatSpec with Matchers {
-  behavior of "ManchesterCore"
+  behavior of "Manchestermu1Core"
 
   it should "execute LDN, SUB, STO, and STP correctly" in {
     def findWorkspaceFile(relativePath: String): java.io.File = {
@@ -22,7 +22,7 @@ class CoreSpec extends AnyFlatSpec with Matchers {
       if (foundFile.exists()) foundFile else new java.io.File(relativePath)
     }
 
-    val hexFile = findWorkspaceFile("manchester/sw/test_vector.hex")
+    val hexFile = findWorkspaceFile("manchestermu1/sw/test_vector.hex")
     val lines = Source.fromFile(hexFile).getLines()
       .map(_.trim)
       .filter(line => line.nonEmpty && !line.startsWith("#"))
@@ -35,7 +35,7 @@ class CoreSpec extends AnyFlatSpec with Matchers {
       mem(i) = lines(i)
     }
 
-    simulate(new ManchesterCore) { c =>
+    simulate(new Manchestermu1Core) { c =>
       c.io.mem.ready.poke(false.B)
       c.io.mem.rdata.poke(0.U)
 

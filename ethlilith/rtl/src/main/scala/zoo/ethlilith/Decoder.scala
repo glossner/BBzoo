@@ -1,9 +1,9 @@
-package zoo.lilith
+package zoo.ethlilith
 
 import chisel3._
 import chisel3.util._
 
-class LilithCtrlSignals extends Bundle {
+class EthlilithCtrlSignals extends Bundle {
   val opcode   = UInt(8.W)
   val is_push  = Bool()
   val is_pop   = Bool()
@@ -11,10 +11,10 @@ class LilithCtrlSignals extends Bundle {
   val is_hlt   = Bool()
 }
 
-class LilithDecoder extends Module {
+class EthlilithDecoder extends Module {
   val io = IO(new Bundle {
     val inst = Input(UInt(16.W))
-    val ctrl = Output(new LilithCtrlSignals)
+    val ctrl = Output(new EthlilithCtrlSignals)
   })
 
   val op = io.inst(15, 8)

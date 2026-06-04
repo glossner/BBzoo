@@ -1,4 +1,4 @@
-package zoo.mipsi
+package zoo.mips1
 
 import chisel3._
 import chisel3.util._
@@ -8,7 +8,7 @@ import zoo.common.components._
  * MIPS I (R2000) Core Processor.
  * A 32-bit RISC core with 32 registers (R0-R31), where R0 is hardwired to 0.
  */
-class MipsiCore extends Module {
+class Mips1Core extends Module {
   val io = IO(new Bundle {
     val mem = new SimpleMemIO(addrWidth = 32, dataWidth = 32)
     val hlt = Output(Bool())
@@ -25,7 +25,7 @@ class MipsiCore extends Module {
   })
 
   // Sub-modules
-  val decoder = Module(new MipsiDecoder)
+  val decoder = Module(new Mips1Decoder)
 
   // Registers
   val regs   = RegInit(VecInit(Seq.fill(32)(0.U(32.W))))

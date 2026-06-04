@@ -1,9 +1,9 @@
-package zoo.berkrisc
+package zoo.berkeleyrisc
 
 import chisel3._
 import chisel3.util._
 
-class BerkriscCtrlSignals extends Bundle {
+class BerkeleyriscCtrlSignals extends Bundle {
   val opcode = UInt(8.W)
   val rd     = UInt(5.W)
   val rs     = UInt(5.W)
@@ -14,10 +14,10 @@ class BerkriscCtrlSignals extends Bundle {
   val is_hlt = Bool()
 }
 
-class BerkriscDecoder extends Module {
+class BerkeleyriscDecoder extends Module {
   val io = IO(new Bundle {
     val inst = Input(UInt(32.W))
-    val ctrl = Output(new BerkriscCtrlSignals)
+    val ctrl = Output(new BerkeleyriscCtrlSignals)
   })
 
   val op = io.inst(31, 24)

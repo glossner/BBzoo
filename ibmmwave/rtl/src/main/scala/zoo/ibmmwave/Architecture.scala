@@ -1,4 +1,4 @@
-package zoo.mwave
+package zoo.ibmmwave
 
 import zoo.common.architecture._
 
@@ -6,7 +6,7 @@ import zoo.common.architecture._
  * IBM MWave Architectural Specification.
  * Introduced in 1992.
  */
-class MwaveArchitecture extends GeneralRegisterArchitecture with VariableLengthFormat with FixedPointOperations {
+class IbmmwaveArchitecture extends GeneralRegisterArchitecture with VariableLengthFormat with FixedPointOperations {
   override val wordWidth: Int = 16
   override val addressWidth: Int = 16
   override val numGPRs: Int = 16

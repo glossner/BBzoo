@@ -6,7 +6,7 @@ import scala.io.Source
 object Assembler {
   def main(args: Array[String]): Unit = {
     if (args.length < 5 || args(0) != "-arch") {
-      println("Usage: sbt \"common/runMain zoo.common.sw.Assembler -arch <pdp8|ibm360|cray1|m68k|burroughsb5500|decpdp11|cdc6600|mos6502|babbage|harvardmark1|zusez1|manchester|univac1|ias|edsac|ibm701|ibm704|ibm650|ibm705|ibm1401|stczebra|bullgamma60|ibmstretch|univac1103a|cdc6600ppu|decvax|intel8080a|motorola6800|ibm6150|mipsi|arm1|berkrisc|hp3000|lilith|ucsdp|upd7720|tms32010|adsp2100|mwave> <input.asm> -o <output.hex>\"")
+      println("Usage: sbt \"common/runMain zoo.common.sw.Assembler -arch <pdp8|ibm360|cray1|m68k|burroughsb5500|decpdp11|cdc6600|mos6502|babbage|harvardmark1|zusez1|manchestermu1|univac1|princetonias|cambridgeedsac|ibm701|ibm704|ibm650|ibm705|ibm1401|stczebra|bullgamma60|ibmstretch|univac1103a|cdc6600ppu|decvax|intel8080a|motorola6800|ibm6150|mips1|arm1|berkeleyrisc|hp3000|ethlilith|ucsdp|upd7720|tms32010|adsp2100|ibmmwave> <input.asm> -o <output.hex>\"")
       sys.exit(1)
     }
 
@@ -26,10 +26,10 @@ object Assembler {
       case "babbage"         => new BabbageAssembler()
       case "harvardmark1"    => new HarvardMark1Assembler()
       case "zusez1"          => new ZuseZ1Assembler()
-      case "manchester"      => new ManchesterAssembler()
+      case "manchestermu1"   => new Manchestermu1Assembler()
       case "univac1"         => new Univac1Assembler()
-      case "ias"             => new IasAssembler()
-      case "edsac"           => new EdsacAssembler()
+      case "princetonias"    => new PrincetoniasAssembler()
+      case "cambridgeedsac"  => new CambridgeedsacAssembler()
       case "ibm701"          => new Ibm701Assembler()
       case "ibm704"          => new Ibm704Assembler()
       case "ibm650"          => new Ibm650Assembler()
@@ -44,16 +44,16 @@ object Assembler {
       case "intel8080a"      => new Intel8080aAssembler()
       case "motorola6800"    => new Motorola6800Assembler()
       case "ibm6150"         => new Ibm6150Assembler()
-      case "mipsi"           => new MipsiAssembler()
+      case "mips1"           => new Mips1Assembler()
       case "arm1"            => new Arm1Assembler()
-      case "berkrisc"        => new BerkriscAssembler()
+      case "berkeleyrisc"    => new BerkeleyriscAssembler()
       case "hp3000"          => new Hp3000Assembler()
-      case "lilith"          => new LilithAssembler()
+      case "ethlilith"       => new EthlilithAssembler()
       case "ucsdp"           => new UcsdpAssembler()
       case "upd7720"         => new Upd7720Assembler()
       case "tms32010"        => new Tms32010Assembler()
       case "adsp2100"        => new Adsp2100Assembler()
-      case "mwave"           => new MwaveAssembler()
+      case "ibmmwave"        => new IbmmwaveAssembler()
       case _ =>
         println(s"Unknown architecture: $arch")
         sys.exit(1)

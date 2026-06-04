@@ -5,7 +5,7 @@ from architecture.storage_hierarchy import GeneralRegisterArchitecture
 from architecture.instruction_format import VariableLengthFormat
 from architecture.operations import FixedPointOperations
 
-class MipsiAssembler(BaseAssembler, GeneralRegisterArchitecture, VariableLengthFormat, FixedPointOperations):
+class Mips1Assembler(BaseAssembler, GeneralRegisterArchitecture, VariableLengthFormat, FixedPointOperations):
     word_width = 32
     address_width = 32
     num_gprs = 32

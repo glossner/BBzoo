@@ -1,4 +1,4 @@
-package zoo.edsac
+package zoo.cambridgeedsac
 
 import chisel3._
 import chisel3.simulator.EphemeralSimulator._
@@ -7,7 +7,7 @@ import org.scalatest.matchers.should.Matchers
 import scala.io.Source
 
 class CoreSpec extends AnyFlatSpec with Matchers {
-  behavior of "EdsacCore"
+  behavior of "CambridgeedsacCore"
 
   it should "execute A, S, T, U, and Z correctly on 17-bit values" in {
     def findWorkspaceFile(relativePath: String): java.io.File = {
@@ -22,7 +22,7 @@ class CoreSpec extends AnyFlatSpec with Matchers {
       if (foundFile.exists()) foundFile else new java.io.File(relativePath)
     }
 
-    val hexFile = findWorkspaceFile("edsac/sw/test_vector.hex")
+    val hexFile = findWorkspaceFile("cambridgeedsac/sw/test_vector.hex")
     val lines = Source.fromFile(hexFile).getLines()
       .map(_.trim)
       .filter(line => line.nonEmpty && !line.startsWith("#"))
@@ -35,7 +35,7 @@ class CoreSpec extends AnyFlatSpec with Matchers {
       mem(i) = lines(i)
     }
 
-    simulate(new EdsacCore) { c =>
+    simulate(new CambridgeedsacCore) { c =>
       c.io.mem.ready.poke(false.B)
       c.io.mem.rdata.poke(0.U)
 

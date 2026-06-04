@@ -5,7 +5,7 @@ from architecture.storage_hierarchy import GeneralRegisterArchitecture
 from architecture.instruction_format import VariableLengthFormat
 from architecture.operations import FixedPointOperations
 
-class BerkriscAssembler(BaseAssembler, GeneralRegisterArchitecture, VariableLengthFormat, FixedPointOperations):
+class BerkeleyriscAssembler(BaseAssembler, GeneralRegisterArchitecture, VariableLengthFormat, FixedPointOperations):
     word_width = 32
     address_width = 32
     num_gprs = 32

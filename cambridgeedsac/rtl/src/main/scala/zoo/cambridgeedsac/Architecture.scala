@@ -1,11 +1,11 @@
-package zoo.edsac
+package zoo.cambridgeedsac
 
 import zoo.common.architecture._
 
 /**
  * EDSAC Architectural Specification.
  */
-class EdsacArchitecture extends AccumulatorArchitecture with FixedLengthFormat with FixedPointOperations {
+class CambridgeedsacArchitecture extends AccumulatorArchitecture with FixedLengthFormat with FixedPointOperations {
   override val wordWidth: Int = 17
   override val addressWidth: Int = 10
   override val hasLinkBit: Boolean = false

@@ -5,7 +5,7 @@ from architecture.storage_hierarchy import AccumulatorArchitecture
 from architecture.instruction_format import FixedLengthFormat
 from architecture.operations import FixedPointOperations
 
-class EdsacAssembler(BaseAssembler, AccumulatorArchitecture, FixedLengthFormat, FixedPointOperations):
+class CambridgeedsacAssembler(BaseAssembler, AccumulatorArchitecture, FixedLengthFormat, FixedPointOperations):
     word_width = 17
     address_width = 10
     has_link_bit = False
@@ -41,11 +41,11 @@ class EdsacAssembler(BaseAssembler, AccumulatorArchitecture, FixedLengthFormat, 
         try:
             return [self.parse_numeric_or_symbol(line)]
         except ValueError:
-            raise Exception(f"Unknown EDSAC instruction: {line}")
+            raise Exception(f"Unknown Cambridgeedsac instruction: {line}")
 
     def format_output(self, values):
         out = []
-        out.append("# Compiled EDSAC Hex File")
+        out.append("# Compiled Cambridgeedsac Hex File")
         for val in values:
             out.append(f"{val & 0x1FFFF:05X}")
         return "\n".join(out) + "\n"

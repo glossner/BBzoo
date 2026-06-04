@@ -1,4 +1,4 @@
-package zoo.manchester
+package zoo.manchestermu1
 
 import chisel3._
 import chisel3.util._
@@ -8,7 +8,7 @@ import zoo.common.components._
  * Manchester Baby Core Processor.
  * A 32-bit serial stored-program machine with a single Accumulator (A).
  */
-class ManchesterCore extends Module {
+class Manchestermu1Core extends Module {
   val io = IO(new Bundle {
     val mem = new SimpleMemIO(addrWidth = 13, dataWidth = 32)
     val hlt = Output(Bool())
@@ -25,7 +25,7 @@ class ManchesterCore extends Module {
   })
 
   // Sub-modules
-  val decoder = Module(new ManchesterDecoder)
+  val decoder = Module(new Manchestermu1Decoder)
 
   // Core Registers
   val pc     = RegInit(0.U(13.W))

@@ -18,10 +18,10 @@ import zoo.mos6502.Mos6502Core
 import zoo.babbage.BabbageCore
 import zoo.harvardmark1.HarvardMark1Core
 import zoo.zusez1.ZuseZ1Core
-import zoo.manchester.ManchesterCore
+import zoo.manchestermu1.Manchestermu1Core
 import zoo.univac1.Univac1Core
-import zoo.ias.IasCore
-import zoo.edsac.EdsacCore
+import zoo.princetonias.PrincetoniasCore
+import zoo.cambridgeedsac.CambridgeedsacCore
 import zoo.ibm701.Ibm701Core
 import zoo.ibm704.Ibm704Core
 import zoo.ibm650.Ibm650Core
@@ -36,16 +36,16 @@ import zoo.decvax.DecvaxCore
 import zoo.intel8080a.Intel8080aCore
 import zoo.motorola6800.Motorola6800Core
 import zoo.ibm6150.Ibm6150Core
-import zoo.mipsi.MipsiCore
+import zoo.mips1.Mips1Core
 import zoo.arm1.Arm1Core
-import zoo.berkrisc.BerkriscCore
+import zoo.berkeleyrisc.BerkeleyriscCore
 import zoo.hp3000.Hp3000Core
-import zoo.lilith.LilithCore
+import zoo.ethlilith.EthlilithCore
 import zoo.ucsdp.UcsdpCore
 import zoo.upd7720.Upd7720Core
 import zoo.tms32010.Tms32010Core
 import zoo.adsp2100.Adsp2100Core
-import zoo.mwave.MwaveCore
+import zoo.ibmmwave.IbmmwaveCore
 
 class ProfilerSpec extends AnyFlatSpec with Matchers {
   behavior of "ZooArchitectureProfiler"
@@ -641,16 +641,16 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     }
 
     // 12. Manchester Baby
-    val manchesterHex = findWorkspaceFile("manchester/sw/test_vector.hex")
-    val manchesterBytes = Source.fromFile(manchesterHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseLong(l.trim, 16).toInt).toArray
-    var manchesterCycles = 0L
-    var manchesterInsts = 0L
-    var manchesterReads = 0L
-    var manchesterWrites = 0L
+    val manchestermu1Hex = findWorkspaceFile("manchestermu1/sw/test_vector.hex")
+    val manchestermu1Bytes = Source.fromFile(manchestermu1Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseLong(l.trim, 16).toInt).toArray
+    var manchestermu1Cycles = 0L
+    var manchestermu1Insts = 0L
+    var manchestermu1Reads = 0L
+    var manchestermu1Writes = 0L
 
-    simulate(new ManchesterCore) { c =>
+    simulate(new Manchestermu1Core) { c =>
       val mem = Array.fill(256)(0)
-      for (i <- manchesterBytes.indices) mem(i) = manchesterBytes(i)
+      for (i <- manchestermu1Bytes.indices) mem(i) = manchestermu1Bytes(i)
       c.io.mem.ready.poke(false.B)
       c.io.mem.rdata.poke(0.U)
       c.reset.poke(true.B)
@@ -677,10 +677,10 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
         limit -= 1
         if (c.io.hlt.peek().litToBoolean) halted = true
       }
-      manchesterCycles = c.io.pmu_cycles.peek().litValue.toLong
-      manchesterInsts  = c.io.pmu_insts.peek().litValue.toLong
-      manchesterReads  = c.io.pmu_reads.peek().litValue.toLong
-      manchesterWrites = c.io.pmu_writes.peek().litValue.toLong
+      manchestermu1Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      manchestermu1Insts  = c.io.pmu_insts.peek().litValue.toLong
+      manchestermu1Reads  = c.io.pmu_reads.peek().litValue.toLong
+      manchestermu1Writes = c.io.pmu_writes.peek().litValue.toLong
 
       mem(48) shouldBe 11
       mem(49) shouldBe 22
@@ -737,16 +737,16 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     }
 
     // 14. Princeton IAS
-    val iasHex = findWorkspaceFile("ias/sw/test_vector.hex")
-    val iasBytes = Source.fromFile(iasHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
-    var iasCycles = 0L
-    var iasInsts = 0L
-    var iasReads = 0L
-    var iasWrites = 0L
+    val princetoniasHex = findWorkspaceFile("princetonias/sw/test_vector.hex")
+    val princetoniasBytes = Source.fromFile(princetoniasHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
+    var princetoniasCycles = 0L
+    var princetoniasInsts = 0L
+    var princetoniasReads = 0L
+    var princetoniasWrites = 0L
 
-    simulate(new IasCore) { c =>
+    simulate(new PrincetoniasCore) { c =>
       val mem = Array.fill(4096)(0L)
-      for (i <- iasBytes.indices) mem(i) = iasBytes(i)
+      for (i <- princetoniasBytes.indices) mem(i) = princetoniasBytes(i)
       c.io.mem.ready.poke(false.B)
       c.io.mem.rdata.poke(0.U)
       c.reset.poke(true.B)
@@ -773,10 +773,10 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
         limit -= 1
         if (c.io.hlt.peek().litToBoolean) halted = true
       }
-      iasCycles = c.io.pmu_cycles.peek().litValue.toLong
-      iasInsts  = c.io.pmu_insts.peek().litValue.toLong
-      iasReads  = c.io.pmu_reads.peek().litValue.toLong
-      iasWrites = c.io.pmu_writes.peek().litValue.toLong
+      princetoniasCycles = c.io.pmu_cycles.peek().litValue.toLong
+      princetoniasInsts  = c.io.pmu_insts.peek().litValue.toLong
+      princetoniasReads  = c.io.pmu_reads.peek().litValue.toLong
+      princetoniasWrites = c.io.pmu_writes.peek().litValue.toLong
 
       mem(48) shouldBe 11L
       mem(49) shouldBe 22L
@@ -785,16 +785,16 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     }
 
     // 15. EDSAC
-    val edsacHex = findWorkspaceFile("edsac/sw/test_vector.hex")
-    val edsacBytes = Source.fromFile(edsacHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
-    var edsacCycles = 0L
-    var edsacInsts = 0L
-    var edsacReads = 0L
-    var edsacWrites = 0L
+    val cambridgeedsacHex = findWorkspaceFile("cambridgeedsac/sw/test_vector.hex")
+    val cambridgeedsacBytes = Source.fromFile(cambridgeedsacHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var cambridgeedsacCycles = 0L
+    var cambridgeedsacInsts = 0L
+    var cambridgeedsacReads = 0L
+    var cambridgeedsacWrites = 0L
 
-    simulate(new EdsacCore) { c =>
+    simulate(new CambridgeedsacCore) { c =>
       val mem = Array.fill(1024)(0)
-      for (i <- edsacBytes.indices) mem(i) = edsacBytes(i)
+      for (i <- cambridgeedsacBytes.indices) mem(i) = cambridgeedsacBytes(i)
       c.io.mem.ready.poke(false.B)
       c.io.mem.rdata.poke(0.U)
       c.reset.poke(true.B)
@@ -821,10 +821,10 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
         limit -= 1
         if (c.io.hlt.peek().litToBoolean) halted = true
       }
-      edsacCycles = c.io.pmu_cycles.peek().litValue.toLong
-      edsacInsts  = c.io.pmu_insts.peek().litValue.toLong
-      edsacReads  = c.io.pmu_reads.peek().litValue.toLong
-      edsacWrites = c.io.pmu_writes.peek().litValue.toLong
+      cambridgeedsacCycles = c.io.pmu_cycles.peek().litValue.toLong
+      cambridgeedsacInsts  = c.io.pmu_insts.peek().litValue.toLong
+      cambridgeedsacReads  = c.io.pmu_reads.peek().litValue.toLong
+      cambridgeedsacWrites = c.io.pmu_writes.peek().litValue.toLong
 
       mem(48) shouldBe 11
       mem(49) shouldBe 22
@@ -1505,16 +1505,16 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     }
 
     // 30. MIPS I (R2000)
-    val mipsiHex = findWorkspaceFile("mipsi/sw/test_vector.hex")
-    val mipsiBytes = Source.fromFile(mipsiHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
-    var mipsiCycles = 0L
-    var mipsiInsts = 0L
-    var mipsiReads = 0L
-    var mipsiWrites = 0L
+    val mips1Hex = findWorkspaceFile("mips1/sw/test_vector.hex")
+    val mips1Bytes = Source.fromFile(mips1Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
+    var mips1Cycles = 0L
+    var mips1Insts = 0L
+    var mips1Reads = 0L
+    var mips1Writes = 0L
 
-    simulate(new MipsiCore) { c =>
+    simulate(new Mips1Core) { c =>
       val mem = Array.fill(256)(0L)
-      for (i <- mipsiBytes.indices) mem(i) = mipsiBytes(i)
+      for (i <- mips1Bytes.indices) mem(i) = mips1Bytes(i)
       c.io.mem.ready.poke(false.B)
       c.io.mem.rdata.poke(0.U)
       c.reset.poke(true.B)
@@ -1541,10 +1541,10 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
         limit -= 1
         if (c.io.hlt.peek().litToBoolean) halted = true
       }
-      mipsiCycles = c.io.pmu_cycles.peek().litValue.toLong
-      mipsiInsts  = c.io.pmu_insts.peek().litValue.toLong
-      mipsiReads  = c.io.pmu_reads.peek().litValue.toLong
-      mipsiWrites = c.io.pmu_writes.peek().litValue.toLong
+      mips1Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      mips1Insts  = c.io.pmu_insts.peek().litValue.toLong
+      mips1Reads  = c.io.pmu_reads.peek().litValue.toLong
+      mips1Writes = c.io.pmu_writes.peek().litValue.toLong
 
       mem(48) shouldBe 11L
       mem(49) shouldBe 22L
@@ -1601,16 +1601,16 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     }
 
     // 32. Berkeley RISC-I
-    val berkriscHex = findWorkspaceFile("berkrisc/sw/test_vector.hex")
-    val berkriscBytes = Source.fromFile(berkriscHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
-    var berkriscCycles = 0L
-    var berkriscInsts = 0L
-    var berkriscReads = 0L
-    var berkriscWrites = 0L
+    val berkeleyriscHex = findWorkspaceFile("berkeleyrisc/sw/test_vector.hex")
+    val berkeleyriscBytes = Source.fromFile(berkeleyriscHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
+    var berkeleyriscCycles = 0L
+    var berkeleyriscInsts = 0L
+    var berkeleyriscReads = 0L
+    var berkeleyriscWrites = 0L
 
-    simulate(new BerkriscCore) { c =>
+    simulate(new BerkeleyriscCore) { c =>
       val mem = Array.fill(256)(0L)
-      for (i <- berkriscBytes.indices) mem(i) = berkriscBytes(i)
+      for (i <- berkeleyriscBytes.indices) mem(i) = berkeleyriscBytes(i)
       c.io.mem.ready.poke(false.B)
       c.io.mem.rdata.poke(0.U)
       c.reset.poke(true.B)
@@ -1637,10 +1637,10 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
         limit -= 1
         if (c.io.hlt.peek().litToBoolean) halted = true
       }
-      berkriscCycles = c.io.pmu_cycles.peek().litValue.toLong
-      berkriscInsts  = c.io.pmu_insts.peek().litValue.toLong
-      berkriscReads  = c.io.pmu_reads.peek().litValue.toLong
-      berkriscWrites = c.io.pmu_writes.peek().litValue.toLong
+      berkeleyriscCycles = c.io.pmu_cycles.peek().litValue.toLong
+      berkeleyriscInsts  = c.io.pmu_insts.peek().litValue.toLong
+      berkeleyriscReads  = c.io.pmu_reads.peek().litValue.toLong
+      berkeleyriscWrites = c.io.pmu_writes.peek().litValue.toLong
 
       mem(48) shouldBe 11L
       mem(49) shouldBe 22L
@@ -1696,17 +1696,17 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       mem(51) shouldBe 44
     }
 
-    // 34. Lilith
-    val lilithHex = findWorkspaceFile("lilith/sw/test_vector.hex")
-    val lilithBytes = Source.fromFile(lilithHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
-    var lilithCycles = 0L
-    var lilithInsts = 0L
-    var lilithReads = 0L
-    var lilithWrites = 0L
+    // 34. Ethlilith
+    val ethlilithHex = findWorkspaceFile("ethlilith/sw/test_vector.hex")
+    val ethlilithBytes = Source.fromFile(ethlilithHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var ethlilithCycles = 0L
+    var ethlilithInsts = 0L
+    var ethlilithReads = 0L
+    var ethlilithWrites = 0L
 
-    simulate(new LilithCore) { c =>
+    simulate(new EthlilithCore) { c =>
       val mem = Array.fill(256)(0)
-      for (i <- lilithBytes.indices) mem(i) = lilithBytes(i)
+      for (i <- ethlilithBytes.indices) mem(i) = ethlilithBytes(i)
       c.io.mem.ready.poke(false.B)
       c.io.mem.rdata.poke(0.U)
       c.reset.poke(true.B)
@@ -1733,10 +1733,10 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
         limit -= 1
         if (c.io.hlt.peek().litToBoolean) halted = true
       }
-      lilithCycles = c.io.pmu_cycles.peek().litValue.toLong
-      lilithInsts  = c.io.pmu_insts.peek().litValue.toLong
-      lilithReads  = c.io.pmu_reads.peek().litValue.toLong
-      lilithWrites = c.io.pmu_writes.peek().litValue.toLong
+      ethlilithCycles = c.io.pmu_cycles.peek().litValue.toLong
+      ethlilithInsts  = c.io.pmu_insts.peek().litValue.toLong
+      ethlilithReads  = c.io.pmu_reads.peek().litValue.toLong
+      ethlilithWrites = c.io.pmu_writes.peek().litValue.toLong
 
       mem(48) shouldBe 11
       mem(49) shouldBe 22
@@ -1937,16 +1937,16 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     }
 
     // 39. IBM MWave
-    val mwaveHex = findWorkspaceFile("mwave/sw/test_vector.hex")
-    val mwaveBytes = Source.fromFile(mwaveHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
-    var mwaveCycles = 0L
-    var mwaveInsts = 0L
-    var mwaveReads = 0L
-    var mwaveWrites = 0L
+    val ibmmwaveHex = findWorkspaceFile("ibmmwave/sw/test_vector.hex")
+    val ibmmwaveBytes = Source.fromFile(ibmmwaveHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var ibmmwaveCycles = 0L
+    var ibmmwaveInsts = 0L
+    var ibmmwaveReads = 0L
+    var ibmmwaveWrites = 0L
 
-    simulate(new MwaveCore) { c =>
+    simulate(new IbmmwaveCore) { c =>
       val mem = Array.fill(256)(0)
-      for (i <- mwaveBytes.indices) mem(i) = mwaveBytes(i)
+      for (i <- ibmmwaveBytes.indices) mem(i) = ibmmwaveBytes(i)
       c.io.mem.ready.poke(false.B)
       c.io.mem.rdata.poke(0.U)
       c.reset.poke(true.B)
@@ -1973,10 +1973,10 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
         limit -= 1
         if (c.io.hlt.peek().litToBoolean) halted = true
       }
-      mwaveCycles = c.io.pmu_cycles.peek().litValue.toLong
-      mwaveInsts  = c.io.pmu_insts.peek().litValue.toLong
-      mwaveReads  = c.io.pmu_reads.peek().litValue.toLong
-      mwaveWrites = c.io.pmu_writes.peek().litValue.toLong
+      ibmmwaveCycles = c.io.pmu_cycles.peek().litValue.toLong
+      ibmmwaveInsts  = c.io.pmu_insts.peek().litValue.toLong
+      ibmmwaveReads  = c.io.pmu_reads.peek().litValue.toLong
+      ibmmwaveWrites = c.io.pmu_writes.peek().litValue.toLong
 
       mem(48) shouldBe 11
       mem(49) shouldBe 22
@@ -1996,10 +1996,10 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     val babbageCpi = if (babbageInsts > 0) String.format("%.2f", Double.box(babbageCycles.toDouble / babbageInsts)) else "N/A"
     val harvardCpi = if (harvardInsts > 0) String.format("%.2f", Double.box(harvardCycles.toDouble / harvardInsts)) else "N/A"
     val zuseCpi    = if (zuseInsts > 0)    String.format("%.2f", Double.box(zuseCycles.toDouble / zuseInsts))       else "N/A"
-    val manchesterCpi = if (manchesterInsts > 0) String.format("%.2f", Double.box(manchesterCycles.toDouble / manchesterInsts)) else "N/A"
+    val manchestermu1Cpi = if (manchestermu1Insts > 0) String.format("%.2f", Double.box(manchestermu1Cycles.toDouble / manchestermu1Insts)) else "N/A"
     val univacCpi  = if (univacInsts > 0)  String.format("%.2f", Double.box(univacCycles.toDouble / univacInsts))   else "N/A"
-    val iasCpi     = if (iasInsts > 0)     String.format("%.2f", Double.box(iasCycles.toDouble / iasInsts))       else "N/A"
-    val edsacCpi   = if (edsacInsts > 0)   String.format("%.2f", Double.box(edsacCycles.toDouble / edsacInsts))   else "N/A"
+    val princetoniasCpi     = if (princetoniasInsts > 0)     String.format("%.2f", Double.box(princetoniasCycles.toDouble / princetoniasInsts))       else "N/A"
+    val cambridgeedsacCpi   = if (cambridgeedsacInsts > 0)   String.format("%.2f", Double.box(cambridgeedsacCycles.toDouble / cambridgeedsacInsts))   else "N/A"
     val ibm701Cpi  = if (ibm701Insts > 0)  String.format("%.2f", Double.box(ibm701Cycles.toDouble / ibm701Insts))   else "N/A"
     val ibm704Cpi  = if (ibm704Insts > 0)  String.format("%.2f", Double.box(ibm704Cycles.toDouble / ibm704Insts))   else "N/A"
     val ibm650Cpi  = if (ibm650Insts > 0)  String.format("%.2f", Double.box(ibm650Cycles.toDouble / ibm650Insts))   else "N/A"
@@ -2014,16 +2014,16 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     val intel8080aCpi = if (intel8080aInsts > 0) String.format("%.2f", Double.box(intel8080aCycles.toDouble / intel8080aInsts)) else "N/A"
     val motorola6800Cpi = if (motorola6800Insts > 0) String.format("%.2f", Double.box(motorola6800Cycles.toDouble / motorola6800Insts)) else "N/A"
     val ibm6150Cpi = if (ibm6150Insts > 0) String.format("%.2f", Double.box(ibm6150Cycles.toDouble / ibm6150Insts)) else "N/A"
-    val mipsiCpi = if (mipsiInsts > 0) String.format("%.2f", Double.box(mipsiCycles.toDouble / mipsiInsts)) else "N/A"
+    val mips1Cpi = if (mips1Insts > 0) String.format("%.2f", Double.box(mips1Cycles.toDouble / mips1Insts)) else "N/A"
     val arm1Cpi = if (arm1Insts > 0) String.format("%.2f", Double.box(arm1Cycles.toDouble / arm1Insts)) else "N/A"
-    val berkriscCpi = if (berkriscInsts > 0) String.format("%.2f", Double.box(berkriscCycles.toDouble / berkriscInsts)) else "N/A"
+    val berkeleyriscCpi = if (berkeleyriscInsts > 0) String.format("%.2f", Double.box(berkeleyriscCycles.toDouble / berkeleyriscInsts)) else "N/A"
     val hp3000Cpi = if (hp3000Insts > 0) String.format("%.2f", Double.box(hp3000Cycles.toDouble / hp3000Insts)) else "N/A"
-    val lilithCpi = if (lilithInsts > 0) String.format("%.2f", Double.box(lilithCycles.toDouble / lilithInsts)) else "N/A"
+    val ethlilithCpi = if (ethlilithInsts > 0) String.format("%.2f", Double.box(ethlilithCycles.toDouble / ethlilithInsts)) else "N/A"
     val ucsdpCpi = if (ucsdpInsts > 0) String.format("%.2f", Double.box(ucsdpCycles.toDouble / ucsdpInsts)) else "N/A"
     val upd7720Cpi = if (upd7720Insts > 0) String.format("%.2f", Double.box(upd7720Cycles.toDouble / upd7720Insts)) else "N/A"
     val tms32010Cpi = if (tms32010Insts > 0) String.format("%.2f", Double.box(tms32010Cycles.toDouble / tms32010Insts)) else "N/A"
     val adsp2100Cpi = if (adsp2100Insts > 0) String.format("%.2f", Double.box(adsp2100Cycles.toDouble / adsp2100Insts)) else "N/A"
-    val mwaveCpi = if (mwaveInsts > 0) String.format("%.2f", Double.box(mwaveCycles.toDouble / mwaveInsts)) else "N/A"
+    val ibmmwaveCpi = if (ibmmwaveInsts > 0) String.format("%.2f", Double.box(ibmmwaveCycles.toDouble / ibmmwaveInsts)) else "N/A"
 
     val table = s"""
 | Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI |
@@ -2031,10 +2031,10 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
 | Babbage Anal. Eng.  | 64                | $babbageCycles              | $babbageInsts                   | $babbageReads            | $babbageWrites             | $babbageCpi |
 | Harvard Mark I      | 64                | $harvardCycles              | $harvardInsts                   | $harvardReads            | $harvardWrites             | $harvardCpi |
 | Zuse Z1             | 22                | $zuseCycles              | $zuseInsts                   | $zuseReads            | $zuseWrites             | $zuseCpi |
-| Manchester Baby     | 32                | $manchesterCycles              | $manchesterInsts                   | $manchesterReads            | $manchesterWrites             | $manchesterCpi |
+| Manchester Baby     | 32                | $manchestermu1Cycles              | $manchestermu1Insts                   | $manchestermu1Reads            | $manchestermu1Writes             | $manchestermu1Cpi |
 | Univac I            | 72                | $univacCycles              | $univacInsts                   | $univacReads            | $univacWrites             | $univacCpi |
-| Princeton IAS       | 40                | $iasCycles              | $iasInsts                   | $iasReads            | $iasWrites             | $iasCpi |
-| EDSAC               | 17                | $edsacCycles              | $edsacInsts                   | $edsacReads            | $edsacWrites             | $edsacCpi |
+| Princeton IAS       | 40                | $princetoniasCycles              | $princetoniasInsts                   | $princetoniasReads            | $princetoniasWrites             | $princetoniasCpi |
+| EDSAC               | 17                | $cambridgeedsacCycles              | $cambridgeedsacInsts                   | $cambridgeedsacReads            | $cambridgeedsacWrites             | $cambridgeedsacCpi |
 | IBM 701             | 36                | $ibm701Cycles              | $ibm701Insts                   | $ibm701Reads            | $ibm701Writes             | $ibm701Cpi |
 | IBM 704             | 36                | $ibm704Cycles              | $ibm704Insts                   | $ibm704Reads            | $ibm704Writes             | $ibm704Cpi |
 | IBM 650             | 40                | $ibm650Cycles              | $ibm650Insts                   | $ibm650Reads            | $ibm650Writes             | $ibm650Cpi |
@@ -2057,16 +2057,16 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
 | Intel 8080A         | 8                 | $intel8080aCycles              | $intel8080aInsts                   | $intel8080aReads            | $intel8080aWrites             | $intel8080aCpi |
 | Motorola 6800       | 8                 | $motorola6800Cycles              | $motorola6800Insts                   | $motorola6800Reads            | $motorola6800Writes             | $motorola6800Cpi |
 | IBM 6150 ROMP       | 32                | $ibm6150Cycles              | $ibm6150Insts                   | $ibm6150Reads            | $ibm6150Writes             | $ibm6150Cpi |
-| MIPS I (R2000)      | 32                | $mipsiCycles              | $mipsiInsts                   | $mipsiReads            | $mipsiWrites             | $mipsiCpi |
+| MIPS I (R2000)      | 32                | $mips1Cycles              | $mips1Insts                   | $mips1Reads            | $mips1Writes             | $mips1Cpi |
 | ARM1                | 32                | $arm1Cycles              | $arm1Insts                   | $arm1Reads            | $arm1Writes             | $arm1Cpi |
-| Berkeley RISC-I     | 32                | $berkriscCycles              | $berkriscInsts                   | $berkriscReads            | $berkriscWrites             | $berkriscCpi |
+| Berkeley RISC-I     | 32                | $berkeleyriscCycles              | $berkeleyriscInsts                   | $berkeleyriscReads            | $berkeleyriscWrites             | $berkeleyriscCpi |
 | HP 3000             | 16                | $hp3000Cycles              | $hp3000Insts                   | $hp3000Reads            | $hp3000Writes             | $hp3000Cpi |
-| Lilith              | 16                | $lilithCycles              | $lilithInsts                   | $lilithReads            | $lilithWrites             | $lilithCpi |
+| Ethlilith           | 16                | $ethlilithCycles              | $ethlilithInsts                   | $ethlilithReads            | $ethlilithWrites             | $ethlilithCpi |
 | UCSD Pascal P-Mach  | 16                | $ucsdpCycles              | $ucsdpInsts                   | $ucsdpReads            | $ucsdpWrites             | $ucsdpCpi |
 | NEC uPD7720 DSP     | 16                | $upd7720Cycles              | $upd7720Insts                   | $upd7720Reads            | $upd7720Writes             | $upd7720Cpi |
 | TI TMS32010 DSP     | 16                | $tms32010Cycles              | $tms32010Insts                   | $tms32010Reads            | $tms32010Writes             | $tms32010Cpi |
 | ADI ADSP-2100 DSP   | 16                | $adsp2100Cycles              | $adsp2100Insts                   | $adsp2100Reads            | $adsp2100Writes             | $adsp2100Cpi |
-| IBM MWave DSP       | 16                | $mwaveCycles              | $mwaveInsts                   | $mwaveReads            | $mwaveWrites             | $mwaveCpi |
+| IBM MWave DSP       | 16                | $ibmmwaveCycles              | $ibmmwaveInsts                   | $ibmmwaveReads            | $ibmmwaveWrites             | $ibmmwaveCpi |
 """
 
     println("\n=== COMPARATIVE ARCHITECTURE PERFORMANCE REPORT ===")

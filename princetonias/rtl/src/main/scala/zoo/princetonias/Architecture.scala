@@ -1,11 +1,11 @@
-package zoo.ias
+package zoo.princetonias
 
 import zoo.common.architecture._
 
 /**
  * Princeton IAS Architectural Specification.
  */
-class IasArchitecture extends AccumulatorArchitecture with FixedLengthFormat with FixedPointOperations {
+class PrincetoniasArchitecture extends AccumulatorArchitecture with FixedLengthFormat with FixedPointOperations {
   override val wordWidth: Int = 40
   override val addressWidth: Int = 12
   override val hasLinkBit: Boolean = false

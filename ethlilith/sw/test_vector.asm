@@ -1,4 +1,4 @@
-# Lilith Vector Addition Benchmark
+# Ethlilith Vector Addition Benchmark
 
 PUSH valA0
 PUSH valB0

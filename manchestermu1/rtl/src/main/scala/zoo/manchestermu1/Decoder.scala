@@ -1,9 +1,9 @@
-package zoo.manchester
+package zoo.manchestermu1
 
 import chisel3._
 import chisel3.util._
 
-class ManchesterCtrlSignals extends Bundle {
+class Manchestermu1CtrlSignals extends Bundle {
   val mem_read  = Bool()
   val mem_write = Bool()
   val is_ldn    = Bool()
@@ -13,10 +13,10 @@ class ManchesterCtrlSignals extends Bundle {
   val is_stp    = Bool()
 }
 
-class ManchesterDecoder extends Module {
+class Manchestermu1Decoder extends Module {
   val io = IO(new Bundle {
     val inst = Input(UInt(32.W))
-    val ctrl = Output(new ManchesterCtrlSignals)
+    val ctrl = Output(new Manchestermu1CtrlSignals)
     val addr = Output(UInt(13.W))
   })
 

@@ -3,7 +3,7 @@ package zoo.common.sw
 import zoo.common.architecture._
 import scala.collection.mutable
 
-class MipsiAssembler extends BaseAssembler with GeneralRegisterArchitecture with VariableLengthFormat with FixedPointOperations {
+class Mips1Assembler extends BaseAssembler with GeneralRegisterArchitecture with VariableLengthFormat with FixedPointOperations {
   commentPattern = "(;|//).*"
   override val wordWidth: Int = 32
   override val addressWidth: Int = 32
@@ -18,7 +18,7 @@ class MipsiAssembler extends BaseAssembler with GeneralRegisterArchitecture with
     if (s.startsWith("R") || s.startsWith("r")) {
       s.substring(1).toInt
     } else {
-      throw new Exception(s"Invalid MIPS register operand: $s")
+      throw new Exception(s"Invalid Mips1 register operand: $s")
     }
   }
 
@@ -76,13 +76,13 @@ class MipsiAssembler extends BaseAssembler with GeneralRegisterArchitecture with
         Seq(inst)
 
       case _ =>
-        throw new Exception(s"Unknown MIPS I instruction: $s")
+        throw new Exception(s"Unknown Mips1 instruction: $s")
     }
   }
 
   override def formatOutput(values: Seq[Int]): String = {
     val out = mutable.Buffer[String]()
-    out += "# Compiled MIPS I Hex File"
+    out += "# Compiled Mips1 Hex File"
     for (v <- values) {
       out += f"${v & 0xFFFFFFFFL}%08X"
     }

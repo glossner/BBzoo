@@ -1,4 +1,4 @@
-package zoo.ias
+package zoo.princetonias
 
 import chisel3._
 import chisel3.util._
@@ -8,7 +8,7 @@ import zoo.common.components._
  * Princeton IAS Core Processor.
  * A 40-bit accumulator-based CPU.
  */
-class IasCore extends Module {
+class PrincetoniasCore extends Module {
   val io = IO(new Bundle {
     val mem = new SimpleMemIO(addrWidth = 12, dataWidth = 40)
     val hlt = Output(Bool())
@@ -25,7 +25,7 @@ class IasCore extends Module {
   })
 
   // Sub-modules
-  val decoder = Module(new IasDecoder)
+  val decoder = Module(new PrincetoniasDecoder)
 
   // Core Registers
   val pc     = RegInit(0.U(12.W))

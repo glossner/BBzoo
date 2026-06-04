@@ -1,4 +1,4 @@
-package zoo.edsac
+package zoo.cambridgeedsac
 
 import chisel3._
 import chisel3.util._
@@ -8,7 +8,7 @@ import zoo.common.components._
  * EDSAC Core Processor.
  * A 17-bit stored-program computer with accumulator-based datapath.
  */
-class EdsacCore extends Module {
+class CambridgeedsacCore extends Module {
   val io = IO(new Bundle {
     val mem = new SimpleMemIO(addrWidth = 10, dataWidth = 17)
     val hlt = Output(Bool())
@@ -25,7 +25,7 @@ class EdsacCore extends Module {
   })
 
   // Sub-modules
-  val decoder = Module(new EdsacDecoder)
+  val decoder = Module(new CambridgeedsacDecoder)
 
   // Core Registers
   val pc     = RegInit(0.U(10.W))

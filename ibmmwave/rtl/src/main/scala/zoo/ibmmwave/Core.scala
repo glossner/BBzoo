@@ -1,4 +1,4 @@
-package zoo.mwave
+package zoo.ibmmwave
 
 import chisel3._
 import chisel3.util._
@@ -8,7 +8,7 @@ import zoo.common.components._
  * IBM MWave Core Processor.
  * A 16-bit DSP core with specific general registers R1 and R2.
  */
-class MwaveCore extends Module {
+class IbmmwaveCore extends Module {
   val io = IO(new Bundle {
     val mem = new SimpleMemIO(addrWidth = 16, dataWidth = 16)
     val hlt = Output(Bool())
@@ -32,7 +32,7 @@ class MwaveCore extends Module {
   val hltReg = RegInit(false.B)
 
   // Sub-modules
-  val decoder = Module(new MwaveDecoder)
+  val decoder = Module(new IbmmwaveDecoder)
 
   // Debug outputs
   io.hlt      := hltReg

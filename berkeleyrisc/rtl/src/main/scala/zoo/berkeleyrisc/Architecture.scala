@@ -1,4 +1,4 @@
-package zoo.berkrisc
+package zoo.berkeleyrisc
 
 import zoo.common.architecture._
 
@@ -6,7 +6,7 @@ import zoo.common.architecture._
  * Berkeley RISC-I Architectural Specification.
  * Designed by David Patterson & Carlo H. Séquin in 1981.
  */
-class BerkriscArchitecture extends GeneralRegisterArchitecture with VariableLengthFormat with FixedPointOperations {
+class BerkeleyriscArchitecture extends GeneralRegisterArchitecture with VariableLengthFormat with FixedPointOperations {
   override val wordWidth: Int = 32
   override val addressWidth: Int = 32
   override val numGPRs: Int = 32

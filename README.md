@@ -2,6 +2,14 @@
 
 Welcome to **BBZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit A. Blaauw and Frederick P. Brooks, Jr. This repository implements **59 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
 
+I have always wanted to create a version of the Zoo ever since I was a student of Dr. Brooks in the early 1990's. There were rumors of executable APL code for the entire Zoo but I never located it. Technology has progressed so fast that this entire repository was vibe coded in 2 days using Google's Antigravity 2.0 IDE. I'm sure there are omissions, errors, and other artifacts. Given that it took me 30+ years for the first implementation, I wouldn't count on significant upgrades anytime soon. However, I will accept pull requests for bugs, capabilities, and new <u>*architectures*</u>. I have a strong preference only for architectures that have new features. I'm not that interested in microarchitectures. Not that they aren't super important (I mean seriously, you can't build a machine today without caches, branch prediction, superscalar, etc.) its just that this is meant to be an architecture repository.
+
+Each machine directory has a brief overview of the architecture, its unique features, instruction formats, an assembler, and simple programs that execute on the machine. 
+
+Cheers,
+John Glossner
+June, 2026 
+
 ---
 
 ## 🏛️ Architectural Houses
@@ -34,7 +42,7 @@ The architectures in the zoo are organized into 15 distinct "houses" based on th
 *Highly experimental architectures that introduced radically new paradigms such as micro-programming, multitasking, and indexing/lookahead.*
 - 🦓 **STC ZEBRA** (Willem van der Poel, 1958) — [stczebra](stczebra) / [arch.md](stczebra/arch.md)
 - 🐂 **Bull Gamma 60** (Machines Bull Team, 1960) — [bullgamma60](bullgamma60) / [arch.md](bullgamma60/arch.md)
-- 🚀 **IBM Stretch** (Stephen Dunwell, 1961) — [ibmstretch](ibmstretch) / [arch.md](ibmstretch/arch.md)
+- 🚀 **IBM Stretch** (Stephen Dunwell & Werner Buchholz, 1961) — [ibmstretch](ibmstretch) / [arch.md](ibmstretch/arch.md)
 
 ### 5. Stack House
 *Zero-address architectures utilizing evaluation stacks to minimize instruction size and simplify code generation.*

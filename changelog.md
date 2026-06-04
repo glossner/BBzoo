@@ -1,3 +1,12 @@
+# 06/04/2026 05:55 Von Neumann House Expansion: Princeton IAS, EDSAC, IBM 701, and IBM 704
+- Implemented four classic Von Neumann House CPU architectures (Princeton IAS, EDSAC, IBM 701, and IBM 704) with fully functional multi-cycle datapath cores, instruction decoders, and test suites.
+- Added synthesizable Performance Monitoring Units (PMUs) to all 4 new cores to track cycles, instruction retirement, and memory read/write traffic.
+- Built Scala and Python assemblers for all 4 new architectures and integrated them into the pluggable assembler toolchain.
+- Resolved Scala array indexing syntax in `Ibm704Assembler.scala` by replacing bracket access with parentheses.
+- Created architectural documentation (`arch.md`) for all 4 new machines detailing introduction year, designers (John von Neumann, Maurice Wilkes, Nathaniel Rochester, Gene Amdahl), unique architectural features, instruction formats, and implemented/unimplemented instructions.
+- Expanded the unified 4-element Vector Addition benchmark (`ProfilerSpec.scala`) to include the 4 new cores, verifying correct computation and generating comparative PMU execution metrics.
+- Updated `README.md` to catalog all 17 machines, organizing them by their architectural families/houses while preserving the flat `companyMachine` top-level directory structure.
+
 # 06/04/2026 05:40 Pioneer House Expansion: Babbage, Harvard Mark I, Zuse Z1, Manchester Baby, and Univac I
 - Implemented five pioneer-era CPU architectures (Babbage Analytical Engine, Harvard Mark I, Zuse Z1, Manchester Baby, and Univac I) complete with instruction decoders, cores with synthesizable PMUs, and test suites.
 - Added Scala and Python assemblers for all 5 architectures and integrated them into the pluggable assembler framework.

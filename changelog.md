@@ -1,3 +1,12 @@
+# 06/04/2026 07:45 Cray House Expansion: Univac 1103A and CDC 6600 PPU
+- Implemented two new Cray House architectures (Univac 1103A and CDC 6600 PPU) with fully functional multi-cycle datapath cores, instruction decoders, and test suites.
+- Added synthesizable Performance Monitoring Units (PMUs) to both new cores to track cycles, instruction retirement, and memory read/write traffic.
+- Designed unique custom execution paradigms for each machine: two-address memory-to-memory datapath for Univac 1103A, and 12-bit accumulator logic with 6-bit direct addressing for CDC 6600 PPU.
+- Built Scala and Python assemblers for both new architectures and integrated them into the global pluggable assembler registry.
+- Created architectural documentation (`arch.md`) for both new machines detailing introduction year, designer (Seymour Cray), unique architectural features, instruction formats, and implemented/unimplemented instructions.
+- Expanded the unified 4-element Vector Addition benchmark (`ProfilerSpec.scala`) to include the two new cores, verifying correct computation and generating comparative PMU execution metrics.
+- Updated `README.md` to catalog all 25 machines, organizing them by their architectural families/houses (specifically creating the new Cray House grouping containing Univac 1103A, CDC 6600 PPU, CDC 6600, and Cray-1) while preserving the flat `companyMachine` top-level directory structure.
+
 # 06/04/2026 06:45 Explorer House Expansion: STC ZEBRA, Bull Gamma 60, and IBM Stretch
 - Implemented three new Explorer House CPU architectures (STC ZEBRA, Bull Gamma 60, and IBM Stretch) with fully functional multi-cycle datapath cores, instruction decoders, and test suites.
 - Added synthesizable Performance Monitoring Units (PMUs) to all 3 new cores to track cycles, instruction retirement, and memory read/write traffic.

@@ -30,6 +30,8 @@ import zoo.ibm1401.Ibm1401Core
 import zoo.stczebra.StczebraCore
 import zoo.bullgamma60.Bullgamma60Core
 import zoo.ibmstretch.IbmstretchCore
+import zoo.univac1103a.Univac1103aCore
+import zoo.cdc6600ppu.Cdc6600ppuCore
 
 class ProfilerSpec extends AnyFlatSpec with Matchers {
   behavior of "ZooArchitectureProfiler"
@@ -1200,6 +1202,102 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       mem(51) shouldBe 44L
     }
 
+    // 24. UNIVAC 1103A
+    val univac1103aHex = findWorkspaceFile("univac1103a/sw/test_vector.hex")
+    val univac1103aBytes = Source.fromFile(univac1103aHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
+    var univac1103aCycles = 0L
+    var univac1103aInsts = 0L
+    var univac1103aReads = 0L
+    var univac1103aWrites = 0L
+
+    simulate(new Univac1103aCore) { c =>
+      val mem = Array.fill(256)(0L)
+      for (i <- univac1103aBytes.indices) mem(i) = univac1103aBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toLong
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      univac1103aCycles = c.io.pmu_cycles.peek().litValue.toLong
+      univac1103aInsts  = c.io.pmu_insts.peek().litValue.toLong
+      univac1103aReads  = c.io.pmu_reads.peek().litValue.toLong
+      univac1103aWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11L
+      mem(49) shouldBe 22L
+      mem(50) shouldBe 33L
+      mem(51) shouldBe 44L
+    }
+
+    // 25. CDC 6600 PPU
+    val cdc6600ppuHex = findWorkspaceFile("cdc6600ppu/sw/test_vector.hex")
+    val cdc6600ppuBytes = Source.fromFile(cdc6600ppuHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16)).toArray
+    var cdc6600ppuCycles = 0L
+    var cdc6600ppuInsts = 0L
+    var cdc6600ppuReads = 0L
+    var cdc6600ppuWrites = 0L
+
+    simulate(new Cdc6600ppuCore) { c =>
+      val mem = Array.fill(256)(0L)
+      for (i <- cdc6600ppuBytes.indices) mem(i) = cdc6600ppuBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toLong
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      cdc6600ppuCycles = c.io.pmu_cycles.peek().litValue.toLong
+      cdc6600ppuInsts  = c.io.pmu_insts.peek().litValue.toLong
+      cdc6600ppuReads  = c.io.pmu_reads.peek().litValue.toLong
+      cdc6600ppuWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11L
+      mem(49) shouldBe 22L
+      mem(50) shouldBe 33L
+      mem(51) shouldBe 44L
+    }
+
     // Print Consolidated Comparative Table
     val pdp8Cpi  = if (pdp8Insts > 0)  String.format("%.2f", Double.box(pdp8Cycles.toDouble / pdp8Insts))  else "N/A"
     val pdp11Cpi = if (pdp11Insts > 0) String.format("%.2f", Double.box(pdp11Cycles.toDouble / pdp11Insts)) else "N/A"
@@ -1224,6 +1322,8 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     val stczebraCpi = if (stczebraInsts > 0) String.format("%.2f", Double.box(stczebraCycles.toDouble / stczebraInsts)) else "N/A"
     val bullgammaCpi = if (bullgammaInsts > 0) String.format("%.2f", Double.box(bullgammaCycles.toDouble / bullgammaInsts)) else "N/A"
     val ibmstretchCpi = if (ibmstretchInsts > 0) String.format("%.2f", Double.box(ibmstretchCycles.toDouble / ibmstretchInsts)) else "N/A"
+    val univac1103aCpi = if (univac1103aInsts > 0) String.format("%.2f", Double.box(univac1103aCycles.toDouble / univac1103aInsts)) else "N/A"
+    val cdc6600ppuCpi  = if (cdc6600ppuInsts > 0)  String.format("%.2f", Double.box(cdc6600ppuCycles.toDouble / cdc6600ppuInsts))  else "N/A"
 
     val table = s"""
 | Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI |
@@ -1251,6 +1351,8 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
 | Burroughs B5500     | 48                | $b5500Cycles              | $b5500Insts                   | $b5500Reads            | $b5500Writes             | $b5500Cpi |
 | CDC 6600            | 60                | $cdcCycles              | $cdcInsts                   | $cdcReads            | $cdcWrites             | $cdcCpi |
 | Cray-1              | 64 (Vector)       | $crayCycles              | $crayInsts                   | $crayReads            | $crayWrites             | $crayCpi |
+| Univac 1103A        | 36                | $univac1103aCycles              | $univac1103aInsts                   | $univac1103aReads            | $univac1103aWrites             | $univac1103aCpi |
+| CDC 6600 PPU        | 12                | $cdc6600ppuCycles              | $cdc6600ppuInsts                   | $cdc6600ppuReads            | $cdc6600ppuWrites             | $cdc6600ppuCpi |
 """
 
     println("\n=== COMPARATIVE ARCHITECTURE PERFORMANCE REPORT ===")

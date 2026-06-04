@@ -52,6 +52,10 @@ import zoo.radeonr100.Radeonr100Core
 import zoo.powervr1.Powervr1Core
 import zoo.mali200.Mali200Core
 import zoo.amdr600.Amdr600Core
+import zoo.amd2901.Amd2901Core
+import zoo.intel3002.Intel3002Core
+import zoo.imp16.Imp16Core
+import zoo.mc10800.Mc10800Core
 
 class ProfilerSpec extends AnyFlatSpec with Matchers {
   behavior of "ZooArchitectureProfiler"
@@ -2296,6 +2300,198 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       mem(51) shouldBe 44
     }
 
+    // 46. AMD Am2901
+    val amd2901Hex = findWorkspaceFile("amd2901/sw/test_vector.hex")
+    val amd2901Bytes = Source.fromFile(amd2901Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var amd2901Cycles = 0L
+    var amd2901Insts = 0L
+    var amd2901Reads = 0L
+    var amd2901Writes = 0L
+
+    simulate(new Amd2901Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- amd2901Bytes.indices) mem(i) = amd2901Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      amd2901Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      amd2901Insts  = c.io.pmu_insts.peek().litValue.toLong
+      amd2901Reads  = c.io.pmu_reads.peek().litValue.toLong
+      amd2901Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(37) shouldBe 11
+      mem(38) shouldBe 22
+      mem(39) shouldBe 33
+      mem(40) shouldBe 44
+    }
+
+    // 47. Intel 3002
+    val intel3002Hex = findWorkspaceFile("intel3002/sw/test_vector.hex")
+    val intel3002Bytes = Source.fromFile(intel3002Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var intel3002Cycles = 0L
+    var intel3002Insts = 0L
+    var intel3002Reads = 0L
+    var intel3002Writes = 0L
+
+    simulate(new Intel3002Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- intel3002Bytes.indices) mem(i) = intel3002Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      intel3002Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      intel3002Insts  = c.io.pmu_insts.peek().litValue.toLong
+      intel3002Reads  = c.io.pmu_reads.peek().litValue.toLong
+      intel3002Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(37) shouldBe 11
+      mem(38) shouldBe 22
+      mem(39) shouldBe 33
+      mem(40) shouldBe 44
+    }
+
+    // 48. National Semiconductor IMP-16
+    val imp16Hex = findWorkspaceFile("imp16/sw/test_vector.hex")
+    val imp16Bytes = Source.fromFile(imp16Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var imp16Cycles = 0L
+    var imp16Insts = 0L
+    var imp16Reads = 0L
+    var imp16Writes = 0L
+
+    simulate(new Imp16Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- imp16Bytes.indices) mem(i) = imp16Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 1500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      imp16Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      imp16Insts  = c.io.pmu_insts.peek().litValue.toLong
+      imp16Reads  = c.io.pmu_reads.peek().litValue.toLong
+      imp16Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(65) shouldBe 11
+      mem(66) shouldBe 22
+      mem(67) shouldBe 33
+      mem(68) shouldBe 44
+    }
+
+    // 49. Motorola MC10800
+    val mc10800Hex = findWorkspaceFile("mc10800/sw/test_vector.hex")
+    val mc10800Bytes = Source.fromFile(mc10800Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => Integer.parseInt(l.trim, 16)).toArray
+    var mc10800Cycles = 0L
+    var mc10800Insts = 0L
+    var mc10800Reads = 0L
+    var mc10800Writes = 0L
+
+    simulate(new Mc10800Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- mc10800Bytes.indices) mem(i) = mc10800Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 1500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke(mem(addr).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      mc10800Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      mc10800Insts  = c.io.pmu_insts.peek().litValue.toLong
+      mc10800Reads  = c.io.pmu_reads.peek().litValue.toLong
+      mc10800Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(65) shouldBe 11
+      mem(66) shouldBe 22
+      mem(67) shouldBe 33
+      mem(68) shouldBe 44
+    }
+
     // Print Consolidated Comparative Table
     // Print Consolidated Comparative Table
     def aluDutyCycle(arch: String, cycles: Long): String = {
@@ -2309,7 +2505,7 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
         case "powervr1" => 4.0
         case "mips1" | "arm1" | "berkeleyrisc" | "ibm6150" | "hp3000" | "ethlilith" => 8.0
         case "b5500" | "ucsdp" => 6.0
-        case "mos" | "intel8080a" | "motorola6800" | "pdp8" | "upd7720" | "tms32010" | "adsp2100" | "ibmmwave" => 4.0
+        case "mos" | "intel8080a" | "motorola6800" | "pdp8" | "upd7720" | "tms32010" | "adsp2100" | "ibmmwave" | "amd2901" | "intel3002" | "imp16" | "mc10800" => 4.0
         case _ => 4.0
       }
       if (cycles > 0) String.format("%.1f%%", Double.box((aluCycles / cycles.toDouble) * 100.0)) else "N/A"
@@ -2326,7 +2522,7 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       val factor = arch match {
         case "cray" | "mali200" | "amdr600" | "geforce256" | "radeonr100" | "voodoo1" | "powervr1" => 4.5
         case "mips1" | "arm1" | "berkeleyrisc" | "ibm6150" | "decvax" | "pdp11" | "m68k" => 2.5
-        case "mos" | "intel8080a" | "motorola6800" | "pdp8" | "upd7720" | "tms32010" | "adsp2100" | "ibmmwave" => 1.2
+        case "mos" | "intel8080a" | "motorola6800" | "pdp8" | "upd7720" | "tms32010" | "adsp2100" | "ibmmwave" | "amd2901" | "intel3002" | "imp16" | "mc10800" => 1.2
         case "b5500" | "ucsdp" | "hp3000" | "ethlilith" | "cambridgeedsac" | "manchestermu1" | "babbage" | "harvard" | "zuse" | "univac" | "princetonias" => 0.5
         case _ => 1.0
       }
@@ -2378,6 +2574,10 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     val powervr1Cpi = if (powervr1Insts > 0) String.format("%.2f", Double.box(powervr1Cycles.toDouble / powervr1Insts)) else "N/A"
     val mali200Cpi = if (mali200Insts > 0) String.format("%.2f", Double.box(mali200Cycles.toDouble / mali200Insts)) else "N/A"
     val amdr600Cpi = if (amdr600Insts > 0) String.format("%.2f", Double.box(amdr600Cycles.toDouble / amdr600Insts)) else "N/A"
+    val amd2901Cpi = if (amd2901Insts > 0) String.format("%.2f", Double.box(amd2901Cycles.toDouble / amd2901Insts)) else "N/A"
+    val intel3002Cpi = if (intel3002Insts > 0) String.format("%.2f", Double.box(intel3002Cycles.toDouble / intel3002Insts)) else "N/A"
+    val imp16Cpi = if (imp16Insts > 0) String.format("%.2f", Double.box(imp16Cycles.toDouble / imp16Insts)) else "N/A"
+    val mc10800Cpi = if (mc10800Insts > 0) String.format("%.2f", Double.box(mc10800Cycles.toDouble / mc10800Insts)) else "N/A"
 
     val table = s"""
 | Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI | Code Footprint (words) | ALU Duty Cycle | Mem BW Efficiency | Register Port Stress |
@@ -2427,6 +2627,10 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
 | PowerVR Series 1    | 32                | $powervr1Cycles              | $powervr1Insts                   | $powervr1Reads            | $powervr1Writes             | $powervr1Cpi | ${powervr1Bytes.length} | ${aluDutyCycle("powervr1", powervr1Cycles)} | ${memBwEfficiency(32.0, powervr1Reads, powervr1Writes, powervr1Insts)} | ${regPortStress("powervr1")} |
 | ARM Mali-200 GPU    | 32                | $mali200Cycles              | $mali200Insts                   | $mali200Reads            | $mali200Writes             | $mali200Cpi | ${mali200Bytes.length} | ${aluDutyCycle("mali200", mali200Cycles)} | ${memBwEfficiency(32.0, mali200Reads, mali200Writes, mali200Insts)} | ${regPortStress("mali200")} |
 | AMD R600 GPU        | 32                | $amdr600Cycles              | $amdr600Insts                   | $amdr600Reads            | $amdr600Writes             | $amdr600Cpi | ${amdr600Bytes.length} | ${aluDutyCycle("amdr600", amdr600Cycles)} | ${memBwEfficiency(32.0, amdr600Reads, amdr600Writes, amdr600Insts)} | ${regPortStress("amdr600")} |
+| AMD Am2901          | 16                | $amd2901Cycles              | $amd2901Insts                   | $amd2901Reads            | $amd2901Writes             | $amd2901Cpi | ${amd2901Bytes.length} | ${aluDutyCycle("amd2901", amd2901Cycles)} | ${memBwEfficiency(16.0, amd2901Reads, amd2901Writes, amd2901Insts)} | ${regPortStress("amd2901")} |
+| Intel 3002          | 16                | $intel3002Cycles              | $intel3002Insts                   | $intel3002Reads            | $intel3002Writes             | $intel3002Cpi | ${intel3002Bytes.length} | ${aluDutyCycle("intel3002", intel3002Cycles)} | ${memBwEfficiency(16.0, intel3002Reads, intel3002Writes, intel3002Insts)} | ${regPortStress("intel3002")} |
+| NS IMP-16           | 16                | $imp16Cycles              | $imp16Insts                   | $imp16Reads            | $imp16Writes             | $imp16Cpi | ${imp16Bytes.length} | ${aluDutyCycle("imp16", imp16Cycles)} | ${memBwEfficiency(16.0, imp16Reads, imp16Writes, imp16Insts)} | ${regPortStress("imp16")} |
+| Motorola MC10800    | 16                | $mc10800Cycles              | $mc10800Insts                   | $mc10800Reads            | $mc10800Writes             | $mc10800Cpi | ${mc10800Bytes.length} | ${aluDutyCycle("mc10800", mc10800Cycles)} | ${memBwEfficiency(16.0, mc10800Reads, mc10800Writes, mc10800Insts)} | ${regPortStress("mc10800")} |
 """
 
     println("\n=== COMPARATIVE ARCHITECTURE PERFORMANCE REPORT ===")

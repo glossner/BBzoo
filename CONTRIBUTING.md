@@ -81,7 +81,7 @@ sbt "project root" "testOnly zoo.common.ProfilerSpec"
 
 ## 📐 Hardware Design & Coding Guidelines
 
-To maintain readability and consistency across the 45+ architectures:
+To maintain readability and consistency across the 49+ architectures:
 
 1. **Keep it Compact**: Core implementations should be clean, highly readable, and educational (typically 100–300 lines of Chisel). Avoid adding bloated, non-essential system features (like MMUs, supervisor privilege levels, or complex page table walking) unless requested.
 2. **Register Naming & Debug Ports**: Provide debug output ports on your top-level `Core` module (e.g., `pc_debug`, `r0_debug`, `hlt`) so the standalone simulator wrapper can log execution traces cycle-by-cycle.

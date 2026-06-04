@@ -1,12 +1,12 @@
 # BBZoo 🦁
 
-Welcome to **BBZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit A. Blaauw and Frederick P. Brooks, Jr. This repository implements **45 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
+Welcome to **BBZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit A. Blaauw and Frederick P. Brooks, Jr. This repository implements **49 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
 
 ---
 
 ## 🏛️ Architectural Houses
 
-The architectures in the zoo are organized into ten distinct "houses" based on their core datapath and register organization paradigms:
+The architectures in the zoo are organized into 13 distinct "houses" based on their core datapath and register organization paradigms:
 
 ### 1. Pioneer House
 *Characterized by the earliest explorations of stored-program, mechanical, or relay-based calculation.*
@@ -90,6 +90,13 @@ The architectures in the zoo are organized into ten distinct "houses" based on t
 - 🌀 **ARM Mali-200** (ARM, 2007) — [mali200](mali200) / [arch.md](mali200/arch.md)
 - 🔬 **AMD R600** (AMD, 2007) — [amdr600](amdr600) / [arch.md](amdr600/arch.md)
 
+### 13. Bit-Slice House
+*Modular processing architectures designed to be cascaded to construct CPUs of custom word lengths.*
+- ⚡ **AMD Am2901** (AMD, 1975) — [amd2901](amd2901) / [arch.md](amd2901/arch.md)
+- 💾 **Intel 3002** (Intel, 1974) — [intel3002](intel3002) / [arch.md](intel3002/arch.md)
+- 🎛️ **NS IMP-16** (National Semiconductor, 1973) — [imp16](imp16) / [arch.md](imp16/arch.md)
+- 🔌 **Motorola MC10800** (Motorola, 1976) — [mc10800](mc10800) / [arch.md](mc10800/arch.md)
+
 ---
 
 ## 🛠️ Getting Started
@@ -135,7 +142,7 @@ The simulator prints the cycle-by-cycle execution trace, register values, and a 
 
 
 ### PMU Benchmarks
-To compare the execution statistics of the vector addition workload across all 45 architectures, run the comparative profiler test:
+To compare the execution statistics of the vector addition workload across all 49 architectures, run the comparative profiler test:
 ```bash
 sbt "project root" "testOnly zoo.common.ProfilerSpec"
 ```
@@ -203,3 +210,7 @@ This design choice keeps the RTL implementation of each core clean, highly reada
 | PowerVR Series 1    | 32                | 62              | 18                   | 40            | 4             | 3.44 | 53 | 6.5% | 9.78 B/inst | 4.5 regs/inst |
 | ARM Mali-200 GPU    | 32                | 25              | 5                   | 16            | 4             | 5.00 | 52 | 4.0% | 16.00 B/inst | 4.5 regs/inst |
 | AMD R600 GPU        | 32                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 7.69 B/inst | 4.5 regs/inst |
+| AMD Am2901          | 16                | 152              | 43                   | 67            | 4             | 3.53 | 41 | 2.6% | 3.30 B/inst | 1.2 regs/inst |
+| Intel 3002          | 16                | 152              | 43                   | 67            | 4             | 3.53 | 41 | 2.6% | 3.30 B/inst | 1.2 regs/inst |
+| NS IMP-16           | 16                | 478              | 113                   | 253            | 28             | 4.23 | 69 | 0.8% | 4.97 B/inst | 1.2 regs/inst |
+| Motorola MC10800    | 16                | 478              | 113                   | 253            | 28             | 4.23 | 69 | 0.8% | 4.97 B/inst | 1.2 regs/inst |

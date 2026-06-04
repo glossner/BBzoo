@@ -1,3 +1,12 @@
+# 06/04/2026 14:15 Bit-Slice House Expansion: AMD Am2901, Intel 3002, NS IMP-16, and Motorola MC10800
+- Implemented four classic bit-slice architectures under the new **Bit-Slice House**: AMD Am2901, Intel 3002, National Semiconductor IMP-16, and Motorola MC10800.
+- Built synthesizable multi-cycle datapath cores, instruction decoders, and sbt test suites for all 4 architectures.
+- Added synthesizable Performance Monitoring Units (PMUs) to all 4 new cores to track cycles, instruction retirement, and memory read/write traffic.
+- Developed Python and Scala assemblers for all 4 new architectures and registered them globally.
+- Created architectural documentation (`arch.md`) and assembly vector addition test codes for all 4 architectures.
+- Integrated the new bit-slice cores into the unified 4-element Vector Addition benchmark (`ProfilerSpec.scala`), compiling them, verifying correct computation, and generating comparison PMU metrics.
+- Reorganized `README.md` and `examples/README.md` to catalog all 49 architectures, establishing the new **Bit-Slice House** category.
+
 # 06/04/2026 11:15 Instruction Simplification Rationale
 - Documented the design rationale for implementing minimal synthesizable instruction subsets in README.md, emphasizing educational readability, build performance, and baseline architectural paradigms.
 

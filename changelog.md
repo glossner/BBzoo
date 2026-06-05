@@ -1,3 +1,12 @@
+# 06/05/2026 09:14 RISC & Stack Houses Integration: IBM 801, SPARC, PowerPC, and JVM
+- Implemented three RISC architectures (**IBM 801**, **SPARC**, **PowerPC**) under the **RISC House** (House 10), and one stack-based architecture (**JVM**) under the **Stack House** (House 5).
+- Created synthesizable datapath cores, instruction decoders, and sbt test suites for all 4 new architectures.
+- Added synthesizable Performance Monitoring Units (PMUs) to all 4 new cores to track cycles, instruction retirement, and memory reads/writes.
+- Developed Python and Scala assemblers for all 4 new architectures and registered them globally.
+- Created architectural documentation (`arch.md`) and assembly vector addition test codes for all 4 architectures.
+- Integrated the new cores into the unified 4-element Vector Addition benchmark (`ProfilerSpec.scala`), compiling them, verifying correct computation, and generating comparison PMU metrics.
+- Updated `README.md` and `examples/README.md` to catalog all 68 architectures, registering JVM in Stack House (House 5) and IBM 801, SPARC, and PowerPC in RISC House (House 10), while fully preserving the original verbatim textbook taxonomy and user manual edits for the first 7 houses.
+
 # 06/05/2026 07:45 Vector House: CDC STAR-100, TI ASC, Convex C1, NEC SX-2, and IBM System/370 Vector Facility
 - Implemented five historical vector architectures under the new **Vector House**: CDC STAR-100, TI ASC, Convex C1, NEC SX-2, and IBM System/370 Vector Facility.
 - Replicated the entry for Cray-1 under the Vector House while keeping its primary entry in the Cray House, conforming to the designation replication request.

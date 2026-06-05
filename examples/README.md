@@ -11,8 +11,8 @@ BBzoo hosts 64 classic architectures classified into different "Houses" based on
 | House | Paradigm | Examples | Register File Structure |
 |---|---|---|---|
 | **Accumulator House** | 1-operand accumulator logic | PDP-8, MOS 6502, Intel 8080A | Single Accumulator (A) + temporary registers |
-| **RISC House** | 3-operand register-to-register | MIPS I, ARM1, Berkeley RISC-I | Large General Purpose Register (GPR) file |
-| **Stack House** | 0-operand evaluation stack | Burroughs B5500, HP 3000, UCSD Pascal | Top-of-Stack (TOS) registers + memory stack |
+| **RISC House** | 3-operand register-to-register | IBM 801, MIPS I, ARM1, Berkeley RISC-I, SPARC, PowerPC | Large General Purpose Register (GPR) file |
+| **Stack House** | 0-operand evaluation stack | Burroughs B5500, HP 3000, UCSD Pascal, JVM | Top-of-Stack (TOS) registers + memory stack |
 | **DSP House** | Dedicated MAC and parallel arithmetic | NEC µPD7720, TI TMS32010, TI TMS320C6000 | Separate data/program address spaces, accumulator |
 | **GPU House** | Parallel, SIMD, and VLIW execution | NVIDIA GeForce 256, ARM Mali-200, AMD R600 | Vector / VLIW register channels |
 | **Bit-Slice House** | Modular bit-slice slice-cascading logic | Am2901, Intel 3002, IMP-16, MC10800 | Cascaded ALUs + general register slices |

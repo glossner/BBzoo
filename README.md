@@ -19,7 +19,7 @@ The architectures in the zoo are organized into 16 distinct "houses" based on th
 ### 1. Pioneer House
 *Characterized by the earliest explorations of stored-program, mechanical, or relay-based calculation.*
 - ⚙️ **Babbage Analytical Engine** (Charles Babbage, 1837) — [babbage](babbage) / [arch.md](babbage/arch.md)
-- 🧮 **Harvard Mark I** (Howard Aiken, 1944) — [harvardmark1](harvardmark1) / [arch.md](harvardmark1/arch.md)
+- 🎮 **Harvard Mark I** (Howard Aiken, 1944) — [harvardmark1](harvardmark1) / [arch.md](harvardmark1/arch.md)
 - 💾 **Zuse Z1** (Konrad Zuse, 1938) — [zusez1](zusez1) / [arch.md](zusez1/arch.md)
 - 👶 **Manchester MU1** (Frederic Williams & Tom Kilburn, 1948) — [manchestermu1](manchestermu1) / [arch.md](manchestermu1/arch.md)
 - 📼 **Univac I** (J. Presper Eckert & John Mauchly, 1951) — [univac1](univac1) / [arch.md](univac1/arch.md)
@@ -61,6 +61,7 @@ The architectures in the zoo are organized into 16 distinct "houses" based on th
 - 📠 **HP 3000** (HP, 1972) — [hp3000](hp3000) / [arch.md](hp3000/arch.md)
 - 📐 **Ethlilith** (Niklaus Wirth, 1980) — [ethlilith](ethlilith) / [arch.md](ethlilith/arch.md)
 - ☕ **UCSD Pascal P-Machine** (UCSD, 1978) — [ucsdp](ucsdp) / [arch.md](ucsdp/arch.md)
+- ☕ **JVM** (Sun Microsystems, 1995) — [jvm](jvm) / [arch.md](jvm/arch.md)
 
 ### 6. Bell House
 *Representing the architectural evolution of Digital Equipment Corporation (DEC) systems, led or influenced by C. Gordon Bell.*
@@ -98,10 +99,13 @@ The architectures in the zoo are organized into 16 distinct "houses" based on th
 
 ### 10. RISC House
 *Reduced Instruction Set Computer designs prioritizing simplified formats, load-store memory access, and single-cycle executions.*
+- 💼 **IBM 801** (John Cocke & IBM Team, 1980) — [ibm801](ibm801) / [arch.md](ibm801/arch.md)
 - 💼 **IBM 6150 ROMP** (John Cocke & IBM Team, 1986) — [ibm6150](ibm6150) / [arch.md](ibm6150/arch.md)
 - 🚀 **MIPS I (R2000)** (John Hennessy, 1986) — [mips1](mips1) / [arch.md](mips1/arch.md)
 - 📱 **ARM1** (Sophie Wilson & Steve Furber, 1985) — [arm1](arm1) / [arch.md](arm1/arch.md)
 - 🎓 **Berkeley RISC-I** (David Patterson & Carlo H. Séquin, 1981) — [berkeleyrisc](berkeleyrisc) / [arch.md](berkeleyrisc/arch.md)
+- ⚡ **SPARC** (Sun Microsystems, 1987) — [sparc](sparc) / [arch.md](sparc/arch.md)
+- 🏹 **PowerPC** (Apple/IBM/Motorola, 1991) — [powerpc](powerpc) / [arch.md](powerpc/arch.md)
 
 ### 11. DSP House
 *Digital Signal Processors optimized for math, multiply-accumulate operations, and high-performance real-time processing.*
@@ -235,8 +239,8 @@ This design choice keeps the RTL implementation of each core clean, highly reada
 | STC ZEBRA           | 33                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 7.93 B/inst | 1.0 regs/inst |
 | Bull Gamma 60        | 24                | 45              | 16                   | 24            | 4             | 2.81 | 52 | 8.9% | 5.25 B/inst | 1.0 regs/inst |
 | IBM Stretch         | 64                | 46              | 17                   | 25            | 4             | 2.71 | 52 | 8.7% | 13.65 B/inst | 1.0 regs/inst |
-| MOS 6502            | 8                 | 70              | 17                   | 49            | 4             | 4.12 | 72 | 5.7% | 3.12 B/inst | 1.2 regs/inst |
-| DEC PDP-8           | 12                | 133              | 33                   | 69            | 20             | 4.03 | 26 | 3.0% | 4.05 B/inst | 1.2 regs/inst |
+| MOS 6502            | 8                 | 70              | 17                   | 49            | 4             | 4.12 | 72 | 5.7% | 3.12 B/inst | 1.0 regs/inst |
+| DEC PDP-8           | 12                | 133              | 33                   | 69            | 20             | 4.03 | 26 | 3.0% | 4.05 B/inst | 1.0 regs/inst |
 | DEC PDP-11          | 16                | 81              | 16                   | 31            | 4             | 5.06 | 32 | 4.9% | 4.38 B/inst | 2.5 regs/inst |
 | IBM System/360      | 32                | 56              | 12                   | 20            | 4             | 4.67 | 100 | 7.1% | 8.00 B/inst | 1.0 regs/inst |
 | Motorola 68000      | 32                | 157              | 28                   | 68            | 8             | 5.61 | 92 | 2.5% | 10.86 B/inst | 2.5 regs/inst |
@@ -246,8 +250,8 @@ This design choice keeps the RTL implementation of each core clean, highly reada
 | Univac 1103A        | 36                | 38              | 9                   | 21            | 8             | 4.22 | 52 | 10.5% | 14.50 B/inst | 1.0 regs/inst |
 | CDC 6600 PPU        | 12                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 2.88 B/inst | 1.0 regs/inst |
 | DEC VAX             | 32                | 81              | 16                   | 31            | 4             | 5.06 | 32 | 4.9% | 8.75 B/inst | 2.5 regs/inst |
-| Intel 8080A         | 8                 | 78              | 21                   | 53            | 4             | 3.71 | 92 | 5.1% | 2.71 B/inst | 1.2 regs/inst |
-| Motorola 6800       | 8                 | 62              | 13                   | 45            | 4             | 4.77 | 92 | 6.5% | 3.77 B/inst | 1.2 regs/inst |
+| Intel 8080A         | 8                 | 78              | 21                   | 53            | 4             | 3.71 | 92 | 5.1% | 2.71 B/inst | 1.0 regs/inst |
+| Motorola 6800       | 8                 | 62              | 13                   | 45            | 4             | 4.77 | 92 | 6.5% | 3.77 B/inst | 1.0 regs/inst |
 | IBM 6150 ROMP       | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
 | MIPS I (R2000)      | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
 | ARM1                | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
@@ -255,24 +259,24 @@ This design choice keeps the RTL implementation of each core clean, highly reada
 | HP 3000             | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 4.82 B/inst | 0.5 regs/inst |
 | Ethlilith           | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 4.82 B/inst | 0.5 regs/inst |
 | UCSD Pascal P-Mach  | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 10.3% | 4.82 B/inst | 0.5 regs/inst |
-| NEC uPD7720 DSP     | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 4.82 B/inst | 1.2 regs/inst |
-| TI TMS32010 DSP     | 16                | 50              | 13                   | 33            | 4             | 3.85 | 52 | 8.0% | 5.69 B/inst | 1.2 regs/inst |
-| ADI ADSP-2100 DSP   | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 4.82 B/inst | 1.2 regs/inst |
-| IBM MWave DSP       | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 4.82 B/inst | 1.2 regs/inst |
+| NEC uPD7720 DSP     | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 4.82 B/inst | 1.0 regs/inst |
+| TI TMS32010 DSP     | 16                | 50              | 13                   | 33            | 4             | 3.85 | 52 | 8.0% | 5.69 B/inst | 1.0 regs/inst |
+| ADI ADSP-2100 DSP   | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 4.82 B/inst | 1.0 regs/inst |
+| IBM MWave DSP       | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 4.82 B/inst | 1.0 regs/inst |
 | 3dfx Voodoo1        | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 9.65 B/inst | 4.5 regs/inst |
 | NVIDIA GeForce 256  | 32                | 66              | 19                   | 43            | 4             | 3.47 | 53 | 6.1% | 9.89 B/inst | 4.5 regs/inst |
 | ATI Radeon R100     | 32                | 62              | 18                   | 40            | 4             | 3.44 | 53 | 6.5% | 9.78 B/inst | 4.5 regs/inst |
 | PowerVR Series 1    | 32                | 62              | 18                   | 40            | 4             | 3.44 | 53 | 6.5% | 9.78 B/inst | 4.5 regs/inst |
 | ARM Mali-200 GPU    | 32                | 25              | 5                   | 16            | 4             | 5.00 | 52 | 4.0% | 16.00 B/inst | 4.5 regs/inst |
 | AMD R600 GPU        | 32                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 7.69 B/inst | 4.5 regs/inst |
-| AMD Am2901          | 16                | 152              | 43                   | 67            | 4             | 3.53 | 41 | 2.6% | 3.30 B/inst | 1.2 regs/inst |
-| Intel 3002          | 16                | 152              | 43                   | 67            | 4             | 3.53 | 41 | 2.6% | 3.30 B/inst | 1.2 regs/inst |
-| NS IMP-16           | 16                | 478              | 113                   | 253            | 28             | 4.23 | 69 | 0.8% | 4.97 B/inst | 1.2 regs/inst |
-| Motorola MC10800    | 16                | 478              | 113                   | 253            | 28             | 4.23 | 69 | 0.8% | 4.97 B/inst | 1.2 regs/inst |
+| AMD Am2901          | 16                | 152              | 43                   | 67            | 4             | 3.53 | 41 | 2.6% | 3.30 B/inst | 1.0 regs/inst |
+| Intel 3002          | 16                | 152              | 43                   | 67            | 4             | 3.53 | 41 | 2.6% | 3.30 B/inst | 1.0 regs/inst |
+| NS IMP-16           | 16                | 478              | 113                   | 253            | 28             | 4.23 | 69 | 0.8% | 4.97 B/inst | 1.0 regs/inst |
+| Motorola MC10800    | 16                | 478              | 113                   | 253            | 28             | 4.23 | 69 | 0.8% | 4.97 B/inst | 1.0 regs/inst |
 | ILLIAC IV           | 64 (SIMD)         | 32              | 7                   | 8            | 4             | 4.57 | 22 | 25.0% | 13.71 B/inst | 4.5 regs/inst |
-| ICL DAP             | 1 (Bit-Serial)    | 548              | 98                   | 128            | 64             | 5.59 | 158 | 0.7% | 3.92 B/inst | 1.2 regs/inst |
-| Goodyear MPP        | 1 (Bit-Serial)    | 558              | 100                   | 132            | 64             | 5.58 | 165 | 0.7% | 3.92 B/inst | 1.2 regs/inst |
-| Connection Machine  | 1 (Bit-Serial)    | 548              | 98                   | 128            | 64             | 5.59 | 158 | 0.7% | 3.92 B/inst | 1.2 regs/inst |
+| ICL DAP             | 1 (Bit-Serial)    | 548              | 98                   | 128            | 64             | 5.59 | 158 | 0.7% | 3.92 B/inst | 1.0 regs/inst |
+| Goodyear MPP        | 1 (Bit-Serial)    | 558              | 100                   | 132            | 64             | 5.58 | 165 | 0.7% | 3.92 B/inst | 1.0 regs/inst |
+| Connection Machine  | 1 (Bit-Serial)    | 548              | 98                   | 128            | 64             | 5.59 | 158 | 0.7% | 3.92 B/inst | 1.0 regs/inst |
 | IBM MFAST           | 16 (VLIW)         | 39              | 8                   | 8            | 4             | 4.88 | 28 | 20.5% | 3.00 B/inst | 4.5 regs/inst |
 | Multiflow TRACE     | 32                | 106              | 31                   | 9            | 4             | 3.42 | 96 | 3.8% | 1.68 B/inst | 3.0 regs/inst |
 | Cydrome Cydra 5     | 32                | 94              | 27                   | 9            | 4             | 3.48 | 96 | 4.3% | 1.93 B/inst | 3.0 regs/inst |
@@ -284,3 +288,7 @@ This design choice keeps the RTL implementation of each core clean, highly reada
 | Convex C1           | 32                | 36              | 10                   | 8            | 4             | 3.60 | 96 | 11.1% | 4.80 B/inst | 4.0 regs/inst |
 | NEC SX-2            | 32                | 36              | 10                   | 8            | 4             | 3.60 | 96 | 11.1% | 4.80 B/inst | 4.0 regs/inst |
 | IBM S/370 VF        | 32                | 36              | 10                   | 8            | 4             | 3.60 | 96 | 11.1% | 4.80 B/inst | 4.0 regs/inst |
+| IBM 801             | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
+| SPARC               | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
+| PowerPC             | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
+| JVM                 | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 0.5 regs/inst |

@@ -60,6 +60,10 @@ object Assembler {
       case "powervr1"        => new Powervr1Assembler()
       case "mali200"         => new Mali200Assembler()
       case "amdr600"         => new Amdr600Assembler()
+      case "ibm801"          => new Ibm801Assembler()
+      case "sparc"           => new SparcAssembler()
+      case "powerpc"         => new PowerpcAssembler()
+      case "jvm"             => new JvmAssembler()
       case _ =>
         println(s"Unknown architecture: $arch")
         sys.exit(1)

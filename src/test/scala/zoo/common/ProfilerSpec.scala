@@ -71,6 +71,10 @@ import zoo.tiasc.{Core => TiAscCore}
 import zoo.convexc1.{Core => ConvexC1Core}
 import zoo.necsx2.{Core => NecSx2Core}
 import zoo.ibms370vf.{Core => IbmS370VfCore}
+import zoo.ibm801.Ibm801Core
+import zoo.sparc.SparcCore
+import zoo.powerpc.PowerpcCore
+import zoo.jvm.JvmCore
 
 class ProfilerSpec extends AnyFlatSpec with Matchers {
   behavior of "ZooArchitectureProfiler"
@@ -3232,7 +3236,198 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       mem(95) shouldBe 44
     }
 
-    // Print Consolidated Comparative Table
+    // 65. IBM 801
+    val ibm801Hex = findWorkspaceFile("ibm801/sw/test_vector.hex")
+    val ibm801Bytes = Source.fromFile(ibm801Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16).toInt).toArray
+    var ibm801Cycles = 0L
+    var ibm801Insts = 0L
+    var ibm801Reads = 0L
+    var ibm801Writes = 0L
+
+    simulate(new Ibm801Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- ibm801Bytes.indices) mem(i) = ibm801Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      ibm801Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      ibm801Insts  = c.io.pmu_insts.peek().litValue.toLong
+      ibm801Reads  = c.io.pmu_reads.peek().litValue.toLong
+      ibm801Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 66. SPARC
+    val sparcHex = findWorkspaceFile("sparc/sw/test_vector.hex")
+    val sparcBytes = Source.fromFile(sparcHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16).toInt).toArray
+    var sparcCycles = 0L
+    var sparcInsts = 0L
+    var sparcReads = 0L
+    var sparcWrites = 0L
+
+    simulate(new SparcCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- sparcBytes.indices) mem(i) = sparcBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      sparcCycles = c.io.pmu_cycles.peek().litValue.toLong
+      sparcInsts  = c.io.pmu_insts.peek().litValue.toLong
+      sparcReads  = c.io.pmu_reads.peek().litValue.toLong
+      sparcWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 67. PowerPC
+    val powerpcHex = findWorkspaceFile("powerpc/sw/test_vector.hex")
+    val powerpcBytes = Source.fromFile(powerpcHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16).toInt).toArray
+    var powerpcCycles = 0L
+    var powerpcInsts = 0L
+    var powerpcReads = 0L
+    var powerpcWrites = 0L
+
+    simulate(new PowerpcCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- powerpcBytes.indices) mem(i) = powerpcBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      powerpcCycles = c.io.pmu_cycles.peek().litValue.toLong
+      powerpcInsts  = c.io.pmu_insts.peek().litValue.toLong
+      powerpcReads  = c.io.pmu_reads.peek().litValue.toLong
+      powerpcWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 68. JVM
+    val jvmHex = findWorkspaceFile("jvm/sw/test_vector.hex")
+    val jvmBytes = Source.fromFile(jvmHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16).toInt).toArray
+    var jvmCycles = 0L
+    var jvmInsts = 0L
+    var jvmReads = 0L
+    var jvmWrites = 0L
+
+    simulate(new JvmCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- jvmBytes.indices) mem(i) = jvmBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      jvmCycles = c.io.pmu_cycles.peek().litValue.toLong
+      jvmInsts  = c.io.pmu_insts.peek().litValue.toLong
+      jvmReads  = c.io.pmu_reads.peek().litValue.toLong
+      jvmWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
     // Print Consolidated Comparative Table
     def aluDutyCycle(arch: String, cycles: Long): String = {
       val aluCycles: Double = arch match {
@@ -3243,7 +3438,7 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
         case "geforce256" => 4.0
         case "radeonr100" => 4.0
         case "powervr1" => 4.0
-        case "mips1" | "arm1" | "berkeleyrisc" | "ibm6150" | "hp3000" | "ethlilith" => 8.0
+        case "mips1" | "arm1" | "berkeleyrisc" | "ibm6150" | "hp3000" | "ethlilith" | "ibm801" | "sparc" | "powerpc" | "jvm" => 8.0
         case "b5500" | "ucsdp" => 6.0
         case "mos" | "intel8080a" | "motorola6800" | "pdp8" | "upd7720" | "tms32010" | "adsp2100" | "ibmmwave" | "amd2901" | "intel3002" | "imp16" | "mc10800" | "icldap" | "goodmpp" | "cm1" => 4.0
         case "illiac4" | "ibmmfast" => 8.0
@@ -3265,9 +3460,8 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       val factor = arch match {
         case "cray" | "mali200" | "amdr600" | "geforce256" | "radeonr100" | "voodoo1" | "powervr1" => 4.5
         case "illiac4" | "ibmmfast" => 4.5
-        case "mips1" | "arm1" | "berkeleyrisc" | "ibm6150" | "decvax" | "pdp11" | "m68k" => 2.5
-        case "mos" | "intel8080a" | "motorola6800" | "pdp8" | "upd7720" | "tms32010" | "adsp2100" | "ibmmwave" | "amd2901" | "intel3002" | "imp16" | "mc10800" | "icldap" | "goodmpp" | "cm1" => 1.2
-        case "b5500" | "ucsdp" | "hp3000" | "ethlilith" | "cambridgeedsac" | "manchestermu1" | "babbage" | "harvard" | "zuse" | "univac" | "princetonias" => 0.5
+        case "mips1" | "arm1" | "berkeleyrisc" | "ibm6150" | "decvax" | "pdp11" | "m68k" | "ibm801" | "sparc" | "powerpc" => 2.5
+        case "b5500" | "ucsdp" | "hp3000" | "ethlilith" | "cambridgeedsac" | "manchestermu1" | "babbage" | "harvard" | "zuse" | "univac" | "princetonias" | "jvm" => 0.5
         case "multiflow" | "cydra5" | "tms320c6k" | "crusoe" | "itanium" => 3.0
         case "cdcstar100" | "tiasc" | "convexc1" | "necsx2" | "ibms370vf" => 4.0
         case _ => 1.0
@@ -3340,6 +3534,10 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     val convexc1Cpi   = if (convexc1Insts > 0)   String.format("%.2f", Double.box(convexc1Cycles.toDouble / convexc1Insts))     else "N/A"
     val necsx2Cpi     = if (necsx2Insts > 0)     String.format("%.2f", Double.box(necsx2Cycles.toDouble / necsx2Insts))         else "N/A"
     val ibms370vfCpi  = if (ibms370vfInsts > 0)  String.format("%.2f", Double.box(ibms370vfCycles.toDouble / ibms370vfInsts))   else "N/A"
+    val ibm801Cpi     = if (ibm801Insts > 0)     String.format("%.2f", Double.box(ibm801Cycles.toDouble / ibm801Insts))         else "N/A"
+    val sparcCpi      = if (sparcInsts > 0)      String.format("%.2f", Double.box(sparcCycles.toDouble / sparcInsts))           else "N/A"
+    val powerpcCpi    = if (powerpcInsts > 0)    String.format("%.2f", Double.box(powerpcCycles.toDouble / powerpcInsts))       else "N/A"
+    val jvmCpi        = if (jvmInsts > 0)        String.format("%.2f", Double.box(jvmCycles.toDouble / jvmInsts))               else "N/A"
 
     val table = s"""
 | Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI | Code Footprint (words) | ALU Duty Cycle | Mem BW Efficiency | Register Port Stress |
@@ -3408,6 +3606,10 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
 | Convex C1           | 32                | $convexc1Cycles              | $convexc1Insts                   | $convexc1Reads            | $convexc1Writes             | $convexc1Cpi | ${convexc1Bytes.length} | ${aluDutyCycle("convexc1", convexc1Cycles)} | ${memBwEfficiency(32.0, convexc1Reads, convexc1Writes, convexc1Insts)} | ${regPortStress("convexc1")} |
 | NEC SX-2            | 32                | $necsx2Cycles              | $necsx2Insts                   | $necsx2Reads            | $necsx2Writes             | $necsx2Cpi | ${necsx2Bytes.length} | ${aluDutyCycle("necsx2", necsx2Cycles)} | ${memBwEfficiency(32.0, necsx2Reads, necsx2Writes, necsx2Insts)} | ${regPortStress("necsx2")} |
 | IBM S/370 VF        | 32                | $ibms370vfCycles              | $ibms370vfInsts                   | $ibms370vfReads            | $ibms370vfWrites             | $ibms370vfCpi | ${ibms370vfBytes.length} | ${aluDutyCycle("ibms370vf", ibms370vfCycles)} | ${memBwEfficiency(32.0, ibms370vfReads, ibms370vfWrites, ibms370vfInsts)} | ${regPortStress("ibms370vf")} |
+| IBM 801             | 32                | $ibm801Cycles              | $ibm801Insts                   | $ibm801Reads            | $ibm801Writes             | $ibm801Cpi | ${ibm801Bytes.length} | ${aluDutyCycle("ibm801", ibm801Cycles)} | ${memBwEfficiency(32.0, ibm801Reads, ibm801Writes, ibm801Insts)} | ${regPortStress("ibm801")} |
+| SPARC               | 32                | $sparcCycles              | $sparcInsts                   | $sparcReads            | $sparcWrites             | $sparcCpi | ${sparcBytes.length} | ${aluDutyCycle("sparc", sparcCycles)} | ${memBwEfficiency(32.0, sparcReads, sparcWrites, sparcInsts)} | ${regPortStress("sparc")} |
+| PowerPC             | 32                | $powerpcCycles              | $powerpcInsts                   | $powerpcReads            | $powerpcWrites             | $powerpcCpi | ${powerpcBytes.length} | ${aluDutyCycle("powerpc", powerpcCycles)} | ${memBwEfficiency(32.0, powerpcReads, powerpcWrites, powerpcInsts)} | ${regPortStress("powerpc")} |
+| JVM                 | 32                | $jvmCycles              | $jvmInsts                   | $jvmReads            | $jvmWrites             | $jvmCpi | ${jvmBytes.length} | ${aluDutyCycle("jvm", jvmCycles)} | ${memBwEfficiency(32.0, jvmReads, jvmWrites, jvmInsts)} | ${regPortStress("jvm")} |
 """
 
     println("\n=== COMPARATIVE ARCHITECTURE PERFORMANCE REPORT ===")

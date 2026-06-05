@@ -1,3 +1,13 @@
+# 06/05/2026 07:45 Vector House: CDC STAR-100, TI ASC, Convex C1, NEC SX-2, and IBM System/370 Vector Facility
+- Implemented five historical vector architectures under the new **Vector House**: CDC STAR-100, TI ASC, Convex C1, NEC SX-2, and IBM System/370 Vector Facility.
+- Replicated the entry for Cray-1 under the Vector House while keeping its primary entry in the Cray House, conforming to the designation replication request.
+- Built synthesizable datapath cores, instruction decoders, and sbt test suites for all 5 new architectures.
+- Added synthesizable Performance Monitoring Units (PMUs) to all 5 new cores to track cycles, instruction retirement, and memory read/write traffic.
+- Developed Python and Scala assemblers for all 5 new architectures and registered them globally.
+- Created architectural documentation (`arch.md`) and assembly vector addition test codes for all 5 architectures.
+- Integrated the new vector cores into the unified 4-element Vector Addition benchmark (`ProfilerSpec.scala`), compiling them, verifying correct computation, and generating comparison PMU metrics.
+- Reorganized `README.md` and `examples/README.md` to catalog all 64 architectures, establishing the new **Vector House** category.
+
 # 06/04/2026 15:23 VLIW House: Multiflow TRACE, Cydrome Cydra 5, TI TMS320C6000, Transmeta Crusoe, and Intel Itanium
 - Implemented five historical VLIW architectures under the new **VLIW House**: Multiflow TRACE, Cydrome Cydra 5, TI TMS320C6000, Transmeta Crusoe, and Intel Itanium.
 - Built synthesizable datapath cores, instruction decoders, and sbt test suites for all 5 architectures.

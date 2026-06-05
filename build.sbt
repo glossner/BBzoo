@@ -517,16 +517,57 @@ lazy val itanium = (project in file("itanium/rtl"))
   )
   .settings(commonSettings: _*)
 
+// 61. CDC STAR-100 Project
+lazy val cdcstar100 = (project in file("cdcstar100/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "CdcStar100"
+  )
+  .settings(commonSettings: _*)
+
+// 62. TI ASC Project
+lazy val tiasc = (project in file("tiasc/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "TiAsc"
+  )
+  .settings(commonSettings: _*)
+
+// 63. Convex C1 Project
+lazy val convexc1 = (project in file("convexc1/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "ConvexC1"
+  )
+  .settings(commonSettings: _*)
+
+// 64. NEC SX-2 Project
+lazy val necsx2 = (project in file("necsx2/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "NecSx2"
+  )
+  .settings(commonSettings: _*)
+
+// 65. IBM System/370 Vector Facility Project
+lazy val ibms370vf = (project in file("ibms370vf/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "IbmS370Vf"
+  )
+  .settings(commonSettings: _*)
+
 // ***************************
 // * ROOT PROJECT
 // ***************************
 lazy val root = (project in file("."))
-  .aggregate(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchestermu1, univac1, princetonias, cambridgeedsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150, mips1, arm1, berkeleyrisc, hp3000, ethlilith, ucsdp, upd7720, tms32010, adsp2100, ibmmwave, voodoo1, geforce256, radeonr100, powervr1, mali200, amdr600, amd2901, intel3002, imp16, mc10800, illiac4, icldap, goodmpp, cm1, ibmmfast, multiflow, cydra5, tms320c6k, crusoe, itanium)
-  .dependsOn(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchestermu1, univac1, princetonias, cambridgeedsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150, mips1, arm1, berkeleyrisc, hp3000, ethlilith, ucsdp, upd7720, tms32010, adsp2100, ibmmwave, voodoo1, geforce256, radeonr100, powervr1, mali200, amdr600, amd2901, intel3002, imp16, mc10800, illiac4, icldap, goodmpp, cm1, ibmmfast, multiflow, cydra5, tms320c6k, crusoe, itanium)
+  .aggregate(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchestermu1, univac1, princetonias, cambridgeedsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150, mips1, arm1, berkeleyrisc, hp3000, ethlilith, ucsdp, upd7720, tms32010, adsp2100, ibmmwave, voodoo1, geforce256, radeonr100, powervr1, mali200, amdr600, amd2901, intel3002, imp16, mc10800, illiac4, icldap, goodmpp, cm1, ibmmfast, multiflow, cydra5, tms320c6k, crusoe, itanium, cdcstar100, tiasc, convexc1, necsx2, ibms370vf)
+  .dependsOn(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchestermu1, univac1, princetonias, cambridgeedsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150, mips1, arm1, berkeleyrisc, hp3000, ethlilith, ucsdp, upd7720, tms32010, adsp2100, ibmmwave, voodoo1, geforce256, radeonr100, powervr1, mali200, amdr600, amd2901, intel3002, imp16, mc10800, illiac4, icldap, goodmpp, cm1, ibmmfast, multiflow, cydra5, tms320c6k, crusoe, itanium, cdcstar100, tiasc, convexc1, necsx2, ibms370vf)
   .settings(
     name := "BBZoo"
   )
   .settings(commonSettings: _*)
+
 
 
 

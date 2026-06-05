@@ -66,6 +66,11 @@ import zoo.cydra5.{Core => Cydra5Core}
 import zoo.tms320c6k.{Core => Tms320c6kCore}
 import zoo.crusoe.{Core => CrusoeCore}
 import zoo.itanium.{Core => ItaniumCore}
+import zoo.cdcstar100.{Core => CdcStar100Core}
+import zoo.tiasc.{Core => TiAscCore}
+import zoo.convexc1.{Core => ConvexC1Core}
+import zoo.necsx2.{Core => NecSx2Core}
+import zoo.ibms370vf.{Core => IbmS370VfCore}
 
 class ProfilerSpec extends AnyFlatSpec with Matchers {
   behavior of "ZooArchitectureProfiler"
@@ -2987,6 +2992,246 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       mem(53) shouldBe 44L
     }
 
+    // 60. CDC STAR-100
+    val cdcstar100Hex = findWorkspaceFile("cdcstar100/sw/test_vector.hex")
+    val cdcstar100Bytes = Source.fromFile(cdcstar100Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16).toInt).toArray
+    var cdcstar100Cycles = 0L
+    var cdcstar100Insts = 0L
+    var cdcstar100Reads = 0L
+    var cdcstar100Writes = 0L
+
+    simulate(new CdcStar100Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- cdcstar100Bytes.indices) mem(i) = cdcstar100Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      cdcstar100Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      cdcstar100Insts  = c.io.pmu_insts.peek().litValue.toLong
+      cdcstar100Reads  = c.io.pmu_reads.peek().litValue.toLong
+      cdcstar100Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(92) shouldBe 11
+      mem(93) shouldBe 22
+      mem(94) shouldBe 33
+      mem(95) shouldBe 44
+    }
+
+    // 61. TI ASC
+    val tiascHex = findWorkspaceFile("tiasc/sw/test_vector.hex")
+    val tiascBytes = Source.fromFile(tiascHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16).toInt).toArray
+    var tiascCycles = 0L
+    var tiascInsts = 0L
+    var tiascReads = 0L
+    var tiascWrites = 0L
+
+    simulate(new TiAscCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- tiascBytes.indices) mem(i) = tiascBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      tiascCycles = c.io.pmu_cycles.peek().litValue.toLong
+      tiascInsts  = c.io.pmu_insts.peek().litValue.toLong
+      tiascReads  = c.io.pmu_reads.peek().litValue.toLong
+      tiascWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(92) shouldBe 11
+      mem(93) shouldBe 22
+      mem(94) shouldBe 33
+      mem(95) shouldBe 44
+    }
+
+    // 62. Convex C1
+    val convexc1Hex = findWorkspaceFile("convexc1/sw/test_vector.hex")
+    val convexc1Bytes = Source.fromFile(convexc1Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16).toInt).toArray
+    var convexc1Cycles = 0L
+    var convexc1Insts = 0L
+    var convexc1Reads = 0L
+    var convexc1Writes = 0L
+
+    simulate(new ConvexC1Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- convexc1Bytes.indices) mem(i) = convexc1Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      convexc1Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      convexc1Insts  = c.io.pmu_insts.peek().litValue.toLong
+      convexc1Reads  = c.io.pmu_reads.peek().litValue.toLong
+      convexc1Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(92) shouldBe 11
+      mem(93) shouldBe 22
+      mem(94) shouldBe 33
+      mem(95) shouldBe 44
+    }
+
+    // 63. NEC SX-2
+    val necsx2Hex = findWorkspaceFile("necsx2/sw/test_vector.hex")
+    val necsx2Bytes = Source.fromFile(necsx2Hex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16).toInt).toArray
+    var necsx2Cycles = 0L
+    var necsx2Insts = 0L
+    var necsx2Reads = 0L
+    var necsx2Writes = 0L
+
+    simulate(new NecSx2Core) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- necsx2Bytes.indices) mem(i) = necsx2Bytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      necsx2Cycles = c.io.pmu_cycles.peek().litValue.toLong
+      necsx2Insts  = c.io.pmu_insts.peek().litValue.toLong
+      necsx2Reads  = c.io.pmu_reads.peek().litValue.toLong
+      necsx2Writes = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(92) shouldBe 11
+      mem(93) shouldBe 22
+      mem(94) shouldBe 33
+      mem(95) shouldBe 44
+    }
+
+    // 64. IBM System/370 Vector Facility
+    val ibms370vfHex = findWorkspaceFile("ibms370vf/sw/test_vector.hex")
+    val ibms370vfBytes = Source.fromFile(ibms370vfHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16).toInt).toArray
+    var ibms370vfCycles = 0L
+    var ibms370vfInsts = 0L
+    var ibms370vfReads = 0L
+    var ibms370vfWrites = 0L
+
+    simulate(new IbmS370VfCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- ibms370vfBytes.indices) mem(i) = ibms370vfBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      ibms370vfCycles = c.io.pmu_cycles.peek().litValue.toLong
+      ibms370vfInsts  = c.io.pmu_insts.peek().litValue.toLong
+      ibms370vfReads  = c.io.pmu_reads.peek().litValue.toLong
+      ibms370vfWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(92) shouldBe 11
+      mem(93) shouldBe 22
+      mem(94) shouldBe 33
+      mem(95) shouldBe 44
+    }
+
     // Print Consolidated Comparative Table
     // Print Consolidated Comparative Table
     def aluDutyCycle(arch: String, cycles: Long): String = {
@@ -3003,6 +3248,7 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
         case "mos" | "intel8080a" | "motorola6800" | "pdp8" | "upd7720" | "tms32010" | "adsp2100" | "ibmmwave" | "amd2901" | "intel3002" | "imp16" | "mc10800" | "icldap" | "goodmpp" | "cm1" => 4.0
         case "illiac4" | "ibmmfast" => 8.0
         case "multiflow" | "cydra5" | "tms320c6k" | "crusoe" | "itanium" => 4.0
+        case "cdcstar100" | "tiasc" | "convexc1" | "necsx2" | "ibms370vf" => 4.0
         case _ => 4.0
       }
       if (cycles > 0) String.format("%.1f%%", Double.box((aluCycles / cycles.toDouble) * 100.0)) else "N/A"
@@ -3023,6 +3269,7 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
         case "mos" | "intel8080a" | "motorola6800" | "pdp8" | "upd7720" | "tms32010" | "adsp2100" | "ibmmwave" | "amd2901" | "intel3002" | "imp16" | "mc10800" | "icldap" | "goodmpp" | "cm1" => 1.2
         case "b5500" | "ucsdp" | "hp3000" | "ethlilith" | "cambridgeedsac" | "manchestermu1" | "babbage" | "harvard" | "zuse" | "univac" | "princetonias" => 0.5
         case "multiflow" | "cydra5" | "tms320c6k" | "crusoe" | "itanium" => 3.0
+        case "cdcstar100" | "tiasc" | "convexc1" | "necsx2" | "ibms370vf" => 4.0
         case _ => 1.0
       }
       String.format("%.1f regs/inst", Double.box(factor))
@@ -3088,6 +3335,12 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     val crusoeCpi    = if (crusoeInsts > 0)    String.format("%.2f", Double.box(crusoeCycles.toDouble / crusoeInsts))       else "N/A"
     val itaniumCpi   = if (itaniumInsts > 0)   String.format("%.2f", Double.box(itaniumCycles.toDouble / itaniumInsts))     else "N/A"
 
+    val cdcstar100Cpi = if (cdcstar100Insts > 0) String.format("%.2f", Double.box(cdcstar100Cycles.toDouble / cdcstar100Insts)) else "N/A"
+    val tiascCpi      = if (tiascInsts > 0)      String.format("%.2f", Double.box(tiascCycles.toDouble / tiascInsts))           else "N/A"
+    val convexc1Cpi   = if (convexc1Insts > 0)   String.format("%.2f", Double.box(convexc1Cycles.toDouble / convexc1Insts))     else "N/A"
+    val necsx2Cpi     = if (necsx2Insts > 0)     String.format("%.2f", Double.box(necsx2Cycles.toDouble / necsx2Insts))         else "N/A"
+    val ibms370vfCpi  = if (ibms370vfInsts > 0)  String.format("%.2f", Double.box(ibms370vfCycles.toDouble / ibms370vfInsts))   else "N/A"
+
     val table = s"""
 | Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI | Code Footprint (words) | ALU Duty Cycle | Mem BW Efficiency | Register Port Stress |
 |---------------------|-------------------|------------------|----------------------|--------------|---------------|-----|------------------------|----------------|-------------------|----------------------|
@@ -3150,6 +3403,11 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
 | TI TMS320C6000      | 32                | $tms320c6kCycles              | $tms320c6kInsts                   | $tms320c6kReads            | $tms320c6kWrites             | $tms320c6kCpi | ${tms320c6kBytes.length} | ${aluDutyCycle("tms320c6k", tms320c6kCycles)} | ${memBwEfficiency(32.0, tms320c6kReads, tms320c6kWrites, tms320c6kInsts)} | ${regPortStress("tms320c6k")} |
 | Transmeta Crusoe    | 32                | $crusoeCycles              | $crusoeInsts                   | $crusoeReads            | $crusoeWrites             | $crusoeCpi | ${crusoeBytes.length} | ${aluDutyCycle("crusoe", crusoeCycles)} | ${memBwEfficiency(32.0, crusoeReads, crusoeWrites, crusoeInsts)} | ${regPortStress("crusoe")} |
 | Intel Itanium       | 64                | $itaniumCycles              | $itaniumInsts                   | $itaniumReads            | $itaniumWrites             | $itaniumCpi | ${itaniumBytes.length} | ${aluDutyCycle("itanium", itaniumCycles)} | ${memBwEfficiency(64.0, itaniumReads, itaniumWrites, itaniumInsts)} | ${regPortStress("itanium")} |
+| CDC STAR-100        | 32                | $cdcstar100Cycles              | $cdcstar100Insts                   | $cdcstar100Reads            | $cdcstar100Writes             | $cdcstar100Cpi | ${cdcstar100Bytes.length} | ${aluDutyCycle("cdcstar100", cdcstar100Cycles)} | ${memBwEfficiency(32.0, cdcstar100Reads, cdcstar100Writes, cdcstar100Insts)} | ${regPortStress("cdcstar100")} |
+| TI ASC              | 32                | $tiascCycles              | $tiascInsts                   | $tiascReads            | $tiascWrites             | $tiascCpi | ${tiascBytes.length} | ${aluDutyCycle("tiasc", tiascCycles)} | ${memBwEfficiency(32.0, tiascReads, tiascWrites, tiascInsts)} | ${regPortStress("tiasc")} |
+| Convex C1           | 32                | $convexc1Cycles              | $convexc1Insts                   | $convexc1Reads            | $convexc1Writes             | $convexc1Cpi | ${convexc1Bytes.length} | ${aluDutyCycle("convexc1", convexc1Cycles)} | ${memBwEfficiency(32.0, convexc1Reads, convexc1Writes, convexc1Insts)} | ${regPortStress("convexc1")} |
+| NEC SX-2            | 32                | $necsx2Cycles              | $necsx2Insts                   | $necsx2Reads            | $necsx2Writes             | $necsx2Cpi | ${necsx2Bytes.length} | ${aluDutyCycle("necsx2", necsx2Cycles)} | ${memBwEfficiency(32.0, necsx2Reads, necsx2Writes, necsx2Insts)} | ${regPortStress("necsx2")} |
+| IBM S/370 VF        | 32                | $ibms370vfCycles              | $ibms370vfInsts                   | $ibms370vfReads            | $ibms370vfWrites             | $ibms370vfCpi | ${ibms370vfBytes.length} | ${aluDutyCycle("ibms370vf", ibms370vfCycles)} | ${memBwEfficiency(32.0, ibms370vfReads, ibms370vfWrites, ibms370vfInsts)} | ${regPortStress("ibms370vf")} |
 """
 
     println("\n=== COMPARATIVE ARCHITECTURE PERFORMANCE REPORT ===")

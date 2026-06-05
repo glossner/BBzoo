@@ -6,18 +6,19 @@ Welcome to the **BBZoo** educational workspace! This guide explains how to write
 
 ## 1. Architectural Paradigms in the Zoo
 
-BBzoo hosts 59 classic architectures classified into different "Houses" based on their design paradigm:
+BBzoo hosts 64 classic architectures classified into different "Houses" based on their design paradigm:
 
 | House | Paradigm | Examples | Register File Structure |
 |---|---|---|---|
 | **Accumulator House** | 1-operand accumulator logic | PDP-8, MOS 6502, Intel 8080A | Single Accumulator (A) + temporary registers |
 | **RISC House** | 3-operand register-to-register | MIPS I, ARM1, Berkeley RISC-I | Large General Purpose Register (GPR) file |
 | **Stack House** | 0-operand evaluation stack | Burroughs B5500, HP 3000, UCSD Pascal | Top-of-Stack (TOS) registers + memory stack |
-| **DSP House** | Dedicated MAC and parallel arithmetic | NEC µPD7720, TI TMS32010 | Separate data/program address spaces, accumulator |
+| **DSP House** | Dedicated MAC and parallel arithmetic | NEC µPD7720, TI TMS32010, TI TMS320C6000 | Separate data/program address spaces, accumulator |
 | **GPU House** | Parallel, SIMD, and VLIW execution | NVIDIA GeForce 256, ARM Mali-200, AMD R600 | Vector / VLIW register channels |
 | **Bit-Slice House** | Modular bit-slice slice-cascading logic | Am2901, Intel 3002, IMP-16, MC10800 | Cascaded ALUs + general register slices |
 | **Array Processor House** | SIMD, Bit-Serial, and VLIW processing elements | ILLIAC IV, ICL DAP, Goodyear MPP, CM-1, MFAST | Central control registers + parallel PE accumulator/RAM arrays |
 | **VLIW House** | Explicitly parallel bundle execution | Multiflow TRACE, Cydra 5, TMS320C6000, Crusoe, Itanium | Wide bundle packet routing + static/rotating registers |
+| **Vector House** | Parallel vector streaming / registers | Cray-1, STAR-100, TI ASC, Convex C1, NEC SX-2, S/370 VF | GPR scalar base address registers + Vector Register files (V0-V3) |
 
 ---
 

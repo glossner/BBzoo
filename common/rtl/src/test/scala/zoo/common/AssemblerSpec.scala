@@ -104,6 +104,12 @@ class AssemblerSpec extends AnyFlatSpec with Matchers {
   verifyHex("tms320c6k", "tms320c6k/sw/test_vector.asm", "tms320c6k/sw/test_vector.hex", new Tms320c6kAssembler())
   verifyHex("crusoe", "crusoe/sw/test_vector.asm", "crusoe/sw/test_vector.hex", new CrusoeAssembler())
   verifyHex("itanium", "itanium/sw/test_vector.asm", "itanium/sw/test_vector.hex", new ItaniumAssembler())
+
+  verifyHex("cdcstar100", "cdcstar100/sw/test_vector.asm", "cdcstar100/sw/test_vector.hex", new CdcStar100Assembler())
+  verifyHex("tiasc", "tiasc/sw/test_vector.asm", "tiasc/sw/test_vector.hex", new TiAscAssembler())
+  verifyHex("convexc1", "convexc1/sw/test_vector.asm", "convexc1/sw/test_vector.hex", new ConvexC1Assembler())
+  verifyHex("necsx2", "necsx2/sw/test_vector.asm", "necsx2/sw/test_vector.hex", new NecSx2Assembler())
+  verifyHex("ibms370vf", "ibms370vf/sw/test_vector.asm", "ibms370vf/sw/test_vector.hex", new IbmS370VfAssembler())
 }
 
 

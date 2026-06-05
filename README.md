@@ -14,26 +14,22 @@ June, 2026
 
 ## 🏛️ Architectural Houses
 
-The architectures in the zoo are organized into 16 distinct "houses" based on their core datapath and register organization paradigms:
+The architectures in the zoo are organized into 15 distinct "houses". The first 7 houses follow Blaauw & Brooks exactly. The additional houses follow the design style. 
 
 ### 1. Pioneer House
 *Characterized by the earliest explorations of stored-program, mechanical, or relay-based calculation.*
 - ⚙️ **Babbage Analytical Engine** (Charles Babbage, 1837) — [babbage](babbage) / [arch.md](babbage/arch.md)
-- 🎮 **Harvard Mark I** (Howard Aiken, 1944) — [harvardmark1](harvardmark1) / [arch.md](harvardmark1/arch.md)
 - 💾 **Zuse Z1** (Konrad Zuse, 1938) — [zusez1](zusez1) / [arch.md](zusez1/arch.md)
+- 🎮 **Harvard Mark I** (Howard Aiken, 1944) — [harvardmark1](harvardmark1) / [arch.md](harvardmark1/arch.md)
 - 👶 **Manchester MU1** (Frederic Williams & Tom Kilburn, 1948) — [manchestermu1](manchestermu1) / [arch.md](manchestermu1/arch.md)
 - 📼 **Univac I** (J. Presper Eckert & John Mauchly, 1951) — [univac1](univac1) / [arch.md](univac1/arch.md)
 
 ### 2. Von Neumann House
 *Featuring the classic accumulator-based stored-program organization with unified program and data memory.*
-- 🏫 **Princeton IAS** (John von Neumann, 1952) — [princetonias](princetonias) / [arch.md](princetonias/arch.md)
-- 📡 **EDSAC** (Maurice Wilkes, 1949) — [cambridgeedsac](cambridgeedsac) / [arch.md](cambridgeedsac/arch.md)
+- 🏫 **Princeton IAS** (John von Neumann, 1946) — [princetonias](princetonias) / [arch.md](princetonias/arch.md)
+- 📡 **Cambridge EDSAC** (Maurice Wilkes, 1949) — [cambridgeedsac](cambridgeedsac) / [arch.md](cambridgeedsac/arch.md)
 - 🔬 **IBM 701** (Nathaniel Rochester, 1952) — [ibm701](ibm701) / [arch.md](ibm701/arch.md)
 - 📈 **IBM 704** (Gene Amdahl, 1954) — [ibm704](ibm704) / [arch.md](ibm704/arch.md)
-- 🚂 **IBM 650** (Frank Hamilton, Ernest Hughes, & James Birkenstock, 1953) [replicated from IBM House] — [ibm650](ibm650) / [arch.md](ibm650/arch.md)
-- 🏢 **IBM 705** (Werner Buchholz, 1954) [replicated from IBM House] — [ibm705](ibm705) / [arch.md](ibm705/arch.md)
-- 📇 **IBM 1401** (Chuck Branscomb, 1959) [replicated from IBM House] — [ibm1401](ibm1401) / [arch.md](ibm1401/arch.md)
-- 📉 **DEC PDP-8** (C. Gordon Bell & Edson de Castro, 1965) [replicated from Bell House] — [decpdp8](decpdp8) / [arch.md](decpdp8/arch.md)
 
 ### 3. IBM House
 *Representing the commercial business and variable-word-length scientific computer evolution.*
@@ -41,69 +37,56 @@ The architectures in the zoo are organized into 16 distinct "houses" based on th
 - 🏢 **IBM 705** (Werner Buchholz, 1954) — [ibm705](ibm705) / [arch.md](ibm705/arch.md)
 - 📇 **IBM 1401** (Chuck Branscomb, 1959) — [ibm1401](ibm1401) / [arch.md](ibm1401/arch.md)
 - 🏢 **IBM System/360** (Gene Amdahl, Fred Brooks, & G. A. Blaauw, 1964) — [ibm360](ibm360) / [arch.md](ibm360/arch.md)
-- 🔬 **IBM 701** (Nathaniel Rochester, 1952) [replicated from Von Neumann House] — [ibm701](ibm701) / [arch.md](ibm701/arch.md)
-- 📈 **IBM 704** (Gene Amdahl, 1954) [replicated from Von Neumann House] — [ibm704](ibm704) / [arch.md](ibm704/arch.md)
-- 🚀 **IBM Stretch** (Stephen Dunwell & Werner Buchholz, 1961) [replicated from Explorer House] — [ibmstretch](ibmstretch) / [arch.md](ibmstretch/arch.md)
-- 💼 **IBM 6150 ROMP** (John Cocke & IBM Team, 1986) [replicated from RISC House] — [ibm6150](ibm6150) / [arch.md](ibm6150/arch.md)
-- 🏢 **IBM System/370 Vector Facility** (IBM, 1985) [replicated from Vector House] — [ibms370vf](ibms370vf) / [arch.md](ibms370vf/arch.md)
-- ⚡ **IBM MFAST** (IBM, 1998) [replicated from Array Processor House] — [ibmmfast](ibmmfast) / [arch.md](ibmmfast/arch.md)
-- 🌊 **IBM MWave** (IBM, 1992) [replicated from DSP House] — [ibmmwave](ibmmwave) / [arch.md](ibmmwave/arch.md)
 
 ### 4. Explorer House
 *Highly experimental architectures that introduced radically new paradigms such as micro-programming, multitasking, and indexing/lookahead.*
 - 🦓 **STC ZEBRA** (Willem van der Poel, 1958) — [stczebra](stczebra) / [arch.md](stczebra/arch.md)
 - 🐂 **Bull Gamma 60** (Machines Bull Team, 1960) — [bullgamma60](bullgamma60) / [arch.md](bullgamma60/arch.md)
 - 🚀 **IBM Stretch** (Stephen Dunwell & Werner Buchholz, 1961) — [ibmstretch](ibmstretch) / [arch.md](ibmstretch/arch.md)
-
-### 5. Stack House
-*Zero-address architectures utilizing evaluation stacks to minimize instruction size and simplify code generation.*
 - 🥞 **Burroughs B5500** (Robert S. Barton, 1964) — [burroughsb5500](burroughsb5500) / [arch.md](burroughsb5500/arch.md)
+
+### 5. Cray House
+
+*Optimized for high-throughput arithmetic, scientific calculations, and pipelining, designed or influenced by Seymour Cray.*
+
+- 📠 **Univac 1103A** (Seymour Cray, 1956) — [univac1103a](univac1103a) / [arch.md](univac1103a/arch.md)
+- ⚡ **CDC 6600** (Seymour Cray, 1964) — [cdc6600](cdc6600) / [arch.md](cdc6600/arch.md)
+  - 🎛️ **CDC 6600 PPU** (Seymour Cray, 1964) — [cdc6600ppu](cdc6600ppu) / [arch.md](cdc6600ppu/arch.md)
+- 🌀 **Cray-1** (Seymour Cray, 1976) — [cray1](cray1) / [arch.md](cray1/arch.md)
+
+### 6. Bell House
+
+*Representing the architectural evolution of Digital Equipment Corporation (DEC) systems, led or influenced by C. Gordon Bell.*
+
+- 📉 **DEC PDP-8** (C. Gordon Bell & Edson de Castro, 1965) — [decpdp8](decpdp8) / [arch.md](decpdp8/arch.md)
+- 🖥️ **DEC PDP-11** (C. Gordon Bell, 1970) — [decpdp11](decpdp11) / [arch.md](decpdp11/arch.md)
+- 💾 **DEC VAX** (C. Gordon Bell & DEC Team, 1977) — [decvax](decvax) / [arch.md](decvax/arch.md)
+
+### 7. Microcomputer House
+
+*Constrained accumulator and index-register architectures designed for low-cost, mainstream microcomputing.*
+
+- 💻 **Intel 8080A** (Federico Faggin & Masatoshi Shima, 1974) — [intel8080a](intel8080a) / [arch.md](intel8080a/arch.md)
+- 🔌 **Motorola 6800** (Tom Bennett, 1974) — [motorola6800](motorola6800) / [arch.md](motorola6800/arch.md)
+- 🕹️ **MOS 6502** (Chuck Peddle, 1975) — [mos6502](mos6502) / [arch.md](mos6502/arch.md)
+- 📟 **Motorola 68000** (Motorola Team, 1979) [replicated from General Register House] — [motorola68000](motorola68000) / [arch.md](motorola68000/arch.md)
+- 💼 **IBM 6150 ROMP** (John Cocke & IBM Team, 1986) [replicated from RISC House] — [ibm6150](ibm6150) / [arch.md](ibm6150/arch.md)
+
+### 8. Stack House
+
+*Zero-address architectures utilizing evaluation stacks to minimize instruction size and simplify code generation.*
 - 📠 **HP 3000** (HP, 1972) — [hp3000](hp3000) / [arch.md](hp3000/arch.md)
 - 📐 **Ethlilith** (Niklaus Wirth, 1980) — [ethlilith](ethlilith) / [arch.md](ethlilith/arch.md)
 - ☕ **UCSD Pascal P-Machine** (UCSD, 1978) — [ucsdp](ucsdp) / [arch.md](ucsdp/arch.md)
 - ☕ **JVM** (Sun Microsystems, 1995) — [jvm](jvm) / [arch.md](jvm/arch.md)
 
-### 6. Bell House
-*Representing the architectural evolution of Digital Equipment Corporation (DEC) systems, led or influenced by C. Gordon Bell.*
-- 📉 **DEC PDP-8** (C. Gordon Bell & Edson de Castro, 1965) — [decpdp8](decpdp8) / [arch.md](decpdp8/arch.md)
-- 🖥️ **DEC PDP-11** (C. Gordon Bell, 1970) — [decpdp11](decpdp11) / [arch.md](decpdp11/arch.md)
-- 💾 **DEC VAX** (C. Gordon Bell & DEC Team, 1977) — [decvax](decvax) / [arch.md](decvax/arch.md)
-
-### 7. General Register House
-*Modern paradigms utilizing symmetric register files to decouple calculations from a single accumulator.*
-- 🏢 **IBM System/360** (Gene Amdahl, Fred Brooks, & G. A. Blaauw, 1964) — [ibm360](ibm360) / [arch.md](ibm360/arch.md)
-- 📟 **Motorola 68000** (Motorola Team, 1979) — [motorola68000](motorola68000) / [arch.md](motorola68000/arch.md)
-- 🖥️ **DEC PDP-11** (C. Gordon Bell, 1970) [replicated from Bell House] — [decpdp11](decpdp11) / [arch.md](decpdp11/arch.md)
-- 💾 **DEC VAX** (C. Gordon Bell & DEC Team, 1977) [replicated from Bell House] — [decvax](decvax) / [arch.md](decvax/arch.md)
-- 💼 **IBM 6150 ROMP** (John Cocke & IBM Team, 1986) [replicated from RISC House] — [ibm6150](ibm6150) / [arch.md](ibm6150/arch.md)
-- 🚀 **MIPS I (R2000)** (John Hennessy, 1986) [replicated from RISC House] — [mips1](mips1) / [arch.md](mips1/arch.md)
-- 📱 **ARM1** (Sophie Wilson & Steve Furber, 1985) [replicated from RISC House] — [arm1](arm1) / [arch.md](arm1/arch.md)
-- 🎓 **Berkeley RISC-I** (David Patterson & Carlo H. Séquin, 1981) [replicated from RISC House] — [berkeleyrisc](berkeleyrisc) / [arch.md](berkeleyrisc/arch.md)
-- 🏢 **IBM System/370 Vector Facility** (IBM, 1985) [replicated from Vector House] — [ibms370vf](ibms370vf) / [arch.md](ibms370vf/arch.md)
-
-### 8. Cray House
-*Optimized for high-throughput arithmetic, scientific calculations, and pipelining, designed or influenced by Seymour Cray.*
-- 📠 **Univac 1103A** (Seymour Cray, 1956) — [univac1103a](univac1103a) / [arch.md](univac1103a/arch.md)
-- 🎛️ **CDC 6600 PPU** (Seymour Cray, 1964) — [cdc6600ppu](cdc6600ppu) / [arch.md](cdc6600ppu/arch.md)
-- ⚡ **CDC 6600** (Seymour Cray, 1964) — [cdc6600](cdc6600) / [arch.md](cdc6600/arch.md)
-- 🌀 **Cray-1** (Seymour Cray, 1976) — [cray1](cray1) / [arch.md](cray1/arch.md)
-- 🛰️ **CDC STAR-100** (Control Data Corporation, 1974) [replicated from Vector House] — [cdcstar100](cdcstar100) / [arch.md](cdcstar100/arch.md)
-
-### 9. Microcomputer House
-*Constrained accumulator and index-register architectures designed for low-cost, mainstream microcomputing.*
-- 🕹️ **MOS 6502** (Chuck Peddle, 1975) — [mos6502](mos6502) / [arch.md](mos6502/arch.md)
-- 💻 **Intel 8080A** (Federico Faggin & Masatoshi Shima, 1974) — [intel8080a](intel8080a) / [arch.md](intel8080a/arch.md)
-- 🔌 **Motorola 6800** (Tom Bennett, 1974) — [motorola6800](motorola6800) / [arch.md](motorola6800/arch.md)
-- 📟 **Motorola 68000** (Motorola Team, 1979) [replicated from General Register House] — [motorola68000](motorola68000) / [arch.md](motorola68000/arch.md)
-- 📱 **ARM1** (Sophie Wilson & Steve Furber, 1985) [replicated from RISC House] — [arm1](arm1) / [arch.md](arm1/arch.md)
-
-### 10. RISC House
+### 9. RISC House
 *Reduced Instruction Set Computer designs prioritizing simplified formats, load-store memory access, and single-cycle executions.*
 - 💼 **IBM 801** (John Cocke & IBM Team, 1980) — [ibm801](ibm801) / [arch.md](ibm801/arch.md)
+- 🎓 **Berkeley RISC-I** (David Patterson & Carlo H. Séquin, 1981) — [berkeleyrisc](berkeleyrisc) / [arch.md](berkeleyrisc/arch.md)
+- 📱 **ARM1** (Sophie Wilson & Steve Furber, 1985) — [arm1](arm1) / [arch.md](arm1/arch.md)
 - 💼 **IBM 6150 ROMP** (John Cocke & IBM Team, 1986) — [ibm6150](ibm6150) / [arch.md](ibm6150/arch.md)
 - 🚀 **MIPS I (R2000)** (John Hennessy, 1986) — [mips1](mips1) / [arch.md](mips1/arch.md)
-- 📱 **ARM1** (Sophie Wilson & Steve Furber, 1985) — [arm1](arm1) / [arch.md](arm1/arch.md)
-- 🎓 **Berkeley RISC-I** (David Patterson & Carlo H. Séquin, 1981) — [berkeleyrisc](berkeleyrisc) / [arch.md](berkeleyrisc/arch.md)
 - ⚡ **SPARC** (Sun Microsystems, 1987) — [sparc](sparc) / [arch.md](sparc/arch.md)
 - 🏹 **PowerPC** (Apple/IBM/Motorola, 1991) — [powerpc](powerpc) / [arch.md](powerpc/arch.md)
 
@@ -118,17 +101,17 @@ The architectures in the zoo are organized into 16 distinct "houses" based on th
 ### 12. GPU House
 *Graphics Processing Units and accelerators designed for hardware rasterization, texture mapping, tile-based rendering, and VLIW instruction slots.*
 - 🎨 **3dfx Voodoo1** (3dfx Interactive, 1996) — [voodoo1](voodoo1) / [arch.md](voodoo1/arch.md)
+- ⚡ **PowerVR Series 1** (Imagination Technologies, 1996) — [powervr1](powervr1) / [arch.md](powervr1/arch.md)
 - 👁️ **NVIDIA GeForce 256** (NVIDIA, 1999) — [geforce256](geforce256) / [arch.md](geforce256/arch.md)
 - 🐉 **ATI Radeon R100** (ATI, 2000) — [radeonr100](radeonr100) / [arch.md](radeonr100/arch.md)
-- ⚡ **PowerVR Series 1** (Imagination Technologies, 1996) — [powervr1](powervr1) / [arch.md](powervr1/arch.md)
 - 🌀 **ARM Mali-200** (ARM, 2007) — [mali200](mali200) / [arch.md](mali200/arch.md)
 - 🔬 **AMD R600** (AMD, 2007) — [amdr600](amdr600) / [arch.md](amdr600/arch.md)
 
 ### 13. Bit-Slice House
 *Modular processing architectures designed to be cascaded to construct CPUs of custom word lengths.*
-- ⚡ **AMD Am2901** (AMD, 1975) — [amd2901](amd2901) / [arch.md](amd2901/arch.md)
-- 💾 **Intel 3002** (Intel, 1974) — [intel3002](intel3002) / [arch.md](intel3002/arch.md)
 - 🎛️ **NS IMP-16** (National Semiconductor, 1973) — [imp16](imp16) / [arch.md](imp16/arch.md)
+- 💾 **Intel 3002** (Intel, 1974) — [intel3002](intel3002) / [arch.md](intel3002/arch.md)
+- ⚡ **AMD Am2901** (AMD, 1975) — [amd2901](amd2901) / [arch.md](amd2901/arch.md)
 - 🔌 **Motorola MC10800** (Motorola, 1976) — [mc10800](mc10800) / [arch.md](mc10800/arch.md)
 
 ### 14. Array Processor House
@@ -149,16 +132,16 @@ The architectures in the zoo are organized into 16 distinct "houses" based on th
 
 ### 16. Vector House
 *Designed for high-throughput arithmetic operations on one-dimensional data arrays (vectors), using vector instruction sets and pipelined memory streaming or vector registers.*
-- 🌀 **Cray-1** (Seymour Cray, 1976) [replicated from Cray House] — [cray1](cray1) / [arch.md](cray1/arch.md)
-- 🛰️ **CDC STAR-100** (Control Data Corporation, 1974) — [cdcstar100](cdcstar100) / [arch.md](cdcstar100/arch.md)
 - 📡 **TI ASC** (Texas Instruments, 1972) — [tiasc](tiasc) / [arch.md](tiasc/arch.md)
-- 🎛️ **Convex C1** (Convex Computer, 1985) — [convexc1](convexc1) / [arch.md](convexc1/arch.md)
+- 🛰️ **CDC STAR-100** (Control Data Corporation, 1974) — [cdcstar100](cdcstar100) / [arch.md](cdcstar100/arch.md)
+- 🌀 **Cray-1** (Seymour Cray, 1976) [replicated from Cray House] — [cray1](cray1) / [arch.md](cray1/arch.md)
 - ⚡ **NEC SX-2** (NEC, 1983) — [necsx2](necsx2) / [arch.md](necsx2/arch.md)
+- 🎛️ **Convex C1** (Convex Computer, 1985) — [convexc1](convexc1) / [arch.md](convexc1/arch.md)
 - 🏢 **IBM System/370 Vector Facility** (IBM, 1985) — [ibms370vf](ibms370vf) / [arch.md](ibms370vf/arch.md)
 
 ---
 
-## 🛠️ Getting Started
+## 🛠️ Software - Getting Started
 
 ### Prerequisites
 Make sure your development container or local path has:

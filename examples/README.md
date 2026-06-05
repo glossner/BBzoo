@@ -6,7 +6,7 @@ Welcome to the **BBZoo** educational workspace! This guide explains how to write
 
 ## 1. Architectural Paradigms in the Zoo
 
-BBzoo hosts 75 classic architectures classified into different "Houses" based on their design paradigm:
+BBzoo hosts 80 classic architectures classified into different "Houses" based on their design paradigm:
 
 | House | Paradigm | Examples | Register File Structure |
 |---|---|---|---|
@@ -20,6 +20,7 @@ BBzoo hosts 75 classic architectures classified into different "Houses" based on
 | **VLIW House** | Explicitly parallel bundle execution | Multiflow TRACE, Cydra 5, TMS320C6000, Crusoe, Itanium | Wide bundle packet routing + static/rotating registers |
 | **Vector House** | Parallel vector streaming / registers | Cray-1, STAR-100, TI ASC, Convex C1, NEC SX-2, S/370 VF | GPR scalar base address registers + Vector Register files (V0-V3) |
 | **Miscellaneous House** | Unique, unconventional paradigm | Setun, IBM 1620, Symbolics 3600, MIT Dataflow, SUBLEQ, SOAR, TTA | Unique register / tagged-cell / dataflow / OISC structures |
+| **PIM House** | Processing-in-Memory | Berkeley IRAM, UPMEM DPU, Samsung HBM2-PIM, Micron Automata, IBM Execube | Local memory bank processing elements / tag/state registers |
 
 ---
 

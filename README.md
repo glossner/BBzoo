@@ -1,6 +1,6 @@
 # BBZoo 🦁
 
-Welcome to **BBZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit A. Blaauw and Frederick P. Brooks, Jr. This repository implements **75 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
+Welcome to **BBZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit A. Blaauw and Frederick P. Brooks, Jr. This repository implements **80 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
 
 I have always wanted to create a version of the Zoo ever since I was a student of Dr. Brooks in the early 1990's. There were rumors of executable APL code for the entire Zoo but I never located it. Technology has progressed so fast that this entire repository was vibe coded in 2 days using Google's Antigravity 2.0 IDE. I'm sure there are omissions, errors, and other artifacts. Given that it took me 30+ years for the first implementation, I wouldn't count on significant upgrades anytime soon. However, I will accept pull requests for bugs, capabilities, and new <u>*architectures*</u>. I have a strong preference only for architectures that have new features. I'm not that interested in microarchitectures. Not that they aren't super important (I mean seriously, you can't build a machine today without caches, branch prediction, superscalar, etc.) its just that this is meant to be an architecture repository.
 
@@ -14,7 +14,7 @@ June, 2026
 
 ## 🏛️ Architectural Houses
 
-The architectures in the zoo are organized into 17 distinct "houses". The first 7 houses follow Blaauw & Brooks exactly. The additional houses follow the design style.
+The architectures in the zoo are organized into 18 distinct "houses". The first 7 houses follow Blaauw & Brooks exactly. The additional houses follow the design style.
 
 ### 1. Pioneer House
 *Characterized by the earliest explorations of stored-program, mechanical, or relay-based calculation.*
@@ -149,6 +149,14 @@ The architectures in the zoo are organized into 17 distinct "houses". The first 
 - 🦊 **SOAR** (UC Berkeley, 1984) — [soar](soar) / [arch.md](soar/arch.md)
 - 🚗 **Transport Triggered Architecture** (TTA) (Various, 1990) — [tta](tta) / [arch.md](tta/arch.md)
 
+### 18. PIM House
+*Characterized by integrating processing elements or arithmetic logic directly inside the memory array or storage hierarchy (Processing-in-Memory).*
+- 🧠 **UC Berkeley IRAM** (UC Berkeley, 1997) — [iram](iram) / [arch.md](iram/arch.md)
+- 🔌 **UPMEM DPU** (UPMEM, 2019) — [upmem](upmem) / [arch.md](upmem/arch.md)
+- 🤖 **Samsung HBM2-PIM** (Samsung, 2021) — [samsungpim](samsungpim) / [arch.md](samsungpim/arch.md)
+- 🎛️ **Micron Automata** (Micron, 2013) — [micronautomata](micronautomata) / [arch.md](micronautomata/arch.md)
+- 📼 **IBM Execube** (IBM, 1993) — [execube](execube) / [arch.md](execube/arch.md)
+
 ---
 
 ## 🛠️ Software - Getting Started
@@ -251,6 +259,7 @@ This design choice keeps the RTL implementation of each core clean, highly reada
 | IBM 704             | 36                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 8.65 B/inst | 1.0 regs/inst |
 | IBM 705             | 35                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 8.41 B/inst | 1.0 regs/inst |
 | IBM 801             | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
+| IBM Execube         | 32                | 58            | 17                 | 37          | 4          | 3.41 | 52 | 6.9% | 9.65 B/inst | 4.0 regs/inst |
 | IBM MFAST           | 16 (VLIW)         | 39              | 8                   | 8            | 4             | 4.88 | 28 | 20.5% | 3.00 B/inst | 4.5 regs/inst |
 | IBM MWave DSP       | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 4.82 B/inst | 1.0 regs/inst |
 | IBM S/370 VF        | 32                | 36              | 10                   | 8            | 4             | 3.60 | 96 | 11.1% | 4.80 B/inst | 4.0 regs/inst |
@@ -263,6 +272,7 @@ This design choice keeps the RTL implementation of each core clean, highly reada
 | Intel Itanium       | 64                | 124              | 31                   | 9            | 4             | 4.00 | 108 | 3.2% | 3.35 B/inst | 3.0 regs/inst |
 | JVM                 | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 0.5 regs/inst |
 | Manchester Baby     | 32                | 62              | 21                   | 33            | 8             | 2.95 | 52 | 6.5% | 7.81 B/inst | 0.5 regs/inst |
+| Micron Automata     | 32                | 25     | 5          | 16   | 4   | 5.00 | 52 | 16.0% | 16.00 B/inst | 0.5 regs/inst |
 | MIPS I (R2000)      | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
 | MIT Dataflow        | 32                | 58        | 17             | 37      | 4      | 3.41 | 52 | 6.9% | 9.65 B/inst | 0.5 regs/inst |
 | MOS 6502            | 8                 | 70              | 17                   | 49            | 4             | 4.12 | 72 | 5.7% | 3.12 B/inst | 1.0 regs/inst |
@@ -277,6 +287,7 @@ This design choice keeps the RTL implementation of each core clean, highly reada
 | PowerPC             | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
 | PowerVR Series 1    | 32                | 62              | 18                   | 40            | 4             | 3.44 | 53 | 6.5% | 9.78 B/inst | 4.5 regs/inst |
 | Princeton IAS       | 40                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 9.62 B/inst | 0.5 regs/inst |
+| Samsung HBM2-PIM    | 32                | 25         | 5              | 16       | 4       | 5.00 | 52 | 16.0% | 16.00 B/inst | 4.0 regs/inst |
 | Setun               | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 9.65 B/inst | 0.5 regs/inst |
 | SOAR                | 32                | 58               | 17                    | 37             | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
 | SPARC               | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
@@ -288,7 +299,9 @@ This design choice keeps the RTL implementation of each core clean, highly reada
 | TI TMS320C6000      | 32                | 95              | 31                   | 9            | 4             | 3.06 | 96 | 4.2% | 1.68 B/inst | 3.0 regs/inst |
 | Transmeta Crusoe    | 32                | 87              | 31                   | 9            | 4             | 2.81 | 96 | 4.6% | 1.68 B/inst | 3.0 regs/inst |
 | TTA                 | 32                | 102                | 25                     | 49              | 4              | 4.08 | 52 | 3.9% | 8.48 B/inst | 0.5 regs/inst |
+| UC Berkeley IRAM    | 32                | 34               | 8                    | 22             | 4             | 4.25 | 55 | 11.8% | 13.00 B/inst | 4.0 regs/inst |
 | UCSD Pascal P-Mach  | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 10.3% | 4.82 B/inst | 0.5 regs/inst |
 | Univac 1103A        | 36                | 38              | 9                   | 21            | 8             | 4.22 | 52 | 10.5% | 14.50 B/inst | 1.0 regs/inst |
 | Univac I            | 72                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 17.31 B/inst | 0.5 regs/inst |
+| UPMEM DPU           | 32                | 46              | 17                   | 25            | 4            | 2.71 | 52 | 2.2% | 6.82 B/inst | 2.5 regs/inst |
 | Zuse Z1             | 22                | 54              | 21                   | 29            | 4             | 2.57 | 52 | 7.4% | 4.32 B/inst | 0.5 regs/inst |

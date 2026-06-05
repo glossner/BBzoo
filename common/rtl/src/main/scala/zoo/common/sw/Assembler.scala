@@ -71,6 +71,11 @@ object Assembler {
       case "subleq"          => new SubleqAssembler()
       case "soar"            => new SoarAssembler()
       case "tta"             => new TtaAssembler()
+      case "iram"            => new IramAssembler()
+      case "upmem"           => new UpmemAssembler()
+      case "samsungpim"      => new SamsungpimAssembler()
+      case "micronautomata"  => new MicronautomataAssembler()
+      case "execube"         => new ExecubeAssembler()
       case _ =>
         println(s"Unknown architecture: $arch")
         sys.exit(1)

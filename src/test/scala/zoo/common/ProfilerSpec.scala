@@ -82,6 +82,11 @@ import zoo.mitdataflow.MitDataflowCore
 import zoo.subleq.SubleqCore
 import zoo.soar.SoarCore
 import zoo.tta.TtaCore
+import zoo.iram.IramCore
+import zoo.upmem.UpmemCore
+import zoo.samsungpim.SamsungpimCore
+import zoo.micronautomata.MicronautomataCore
+import zoo.execube.ExecubeCore
 
 class ProfilerSpec extends AnyFlatSpec with Matchers {
   behavior of "ZooArchitectureProfiler"
@@ -98,7 +103,7 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     if (foundFile.exists()) foundFile else new File(relativePath)
   }
 
-  it should "profile and compare execution statistics for all 75 cores" in {
+  it should "profile and compare execution statistics for all 80 cores" in {
     println("\n=== RUNNING BENCHMARKS & GATHERING PMU STATS ===")
 
     // 1. DEC PDP-8
@@ -3775,6 +3780,246 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       mem(51) shouldBe 44
     }
 
+    // 76. Berkeley IRAM
+    val iramHex = findWorkspaceFile("iram/sw/test_vector.hex")
+    val iramBytes = Source.fromFile(iramHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16).toInt).toArray
+    var iramCycles = 0L
+    var iramInsts = 0L
+    var iramReads = 0L
+    var iramWrites = 0L
+
+    simulate(new IramCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- iramBytes.indices) mem(i) = iramBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      iramCycles = c.io.pmu_cycles.peek().litValue.toLong
+      iramInsts  = c.io.pmu_insts.peek().litValue.toLong
+      iramReads  = c.io.pmu_reads.peek().litValue.toLong
+      iramWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 77. UPMEM DPU
+    val upmemHex = findWorkspaceFile("upmem/sw/test_vector.hex")
+    val upmemBytes = Source.fromFile(upmemHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16).toInt).toArray
+    var upmemCycles = 0L
+    var upmemInsts = 0L
+    var upmemReads = 0L
+    var upmemWrites = 0L
+
+    simulate(new UpmemCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- upmemBytes.indices) mem(i) = upmemBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      upmemCycles = c.io.pmu_cycles.peek().litValue.toLong
+      upmemInsts  = c.io.pmu_insts.peek().litValue.toLong
+      upmemReads  = c.io.pmu_reads.peek().litValue.toLong
+      upmemWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 78. Samsung HBM2-PIM
+    val samsungpimHex = findWorkspaceFile("samsungpim/sw/test_vector.hex")
+    val samsungpimBytes = Source.fromFile(samsungpimHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16).toInt).toArray
+    var samsungpimCycles = 0L
+    var samsungpimInsts = 0L
+    var samsungpimReads = 0L
+    var samsungpimWrites = 0L
+
+    simulate(new SamsungpimCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- samsungpimBytes.indices) mem(i) = samsungpimBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      samsungpimCycles = c.io.pmu_cycles.peek().litValue.toLong
+      samsungpimInsts  = c.io.pmu_insts.peek().litValue.toLong
+      samsungpimReads  = c.io.pmu_reads.peek().litValue.toLong
+      samsungpimWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 79. Micron Automata
+    val micronautomataHex = findWorkspaceFile("micronautomata/sw/test_vector.hex")
+    val micronautomataBytes = Source.fromFile(micronautomataHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16).toInt).toArray
+    var micronautomataCycles = 0L
+    var micronautomataInsts = 0L
+    var micronautomataReads = 0L
+    var micronautomataWrites = 0L
+
+    simulate(new MicronautomataCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- micronautomataBytes.indices) mem(i) = micronautomataBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      micronautomataCycles = c.io.pmu_cycles.peek().litValue.toLong
+      micronautomataInsts  = c.io.pmu_insts.peek().litValue.toLong
+      micronautomataReads  = c.io.pmu_reads.peek().litValue.toLong
+      micronautomataWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
+    // 80. IBM Execube
+    val execubeHex = findWorkspaceFile("execube/sw/test_vector.hex")
+    val execubeBytes = Source.fromFile(execubeHex).getLines().filterNot(l => l.trim.isEmpty || l.trim.startsWith("#")).map(l => java.lang.Long.parseUnsignedLong(l.trim, 16).toInt).toArray
+    var execubeCycles = 0L
+    var execubeInsts = 0L
+    var execubeReads = 0L
+    var execubeWrites = 0L
+
+    simulate(new ExecubeCore) { c =>
+      val mem = Array.fill(256)(0)
+      for (i <- execubeBytes.indices) mem(i) = execubeBytes(i)
+      c.io.mem.ready.poke(false.B)
+      c.io.mem.rdata.poke(0.U)
+      c.reset.poke(true.B)
+      c.clock.step(5)
+      c.reset.poke(false.B)
+
+      var limit = 500
+      var halted = false
+      while (limit > 0 && !halted) {
+        val req = c.io.mem.req.peek().litToBoolean
+        val addr = c.io.mem.addr.peek().litValue.toInt
+        val write = c.io.mem.write.peek().litToBoolean
+        val wdata = c.io.mem.wdata.peek().litValue.toInt
+
+        if (req) {
+          c.io.mem.ready.poke(true.B)
+          if (write) mem(addr) = wdata
+          c.io.mem.rdata.poke((mem(addr).toLong & 0xFFFFFFFFL).U)
+        } else {
+          c.io.mem.ready.poke(false.B)
+        }
+
+        c.clock.step(1)
+        limit -= 1
+        if (c.io.hlt.peek().litToBoolean) halted = true
+      }
+      execubeCycles = c.io.pmu_cycles.peek().litValue.toLong
+      execubeInsts  = c.io.pmu_insts.peek().litValue.toLong
+      execubeReads  = c.io.pmu_reads.peek().litValue.toLong
+      execubeWrites = c.io.pmu_writes.peek().litValue.toLong
+
+      mem(48) shouldBe 11
+      mem(49) shouldBe 22
+      mem(50) shouldBe 33
+      mem(51) shouldBe 44
+    }
+
     // Print Consolidated Comparative Table
     def aluDutyCycle(arch: String, cycles: Long): String = {
       val aluCycles: Double = arch match {
@@ -3791,6 +4036,8 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
         case "illiac4" | "ibmmfast" => 8.0
         case "multiflow" | "cydra5" | "tms320c6k" | "crusoe" | "itanium" => 4.0
         case "cdcstar100" | "tiasc" | "convexc1" | "necsx2" | "ibms370vf" => 4.0
+        case "iram" | "samsungpim" | "micronautomata" | "execube" => 4.0
+        case "upmem" => 1.0
         case _ => 4.0
       }
       if (cycles > 0) String.format("%.1f%%", Double.box((aluCycles / cycles.toDouble) * 100.0)) else "N/A"
@@ -3811,6 +4058,9 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
         case "b5500" | "ucsdp" | "hp3000" | "ethlilith" | "cambridgeedsac" | "manchestermu1" | "babbage" | "harvard" | "zuse" | "univac" | "princetonias" | "jvm" | "setun" | "symbolics3600" | "mitdataflow" | "subleq" | "tta" | "ibm1620" => 0.5
         case "multiflow" | "cydra5" | "tms320c6k" | "crusoe" | "itanium" => 3.0
         case "cdcstar100" | "tiasc" | "convexc1" | "necsx2" | "ibms370vf" => 4.0
+        case "iram" | "samsungpim" | "execube" => 4.0
+        case "upmem" => 2.5
+        case "micronautomata" => 0.5
         case _ => 1.0
       }
       String.format("%.1f regs/inst", Double.box(factor))
@@ -3892,6 +4142,11 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
     val subleqCpi     = if (subleqInsts > 0)     String.format("%.2f", Double.box(subleqCycles.toDouble / subleqInsts))         else "N/A"
     val soarCpi       = if (soarInsts > 0)       String.format("%.2f", Double.box(soarCycles.toDouble / soarInsts))             else "N/A"
     val ttaCpi        = if (ttaInsts > 0)        String.format("%.2f", Double.box(ttaCycles.toDouble / ttaInsts))               else "N/A"
+    val iramCpi       = if (iramInsts > 0)       String.format("%.2f", Double.box(iramCycles.toDouble / iramInsts))             else "N/A"
+    val upmemCpi      = if (upmemInsts > 0)      String.format("%.2f", Double.box(upmemCycles.toDouble / upmemInsts))           else "N/A"
+    val samsungpimCpi = if (samsungpimInsts > 0) String.format("%.2f", Double.box(samsungpimCycles.toDouble / samsungpimInsts)) else "N/A"
+    val micronautomataCpi = if (micronautomataInsts > 0) String.format("%.2f", Double.box(micronautomataCycles.toDouble / micronautomataInsts)) else "N/A"
+    val execubeCpi    = if (execubeInsts > 0)    String.format("%.2f", Double.box(execubeCycles.toDouble / execubeInsts))       else "N/A"
 
     val rows = Seq(
       s"| Babbage Anal. Eng.  | 64                | $babbageCycles              | $babbageInsts                   | $babbageReads            | $babbageWrites             | $babbageCpi | ${babbageBytes.length} | ${aluDutyCycle("babbage", babbageCycles)} | ${memBwEfficiency(64.0, babbageReads, babbageWrites, babbageInsts)} | ${regPortStress("babbage")} |",
@@ -3968,7 +4223,12 @@ class ProfilerSpec extends AnyFlatSpec with Matchers {
       s"| MIT Dataflow        | 32                | $mitdataflowCycles        | $mitdataflowInsts             | $mitdataflowReads      | $mitdataflowWrites      | $mitdataflowCpi | ${mitdataflowBytes.length} | ${aluDutyCycle("mitdataflow", mitdataflowCycles)} | ${memBwEfficiency(32.0, mitdataflowReads, mitdataflowWrites, mitdataflowInsts)} | ${regPortStress("mitdataflow")} |",
       s"| SUBLEQ              | 32                | $subleqCycles             | $subleqInsts                  | $subleqReads           | $subleqWrites           | $subleqCpi | ${subleqBytes.length} | ${aluDutyCycle("subleq", subleqCycles)} | ${memBwEfficiency(32.0, subleqReads, subleqWrites, subleqInsts)} | ${regPortStress("subleq")} |",
       s"| SOAR                | 32                | $soarCycles               | $soarInsts                    | $soarReads             | $soarWrites             | $soarCpi | ${soarBytes.length} | ${aluDutyCycle("soar", soarCycles)} | ${memBwEfficiency(32.0, soarReads, soarWrites, soarInsts)} | ${regPortStress("soar")} |",
-      s"| TTA                 | 32                | $ttaCycles                | $ttaInsts                     | $ttaReads              | $ttaWrites              | $ttaCpi | ${ttaBytes.length} | ${aluDutyCycle("tta", ttaCycles)} | ${memBwEfficiency(32.0, ttaReads, ttaWrites, ttaInsts)} | ${regPortStress("tta")} |"
+      s"| TTA                 | 32                | $ttaCycles                | $ttaInsts                     | $ttaReads              | $ttaWrites              | $ttaCpi | ${ttaBytes.length} | ${aluDutyCycle("tta", ttaCycles)} | ${memBwEfficiency(32.0, ttaReads, ttaWrites, ttaInsts)} | ${regPortStress("tta")} |",
+      s"| UC Berkeley IRAM    | 32                | $iramCycles               | $iramInsts                    | $iramReads             | $iramWrites             | $iramCpi | ${iramBytes.length} | ${aluDutyCycle("iram", iramCycles)} | ${memBwEfficiency(32.0, iramReads, iramWrites, iramInsts)} | ${regPortStress("iram")} |",
+      s"| UPMEM DPU           | 32                | $upmemCycles              | $upmemInsts                   | $upmemReads            | $upmemWrites            | $upmemCpi | ${upmemBytes.length} | ${aluDutyCycle("upmem", upmemCycles)} | ${memBwEfficiency(32.0, upmemReads, upmemWrites, upmemInsts)} | ${regPortStress("upmem")} |",
+      s"| Samsung HBM2-PIM    | 32                | $samsungpimCycles         | $samsungpimInsts              | $samsungpimReads       | $samsungpimWrites       | $samsungpimCpi | ${samsungpimBytes.length} | ${aluDutyCycle("samsungpim", samsungpimCycles)} | ${memBwEfficiency(32.0, samsungpimReads, samsungpimWrites, samsungpimInsts)} | ${regPortStress("samsungpim")} |",
+      s"| Micron Automata     | 32                | $micronautomataCycles     | $micronautomataInsts          | $micronautomataReads   | $micronautomataWrites   | $micronautomataCpi | ${micronautomataBytes.length} | ${aluDutyCycle("micronautomata", micronautomataCycles)} | ${memBwEfficiency(32.0, micronautomataReads, micronautomataWrites, micronautomataInsts)} | ${regPortStress("micronautomata")} |",
+      s"| IBM Execube         | 32                | $execubeCycles            | $execubeInsts                 | $execubeReads          | $execubeWrites          | $execubeCpi | ${execubeBytes.length} | ${aluDutyCycle("execube", execubeCycles)} | ${memBwEfficiency(32.0, execubeReads, execubeWrites, execubeInsts)} | ${regPortStress("execube")} |"
     )
 
     val sortedRows = rows.sortBy(row => row.split('|')(1).trim.toLowerCase)

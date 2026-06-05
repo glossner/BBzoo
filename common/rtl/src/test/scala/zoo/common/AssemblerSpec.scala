@@ -122,6 +122,11 @@ class AssemblerSpec extends AnyFlatSpec with Matchers {
   verifyHex("subleq", "subleq/sw/test_vector.asm", "subleq/sw/test_vector.hex", new SubleqAssembler())
   verifyHex("soar", "soar/sw/test_vector.asm", "soar/sw/test_vector.hex", new SoarAssembler())
   verifyHex("tta", "tta/sw/test_vector.asm", "tta/sw/test_vector.hex", new TtaAssembler())
+  verifyHex("iram", "iram/sw/test_vector.asm", "iram/sw/test_vector.hex", new IramAssembler())
+  verifyHex("upmem", "upmem/sw/test_vector.asm", "upmem/sw/test_vector.hex", new UpmemAssembler())
+  verifyHex("samsungpim", "samsungpim/sw/test_vector.asm", "samsungpim/sw/test_vector.hex", new SamsungpimAssembler())
+  verifyHex("micronautomata", "micronautomata/sw/test_vector.asm", "micronautomata/sw/test_vector.hex", new MicronautomataAssembler())
+  verifyHex("execube", "execube/sw/test_vector.asm", "execube/sw/test_vector.hex", new ExecubeAssembler())
 }
 
 

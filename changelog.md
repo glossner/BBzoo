@@ -1,3 +1,15 @@
+# 06/05/2026 11:35 PIM House Integration: UC Berkeley IRAM, UPMEM DPU, Samsung HBM2-PIM, Micron Automata, and IBM Execube
+- Implemented five historical and modern Processing-In-Memory architectures under the new **PIM House** (House 18): UC Berkeley IRAM (vector DRAM/logic merge), UPMEM DPU (massively parallel in-DRAM processor), Samsung HBM2-PIM (programmable computing unit in HBM), Micron Automata (associative processing processor in DRAM), and IBM Execube (first commercial multi-processor PIM).
+- Fixed Scala assembler array indexing syntax (`parts(1)` instead of `parts[1]`) and UPMEM branch displacement logic.
+- Resolved Berkeley IRAM vector address loading bug by introducing constant pool loading for vector start addresses.
+- Created synthesizable datapath cores, instruction decoders, and sbt test suites for all 5 new architectures.
+- Added synthesizable Performance Monitoring Units (PMUs) to all 5 new cores to track cycles, instruction retirement, and memory reads/writes.
+- Developed Python and Scala assemblers for all 5 new architectures and registered them globally.
+- Created architectural documentation (`arch.md`) and assembly vector addition test codes for all 5 architectures.
+- Integrated the new cores into the unified 4-element Vector Addition benchmark (`ProfilerSpec.scala`), compiling them, verifying correct computation, and generating comparison PMU metrics.
+- Updated `README.md` and `examples/README.md` to catalog all 80 architectures, registering the 5 new architectures in the new **PIM House** (House 18), while strictly preserving the first 7 houses in `README.md` exactly as they were (avoiding any reordering, modifications, or changes to those sections).
+- Revised the architecture comparison report at the bottom of `README.md` to dynamically sort all 80 target architectures in alphabetical order.
+
 # 06/05/2026 10:28 Miscellaneous House Integration: Setun, IBM 1620, Symbolics 3600, MIT Dataflow, SUBLEQ, SOAR, and TTA
 - Implemented seven unique, unconventional historical architectures under the new **Miscellaneous House** (House 17): Setun (balanced ternary logic), IBM 1620 (table-lookup arithmetic / CADET), Symbolics 3600 (tagged Lisp machine), MIT Tagged-Token Dataflow machine, SUBLEQ (One-Instruction Set Computer / OISC), SOAR (Smalltalk on a RISC), and Transport Triggered Architecture (TTA).
 - Created synthesizable datapath cores, instruction decoders, and sbt test suites for all 7 new architectures.

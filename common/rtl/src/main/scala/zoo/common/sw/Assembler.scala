@@ -64,6 +64,13 @@ object Assembler {
       case "sparc"           => new SparcAssembler()
       case "powerpc"         => new PowerpcAssembler()
       case "jvm"             => new JvmAssembler()
+      case "setun"           => new SetunAssembler()
+      case "ibm1620"         => new Ibm1620Assembler()
+      case "symbolics3600"   => new Symbolics3600Assembler()
+      case "mitdataflow"     => new MitDataflowAssembler()
+      case "subleq"          => new SubleqAssembler()
+      case "soar"            => new SoarAssembler()
+      case "tta"             => new TtaAssembler()
       case _ =>
         println(s"Unknown architecture: $arch")
         sys.exit(1)

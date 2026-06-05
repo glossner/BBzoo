@@ -589,16 +589,73 @@ lazy val jvm = (project in file("jvm/rtl"))
   )
   .settings(commonSettings: _*)
 
+// 70. Setun Project
+lazy val setun = (project in file("setun/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Setun"
+  )
+  .settings(commonSettings: _*)
+
+// 71. IBM 1620 Project
+lazy val ibm1620 = (project in file("ibm1620/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Ibm1620"
+  )
+  .settings(commonSettings: _*)
+
+// 72. Symbolics 3600 Project
+lazy val symbolics3600 = (project in file("symbolics3600/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Symbolics3600"
+  )
+  .settings(commonSettings: _*)
+
+// 73. MIT Tagged-Token Dataflow Project
+lazy val mitdataflow = (project in file("mitdataflow/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "MitDataflow"
+  )
+  .settings(commonSettings: _*)
+
+// 74. SUBLEQ Project
+lazy val subleq = (project in file("subleq/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Subleq"
+  )
+  .settings(commonSettings: _*)
+
+// 75. SOAR Project
+lazy val soar = (project in file("soar/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Soar"
+  )
+  .settings(commonSettings: _*)
+
+// 76. TTA Project
+lazy val tta = (project in file("tta/rtl"))
+  .dependsOn(common)
+  .settings(
+    name := "Tta"
+  )
+  .settings(commonSettings: _*)
+
 // ***************************
 // * ROOT PROJECT
 // ***************************
 lazy val root = (project in file("."))
-  .aggregate(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchestermu1, univac1, princetonias, cambridgeedsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150, mips1, arm1, berkeleyrisc, hp3000, ethlilith, ucsdp, upd7720, tms32010, adsp2100, ibmmwave, voodoo1, geforce256, radeonr100, powervr1, mali200, amdr600, amd2901, intel3002, imp16, mc10800, illiac4, icldap, goodmpp, cm1, ibmmfast, multiflow, cydra5, tms320c6k, crusoe, itanium, cdcstar100, tiasc, convexc1, necsx2, ibms370vf, ibm801, sparc, powerpc, jvm)
-  .dependsOn(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchestermu1, univac1, princetonias, cambridgeedsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150, mips1, arm1, berkeleyrisc, hp3000, ethlilith, ucsdp, upd7720, tms32010, adsp2100, ibmmwave, voodoo1, geforce256, radeonr100, powervr1, mali200, amdr600, amd2901, intel3002, imp16, mc10800, illiac4, icldap, goodmpp, cm1, ibmmfast, multiflow, cydra5, tms320c6k, crusoe, itanium, cdcstar100, tiasc, convexc1, necsx2, ibms370vf, ibm801, sparc, powerpc, jvm)
+  .aggregate(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchestermu1, univac1, princetonias, cambridgeedsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150, mips1, arm1, berkeleyrisc, hp3000, ethlilith, ucsdp, upd7720, tms32010, adsp2100, ibmmwave, voodoo1, geforce256, radeonr100, powervr1, mali200, amdr600, amd2901, intel3002, imp16, mc10800, illiac4, icldap, goodmpp, cm1, ibmmfast, multiflow, cydra5, tms320c6k, crusoe, itanium, cdcstar100, tiasc, convexc1, necsx2, ibms370vf, ibm801, sparc, powerpc, jvm, setun, ibm1620, symbolics3600, mitdataflow, subleq, soar, tta)
+  .dependsOn(common, motorola68000, decpdp8, ibm360, cray1, burroughsb5500, decpdp11, cdc6600, mos6502, babbage, harvardmark1, zusez1, manchestermu1, univac1, princetonias, cambridgeedsac, ibm701, ibm704, ibm650, ibm705, ibm1401, stczebra, bullgamma60, ibmstretch, univac1103a, cdc6600ppu, decvax, intel8080a, motorola6800, ibm6150, mips1, arm1, berkeleyrisc, hp3000, ethlilith, ucsdp, upd7720, tms32010, adsp2100, ibmmwave, voodoo1, geforce256, radeonr100, powervr1, mali200, amdr600, amd2901, intel3002, imp16, mc10800, illiac4, icldap, goodmpp, cm1, ibmmfast, multiflow, cydra5, tms320c6k, crusoe, itanium, cdcstar100, tiasc, convexc1, necsx2, ibms370vf, ibm801, sparc, powerpc, jvm, setun, ibm1620, symbolics3600, mitdataflow, subleq, soar, tta)
   .settings(
     name := "BBZoo"
   )
   .settings(commonSettings: _*)
+
 
 
 

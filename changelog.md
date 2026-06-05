@@ -1,3 +1,13 @@
+# 06/05/2026 10:28 Miscellaneous House Integration: Setun, IBM 1620, Symbolics 3600, MIT Dataflow, SUBLEQ, SOAR, and TTA
+- Implemented seven unique, unconventional historical architectures under the new **Miscellaneous House** (House 17): Setun (balanced ternary logic), IBM 1620 (table-lookup arithmetic / CADET), Symbolics 3600 (tagged Lisp machine), MIT Tagged-Token Dataflow machine, SUBLEQ (One-Instruction Set Computer / OISC), SOAR (Smalltalk on a RISC), and Transport Triggered Architecture (TTA).
+- Created synthesizable datapath cores, instruction decoders, and sbt test suites for all 7 new architectures.
+- Added synthesizable Performance Monitoring Units (PMUs) to all 7 new cores to track cycles, instruction retirement, and memory reads/writes.
+- Developed Python and Scala assemblers for all 7 new architectures and registered them globally.
+- Created architectural documentation (`arch.md`) and assembly vector addition test codes for all 7 architectures.
+- Integrated the new cores into the unified 4-element Vector Addition benchmark (`ProfilerSpec.scala`), compiling them, verifying correct computation, and generating comparison PMU metrics.
+- Updated `README.md` and `examples/README.md` to catalog all 75 architectures, registering the 7 new architectures in the new **Miscellaneous House** (House 17), while strictly preserving the first 7 houses in `README.md` exactly as they were (avoiding any reordering, modifications, or changes to those sections).
+- Revised the architecture comparison report at the bottom of `README.md` to dynamically sort all 75 target architectures in alphabetical order.
+
 # 06/05/2026 09:14 RISC & Stack Houses Integration: IBM 801, SPARC, PowerPC, and JVM
 - Implemented three RISC architectures (**IBM 801**, **SPARC**, **PowerPC**) under the **RISC House** (House 10), and one stack-based architecture (**JVM**) under the **Stack House** (House 5).
 - Created synthesizable datapath cores, instruction decoders, and sbt test suites for all 4 new architectures.

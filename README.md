@@ -1,6 +1,6 @@
 # BBZoo 🦁
 
-Welcome to **BBZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit A. Blaauw and Frederick P. Brooks, Jr. This repository implements **64 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
+Welcome to **BBZoo**, a simulation playground of historical computer architectures implemented in **Chisel / Scala**. The design is inspired by the classic textbook *"Computer Architecture: Concepts and Evolution"* by Gerrit A. Blaauw and Frederick P. Brooks, Jr. This repository implements **75 unique processor architectures** with fully synthesizable datapaths, synthetic Performance Monitoring Units (PMUs) to track cycles, instruction retirement, memory reads, and memory writes, as well as a unified 4-element Vector Addition benchmark.
 
 I have always wanted to create a version of the Zoo ever since I was a student of Dr. Brooks in the early 1990's. There were rumors of executable APL code for the entire Zoo but I never located it. Technology has progressed so fast that this entire repository was vibe coded in 2 days using Google's Antigravity 2.0 IDE. I'm sure there are omissions, errors, and other artifacts. Given that it took me 30+ years for the first implementation, I wouldn't count on significant upgrades anytime soon. However, I will accept pull requests for bugs, capabilities, and new <u>*architectures*</u>. I have a strong preference only for architectures that have new features. I'm not that interested in microarchitectures. Not that they aren't super important (I mean seriously, you can't build a machine today without caches, branch prediction, superscalar, etc.) its just that this is meant to be an architecture repository.
 
@@ -14,7 +14,7 @@ June, 2026
 
 ## 🏛️ Architectural Houses
 
-The architectures in the zoo are organized into 15 distinct "houses". The first 7 houses follow Blaauw & Brooks exactly. The additional houses follow the design style. 
+The architectures in the zoo are organized into 17 distinct "houses". The first 7 houses follow Blaauw & Brooks exactly. The additional houses follow the design style.
 
 ### 1. Pioneer House
 *Characterized by the earliest explorations of stored-program, mechanical, or relay-based calculation.*
@@ -139,6 +139,16 @@ The architectures in the zoo are organized into 15 distinct "houses". The first 
 - 🎛️ **Convex C1** (Convex Computer, 1985) — [convexc1](convexc1) / [arch.md](convexc1/arch.md)
 - 🏢 **IBM System/370 Vector Facility** (IBM, 1985) — [ibms370vf](ibms370vf) / [arch.md](ibms370vf/arch.md)
 
+### 17. Miscellaneous House
+*A collection of unique, unconventional historical architectures that deviate from the classic Von Neumann general register, stack, or accumulator models.*
+- 🧬 **Setun** (Moscow State University, 1958) — [setun](setun) / [arch.md](setun/arch.md)
+- 🧮 **IBM 1620** (IBM, 1959) — [ibm1620](ibm1620) / [arch.md](ibm1620/arch.md)
+- 🦄 **Symbolics 3600** (Symbolics, 1983) — [symbolics3600](symbolics3600) / [arch.md](symbolics3600/arch.md)
+- 🕸️ **MIT Tagged-Token Dataflow** (MIT, 1983) — [mitdataflow](mitdataflow) / [arch.md](mitdataflow/arch.md)
+- 🎯 **SUBLEQ OISC** (Various, 2002) — [subleq](subleq) / [arch.md](subleq/arch.md)
+- 🦊 **SOAR** (UC Berkeley, 1984) — [soar](soar) / [arch.md](soar/arch.md)
+- 🚗 **Transport Triggered Architecture** (TTA) (Various, 1990) — [tta](tta) / [arch.md](tta/arch.md)
+
 ---
 
 ## 🛠️ Software - Getting Started
@@ -207,71 +217,78 @@ This design choice keeps the RTL implementation of each core clean, highly reada
 
 | Target Architecture | Word Width (bits) | Execution Cycles | Retired Instructions | Memory Reads | Memory Writes | CPI | Code Footprint (words) | ALU Duty Cycle | Mem BW Efficiency | Register Port Stress |
 |---------------------|-------------------|------------------|----------------------|--------------|---------------|-----|------------------------|----------------|-------------------|----------------------|
+| 3dfx Voodoo1        | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 9.65 B/inst | 4.5 regs/inst |
+| ADI ADSP-2100 DSP   | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 4.82 B/inst | 1.0 regs/inst |
+| AMD Am2901          | 16                | 152              | 43                   | 67            | 4             | 3.53 | 41 | 2.6% | 3.30 B/inst | 1.0 regs/inst |
+| AMD R600 GPU        | 32                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 7.69 B/inst | 4.5 regs/inst |
+| ARM Mali-200 GPU    | 32                | 25              | 5                   | 16            | 4             | 5.00 | 52 | 4.0% | 16.00 B/inst | 4.5 regs/inst |
+| ARM1                | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
+| ATI Radeon R100     | 32                | 62              | 18                   | 40            | 4             | 3.44 | 53 | 6.5% | 9.78 B/inst | 4.5 regs/inst |
 | Babbage Anal. Eng.  | 64                | 38              | 13                   | 21            | 4             | 2.92 | 32 | 10.5% | 15.38 B/inst | 0.5 regs/inst |
-| Harvard Mark I      | 64                | 26              | 9                   | 9            | 0             | 2.89 | 9 | 15.4% | 8.00 B/inst | 0.5 regs/inst |
-| Zuse Z1             | 22                | 54              | 21                   | 29            | 4             | 2.57 | 52 | 7.4% | 4.32 B/inst | 0.5 regs/inst |
-| Manchester Baby     | 32                | 62              | 21                   | 33            | 8             | 2.95 | 52 | 6.5% | 7.81 B/inst | 0.5 regs/inst |
-| Univac I            | 72                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 17.31 B/inst | 0.5 regs/inst |
-| Princeton IAS       | 40                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 9.62 B/inst | 0.5 regs/inst |
-| EDSAC               | 17                | 50              | 17                   | 25            | 8             | 2.94 | 53 | 8.0% | 4.13 B/inst | 0.5 regs/inst |
-| IBM 701             | 36                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 8.65 B/inst | 1.0 regs/inst |
-| IBM 704             | 36                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 8.65 B/inst | 1.0 regs/inst |
-| IBM 650             | 40                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 9.62 B/inst | 1.0 regs/inst |
-| IBM 705             | 35                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 8.41 B/inst | 1.0 regs/inst |
-| IBM 1401            | 36                | 38              | 9                   | 21            | 8             | 4.22 | 52 | 10.5% | 14.50 B/inst | 1.0 regs/inst |
-| STC ZEBRA           | 33                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 7.93 B/inst | 1.0 regs/inst |
+| Berkeley RISC-I     | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
 | Bull Gamma 60        | 24                | 45              | 16                   | 24            | 4             | 2.81 | 52 | 8.9% | 5.25 B/inst | 1.0 regs/inst |
-| IBM Stretch         | 64                | 46              | 17                   | 25            | 4             | 2.71 | 52 | 8.7% | 13.65 B/inst | 1.0 regs/inst |
-| MOS 6502            | 8                 | 70              | 17                   | 49            | 4             | 4.12 | 72 | 5.7% | 3.12 B/inst | 1.0 regs/inst |
-| DEC PDP-8           | 12                | 133              | 33                   | 69            | 20             | 4.03 | 26 | 3.0% | 4.05 B/inst | 1.0 regs/inst |
-| DEC PDP-11          | 16                | 81              | 16                   | 31            | 4             | 5.06 | 32 | 4.9% | 4.38 B/inst | 2.5 regs/inst |
-| IBM System/360      | 32                | 56              | 12                   | 20            | 4             | 4.67 | 100 | 7.1% | 8.00 B/inst | 1.0 regs/inst |
-| Motorola 68000      | 32                | 157              | 28                   | 68            | 8             | 5.61 | 92 | 2.5% | 10.86 B/inst | 2.5 regs/inst |
 | Burroughs B5500     | 48                | 46              | 17                   | 25            | 4             | 2.71 | 32 | 13.0% | 10.24 B/inst | 0.5 regs/inst |
 | CDC 6600            | 60                | 46              | 17                   | 25            | 4             | 2.71 | 32 | 8.7% | 12.79 B/inst | 1.0 regs/inst |
-| Cray-1              | 64 (Vector)       | 40              | 10                   | 18            | 4             | 4.00 | 28 | 10.0% | 17.60 B/inst | 4.5 regs/inst |
-| Univac 1103A        | 36                | 38              | 9                   | 21            | 8             | 4.22 | 52 | 10.5% | 14.50 B/inst | 1.0 regs/inst |
 | CDC 6600 PPU        | 12                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 2.88 B/inst | 1.0 regs/inst |
-| DEC VAX             | 32                | 81              | 16                   | 31            | 4             | 5.06 | 32 | 4.9% | 8.75 B/inst | 2.5 regs/inst |
-| Intel 8080A         | 8                 | 78              | 21                   | 53            | 4             | 3.71 | 92 | 5.1% | 2.71 B/inst | 1.0 regs/inst |
-| Motorola 6800       | 8                 | 62              | 13                   | 45            | 4             | 4.77 | 92 | 6.5% | 3.77 B/inst | 1.0 regs/inst |
-| IBM 6150 ROMP       | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
-| MIPS I (R2000)      | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
-| ARM1                | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
-| Berkeley RISC-I     | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
-| HP 3000             | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 4.82 B/inst | 0.5 regs/inst |
-| Ethlilith           | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 4.82 B/inst | 0.5 regs/inst |
-| UCSD Pascal P-Mach  | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 10.3% | 4.82 B/inst | 0.5 regs/inst |
-| NEC uPD7720 DSP     | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 4.82 B/inst | 1.0 regs/inst |
-| TI TMS32010 DSP     | 16                | 50              | 13                   | 33            | 4             | 3.85 | 52 | 8.0% | 5.69 B/inst | 1.0 regs/inst |
-| ADI ADSP-2100 DSP   | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 4.82 B/inst | 1.0 regs/inst |
-| IBM MWave DSP       | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 4.82 B/inst | 1.0 regs/inst |
-| 3dfx Voodoo1        | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 9.65 B/inst | 4.5 regs/inst |
-| NVIDIA GeForce 256  | 32                | 66              | 19                   | 43            | 4             | 3.47 | 53 | 6.1% | 9.89 B/inst | 4.5 regs/inst |
-| ATI Radeon R100     | 32                | 62              | 18                   | 40            | 4             | 3.44 | 53 | 6.5% | 9.78 B/inst | 4.5 regs/inst |
-| PowerVR Series 1    | 32                | 62              | 18                   | 40            | 4             | 3.44 | 53 | 6.5% | 9.78 B/inst | 4.5 regs/inst |
-| ARM Mali-200 GPU    | 32                | 25              | 5                   | 16            | 4             | 5.00 | 52 | 4.0% | 16.00 B/inst | 4.5 regs/inst |
-| AMD R600 GPU        | 32                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 7.69 B/inst | 4.5 regs/inst |
-| AMD Am2901          | 16                | 152              | 43                   | 67            | 4             | 3.53 | 41 | 2.6% | 3.30 B/inst | 1.0 regs/inst |
-| Intel 3002          | 16                | 152              | 43                   | 67            | 4             | 3.53 | 41 | 2.6% | 3.30 B/inst | 1.0 regs/inst |
-| NS IMP-16           | 16                | 478              | 113                   | 253            | 28             | 4.23 | 69 | 0.8% | 4.97 B/inst | 1.0 regs/inst |
-| Motorola MC10800    | 16                | 478              | 113                   | 253            | 28             | 4.23 | 69 | 0.8% | 4.97 B/inst | 1.0 regs/inst |
-| ILLIAC IV           | 64 (SIMD)         | 32              | 7                   | 8            | 4             | 4.57 | 22 | 25.0% | 13.71 B/inst | 4.5 regs/inst |
-| ICL DAP             | 1 (Bit-Serial)    | 548              | 98                   | 128            | 64             | 5.59 | 158 | 0.7% | 3.92 B/inst | 1.0 regs/inst |
-| Goodyear MPP        | 1 (Bit-Serial)    | 558              | 100                   | 132            | 64             | 5.58 | 165 | 0.7% | 3.92 B/inst | 1.0 regs/inst |
+| CDC STAR-100        | 32                | 24              | 6                   | 8            | 4             | 4.00 | 96 | 16.7% | 8.00 B/inst | 4.0 regs/inst |
 | Connection Machine  | 1 (Bit-Serial)    | 548              | 98                   | 128            | 64             | 5.59 | 158 | 0.7% | 3.92 B/inst | 1.0 regs/inst |
-| IBM MFAST           | 16 (VLIW)         | 39              | 8                   | 8            | 4             | 4.88 | 28 | 20.5% | 3.00 B/inst | 4.5 regs/inst |
-| Multiflow TRACE     | 32                | 106              | 31                   | 9            | 4             | 3.42 | 96 | 3.8% | 1.68 B/inst | 3.0 regs/inst |
+| Convex C1           | 32                | 36              | 10                   | 8            | 4             | 3.60 | 96 | 11.1% | 4.80 B/inst | 4.0 regs/inst |
+| Cray-1              | 64 (Vector)       | 40              | 10                   | 18            | 4             | 4.00 | 28 | 10.0% | 17.60 B/inst | 4.5 regs/inst |
 | Cydrome Cydra 5     | 32                | 94              | 27                   | 9            | 4             | 3.48 | 96 | 4.3% | 1.93 B/inst | 3.0 regs/inst |
+| DEC PDP-11          | 16                | 81              | 16                   | 31            | 4             | 5.06 | 32 | 4.9% | 4.38 B/inst | 2.5 regs/inst |
+| DEC PDP-8           | 12                | 133              | 33                   | 69            | 20             | 4.03 | 26 | 3.0% | 4.05 B/inst | 1.0 regs/inst |
+| DEC VAX             | 32                | 81              | 16                   | 31            | 4             | 5.06 | 32 | 4.9% | 8.75 B/inst | 2.5 regs/inst |
+| EDSAC               | 17                | 50              | 17                   | 25            | 8             | 2.94 | 53 | 8.0% | 4.13 B/inst | 0.5 regs/inst |
+| Ethlilith           | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 4.82 B/inst | 0.5 regs/inst |
+| Goodyear MPP        | 1 (Bit-Serial)    | 558              | 100                   | 132            | 64             | 5.58 | 165 | 0.7% | 3.92 B/inst | 1.0 regs/inst |
+| Harvard Mark I      | 64                | 26              | 9                   | 9            | 0             | 2.89 | 9 | 15.4% | 8.00 B/inst | 0.5 regs/inst |
+| HP 3000             | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 4.82 B/inst | 0.5 regs/inst |
+| IBM 1401            | 36                | 38              | 9                   | 21            | 8             | 4.22 | 52 | 10.5% | 14.50 B/inst | 1.0 regs/inst |
+| IBM 1620            | 32                | 62            | 17                 | 41          | 4          | 3.65 | 52 | 6.5% | 10.59 B/inst | 0.5 regs/inst |
+| IBM 6150 ROMP       | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
+| IBM 650             | 40                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 9.62 B/inst | 1.0 regs/inst |
+| IBM 701             | 36                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 8.65 B/inst | 1.0 regs/inst |
+| IBM 704             | 36                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 8.65 B/inst | 1.0 regs/inst |
+| IBM 705             | 35                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 8.41 B/inst | 1.0 regs/inst |
+| IBM 801             | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
+| IBM MFAST           | 16 (VLIW)         | 39              | 8                   | 8            | 4             | 4.88 | 28 | 20.5% | 3.00 B/inst | 4.5 regs/inst |
+| IBM MWave DSP       | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 4.82 B/inst | 1.0 regs/inst |
+| IBM S/370 VF        | 32                | 36              | 10                   | 8            | 4             | 3.60 | 96 | 11.1% | 4.80 B/inst | 4.0 regs/inst |
+| IBM Stretch         | 64                | 46              | 17                   | 25            | 4             | 2.71 | 52 | 8.7% | 13.65 B/inst | 1.0 regs/inst |
+| IBM System/360      | 32                | 56              | 12                   | 20            | 4             | 4.67 | 100 | 7.1% | 8.00 B/inst | 1.0 regs/inst |
+| ICL DAP             | 1 (Bit-Serial)    | 548              | 98                   | 128            | 64             | 5.59 | 158 | 0.7% | 3.92 B/inst | 1.0 regs/inst |
+| ILLIAC IV           | 64 (SIMD)         | 32              | 7                   | 8            | 4             | 4.57 | 22 | 25.0% | 13.71 B/inst | 4.5 regs/inst |
+| Intel 3002          | 16                | 152              | 43                   | 67            | 4             | 3.53 | 41 | 2.6% | 3.30 B/inst | 1.0 regs/inst |
+| Intel 8080A         | 8                 | 78              | 21                   | 53            | 4             | 3.71 | 92 | 5.1% | 2.71 B/inst | 1.0 regs/inst |
+| Intel Itanium       | 64                | 124              | 31                   | 9            | 4             | 4.00 | 108 | 3.2% | 3.35 B/inst | 3.0 regs/inst |
+| JVM                 | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 0.5 regs/inst |
+| Manchester Baby     | 32                | 62              | 21                   | 33            | 8             | 2.95 | 52 | 6.5% | 7.81 B/inst | 0.5 regs/inst |
+| MIPS I (R2000)      | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
+| MIT Dataflow        | 32                | 58        | 17             | 37      | 4      | 3.41 | 52 | 6.9% | 9.65 B/inst | 0.5 regs/inst |
+| MOS 6502            | 8                 | 70              | 17                   | 49            | 4             | 4.12 | 72 | 5.7% | 3.12 B/inst | 1.0 regs/inst |
+| Motorola 6800       | 8                 | 62              | 13                   | 45            | 4             | 4.77 | 92 | 6.5% | 3.77 B/inst | 1.0 regs/inst |
+| Motorola 68000      | 32                | 157              | 28                   | 68            | 8             | 5.61 | 92 | 2.5% | 10.86 B/inst | 2.5 regs/inst |
+| Motorola MC10800    | 16                | 478              | 113                   | 253            | 28             | 4.23 | 69 | 0.8% | 4.97 B/inst | 1.0 regs/inst |
+| Multiflow TRACE     | 32                | 106              | 31                   | 9            | 4             | 3.42 | 96 | 3.8% | 1.68 B/inst | 3.0 regs/inst |
+| NEC SX-2            | 32                | 36              | 10                   | 8            | 4             | 3.60 | 96 | 11.1% | 4.80 B/inst | 4.0 regs/inst |
+| NEC uPD7720 DSP     | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 4.82 B/inst | 1.0 regs/inst |
+| NS IMP-16           | 16                | 478              | 113                   | 253            | 28             | 4.23 | 69 | 0.8% | 4.97 B/inst | 1.0 regs/inst |
+| NVIDIA GeForce 256  | 32                | 66              | 19                   | 43            | 4             | 3.47 | 53 | 6.1% | 9.89 B/inst | 4.5 regs/inst |
+| PowerPC             | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
+| PowerVR Series 1    | 32                | 62              | 18                   | 40            | 4             | 3.44 | 53 | 6.5% | 9.78 B/inst | 4.5 regs/inst |
+| Princeton IAS       | 40                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 9.62 B/inst | 0.5 regs/inst |
+| Setun               | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 6.9% | 9.65 B/inst | 0.5 regs/inst |
+| SOAR                | 32                | 58               | 17                    | 37             | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
+| SPARC               | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
+| STC ZEBRA           | 33                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 7.93 B/inst | 1.0 regs/inst |
+| SUBLEQ              | 32                | 147             | 25                  | 123           | 24           | 5.88 | 92 | 2.7% | 23.52 B/inst | 0.5 regs/inst |
+| Symbolics 3600      | 32                | 58          | 17               | 37        | 4        | 3.41 | 52 | 6.9% | 9.65 B/inst | 0.5 regs/inst |
+| TI ASC              | 32                | 24              | 6                   | 8            | 4             | 4.00 | 96 | 16.7% | 8.00 B/inst | 4.0 regs/inst |
+| TI TMS32010 DSP     | 16                | 50              | 13                   | 33            | 4             | 3.85 | 52 | 8.0% | 5.69 B/inst | 1.0 regs/inst |
 | TI TMS320C6000      | 32                | 95              | 31                   | 9            | 4             | 3.06 | 96 | 4.2% | 1.68 B/inst | 3.0 regs/inst |
 | Transmeta Crusoe    | 32                | 87              | 31                   | 9            | 4             | 2.81 | 96 | 4.6% | 1.68 B/inst | 3.0 regs/inst |
-| Intel Itanium       | 64                | 124              | 31                   | 9            | 4             | 4.00 | 108 | 3.2% | 3.35 B/inst | 3.0 regs/inst |
-| CDC STAR-100        | 32                | 24              | 6                   | 8            | 4             | 4.00 | 96 | 16.7% | 8.00 B/inst | 4.0 regs/inst |
-| TI ASC              | 32                | 24              | 6                   | 8            | 4             | 4.00 | 96 | 16.7% | 8.00 B/inst | 4.0 regs/inst |
-| Convex C1           | 32                | 36              | 10                   | 8            | 4             | 3.60 | 96 | 11.1% | 4.80 B/inst | 4.0 regs/inst |
-| NEC SX-2            | 32                | 36              | 10                   | 8            | 4             | 3.60 | 96 | 11.1% | 4.80 B/inst | 4.0 regs/inst |
-| IBM S/370 VF        | 32                | 36              | 10                   | 8            | 4             | 3.60 | 96 | 11.1% | 4.80 B/inst | 4.0 regs/inst |
-| IBM 801             | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
-| SPARC               | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
-| PowerPC             | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 2.5 regs/inst |
-| JVM                 | 32                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 13.8% | 9.65 B/inst | 0.5 regs/inst |
+| TTA                 | 32                | 102                | 25                     | 49              | 4              | 4.08 | 52 | 3.9% | 8.48 B/inst | 0.5 regs/inst |
+| UCSD Pascal P-Mach  | 16                | 58              | 17                   | 37            | 4             | 3.41 | 52 | 10.3% | 4.82 B/inst | 0.5 regs/inst |
+| Univac 1103A        | 36                | 38              | 9                   | 21            | 8             | 4.22 | 52 | 10.5% | 14.50 B/inst | 1.0 regs/inst |
+| Univac I            | 72                | 38              | 13                   | 21            | 4             | 2.92 | 52 | 10.5% | 17.31 B/inst | 0.5 regs/inst |
+| Zuse Z1             | 22                | 54              | 21                   | 29            | 4             | 2.57 | 52 | 7.4% | 4.32 B/inst | 0.5 regs/inst |

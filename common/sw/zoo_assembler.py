@@ -138,6 +138,8 @@ def main():
         class_name = args.arch.replace('m68k', 'M68k').title() + 'Assembler'
         if args.arch == 'm68k':
             class_name = 'M68kAssembler'
+        elif args.arch == 'mitdataflow':
+            class_name = 'MitDataflowAssembler'
         assembler_class = getattr(arch_module, class_name)
         assembler = assembler_class()
     except Exception as e:

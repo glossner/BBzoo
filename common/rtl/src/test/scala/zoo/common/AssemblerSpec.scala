@@ -115,6 +115,13 @@ class AssemblerSpec extends AnyFlatSpec with Matchers {
   verifyHex("sparc", "sparc/sw/test_vector.asm", "sparc/sw/test_vector.hex", new SparcAssembler())
   verifyHex("powerpc", "powerpc/sw/test_vector.asm", "powerpc/sw/test_vector.hex", new PowerpcAssembler())
   verifyHex("jvm", "jvm/sw/test_vector.asm", "jvm/sw/test_vector.hex", new JvmAssembler())
+  verifyHex("setun", "setun/sw/test_vector.asm", "setun/sw/test_vector.hex", new SetunAssembler())
+  verifyHex("ibm1620", "ibm1620/sw/test_vector.asm", "ibm1620/sw/test_vector.hex", new Ibm1620Assembler())
+  verifyHex("symbolics3600", "symbolics3600/sw/test_vector.asm", "symbolics3600/sw/test_vector.hex", new Symbolics3600Assembler())
+  verifyHex("mitdataflow", "mitdataflow/sw/test_vector.asm", "mitdataflow/sw/test_vector.hex", new MitDataflowAssembler())
+  verifyHex("subleq", "subleq/sw/test_vector.asm", "subleq/sw/test_vector.hex", new SubleqAssembler())
+  verifyHex("soar", "soar/sw/test_vector.asm", "soar/sw/test_vector.hex", new SoarAssembler())
+  verifyHex("tta", "tta/sw/test_vector.asm", "tta/sw/test_vector.hex", new TtaAssembler())
 }
 
 

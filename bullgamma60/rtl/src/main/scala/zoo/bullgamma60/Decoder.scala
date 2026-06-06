@@ -12,6 +12,7 @@ class Bullgamma60CtrlSignals extends Bundle {
   val is_fork   = Bool()
   val is_join   = Bool()
   val is_hlt    = Bool()
+  val legal    = Bool()
 }
 
 class Bullgamma60Decoder extends Module {
@@ -36,26 +37,39 @@ class Bullgamma60Decoder extends Module {
   io.ctrl.is_join   := false.B
   io.ctrl.is_hlt    := false.B
 
+  io.ctrl.legal := false.B
   switch(opcode) {
-    is(1.U) { // LD
+    is(1.U) {
+      io.ctrl.legal := true.B
+       // LD
       io.ctrl.mem_read := true.B
       io.ctrl.is_ld    := true.B
     }
-    is(2.U) { // ADD
+    is(2.U) {
+      io.ctrl.legal := true.B
+       // ADD
       io.ctrl.mem_read := true.B
       io.ctrl.is_add   := true.B
     }
-    is(3.U) { // ST
+    is(3.U) {
+      io.ctrl.legal := true.B
+       // ST
       io.ctrl.mem_write := true.B
       io.ctrl.is_st     := true.B
     }
-    is(4.U) { // FORK
+    is(4.U) {
+      io.ctrl.legal := true.B
+       // FORK
       io.ctrl.is_fork  := true.B
     }
-    is(5.U) { // JOIN
+    is(5.U) {
+      io.ctrl.legal := true.B
+       // JOIN
       io.ctrl.is_join  := true.B
     }
-    is(6.U) { // HLT
+    is(6.U) {
+      io.ctrl.legal := true.B
+       // HLT
       io.ctrl.is_hlt   := true.B
     }
   }

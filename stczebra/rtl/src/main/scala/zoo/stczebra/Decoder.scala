@@ -9,6 +9,7 @@ class StczebraCtrlSignals extends Bundle {
   val mem_write = Bool()
   val is_add    = Bool()
   val is_hlt    = Bool()
+  val legal    = Bool()
 }
 
 class StczebraDecoder extends Module {
@@ -34,4 +35,15 @@ class StczebraDecoder extends Module {
   io.ctrl.is_hlt    := io.inst(28)
   
   io.data_addr      := io.inst(17, 5)
+
+  val c = io.ctrl.clear_acc
+  val r = io.ctrl.mem_read
+  val w = io.ctrl.mem_write
+  val a = io.ctrl.is_add
+  val h = io.ctrl.is_hlt
+
+  io.ctrl.legal := (!h && !w && !r && !a && !c) || // NOP
+                    (h && !w && !r && !a && !c) || // HLT
+                    (!h && w && !r && !a && !c) || // ST
+                    (!h && !w && r && a)           // LD or ADD
 }

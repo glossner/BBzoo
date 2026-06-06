@@ -74,6 +74,7 @@ class Amdr600Core extends Module {
     }
 
     is(sEXECUTE) {
+      assert(decoder.io.ctrl.legal, "Unimplemented/illegal instruction")
       // Slot A: ALU operations
       when(decoder.io.ctrl.is_hlt) {
         haltPending := true.B

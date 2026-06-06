@@ -16,6 +16,7 @@ class Amdr600CtrlSignals extends Bundle {
   val is_hlt   = Bool()
   val is_ld    = Bool()
   val is_st    = Bool()
+  val legal    = Bool()
 }
 
 class Amdr600Decoder extends Module {
@@ -37,4 +38,6 @@ class Amdr600Decoder extends Module {
   io.ctrl.is_hlt := io.ctrl.opA === 2.U
   io.ctrl.is_ld  := io.ctrl.opB === 1.U
   io.ctrl.is_st  := io.ctrl.opB === 2.U
+
+  io.ctrl.legal := (io.ctrl.opB === 0.U || io.ctrl.opB === 1.U || io.ctrl.opB === 2.U) && (io.ctrl.opA === 0.U || io.ctrl.opA === 1.U || io.ctrl.opA === 2.U)
 }

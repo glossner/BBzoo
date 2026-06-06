@@ -9,6 +9,7 @@ class EthlilithCtrlSignals extends Bundle {
   val is_pop   = Bool()
   val is_add   = Bool()
   val is_hlt   = Bool()
+  val legal    = Bool()
 }
 
 class EthlilithDecoder extends Module {
@@ -24,4 +25,6 @@ class EthlilithDecoder extends Module {
   io.ctrl.is_pop  := op === 0x30.U
   io.ctrl.is_add  := op === 0x50.U
   io.ctrl.is_hlt  := op === 0x00.U
+
+  io.ctrl.legal := (io.ctrl.opcode === 0.U || io.ctrl.opcode === 10.U || io.ctrl.opcode === 16.U || io.ctrl.opcode === 30.U || io.ctrl.opcode === 48.U || io.ctrl.opcode === 50.U || io.ctrl.opcode === 80.U)
 }

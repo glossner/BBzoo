@@ -70,6 +70,7 @@ class Motorola6800Core extends Module {
     }
 
     is(sDECODE) {
+      assert(decoder.io.ctrl.legal, "Unimplemented/illegal instruction")
       when(decoder.io.ctrl.is_wai) {
         hltReg := true.B
         state  := sFETCH

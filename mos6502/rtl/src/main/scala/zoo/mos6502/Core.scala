@@ -70,6 +70,7 @@ class Mos6502Core extends Module {
     }
 
     is(sDECODE) {
+      assert(decoder.io.ctrl.legal, "Unimplemented/illegal instruction")
       when(decoder.io.ctrl.is_brk) {
         hltReg := true.B
         state  := sFETCH

@@ -10,6 +10,7 @@ class TtaCtrlSignals extends Bundle {
   val is_move      = Bool()
   val is_move_imm  = Bool()
   val is_hlt       = Bool()
+  val legal    = Bool()
 }
 
 class TtaDecoder extends Module {
@@ -26,4 +27,6 @@ class TtaDecoder extends Module {
   io.ctrl.is_move     := op === 0x00.U
   io.ctrl.is_move_imm := op === 0x01.U
   io.ctrl.is_hlt      := op === 0x3F.U
+
+  io.ctrl.legal := (io.ctrl.opcode === 0.U || io.ctrl.opcode === 1.U || io.ctrl.opcode === 63.U)
 }

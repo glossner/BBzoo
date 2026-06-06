@@ -8,6 +8,7 @@ class HarvardMark1CtrlSignals extends Bundle {
   val is_hlt = Bool()
   val write_reg = Bool()
   val alu_op = UInt(4.W)
+  val legal    = Bool()
 }
 
 class HarvardMark1Decoder extends Module {
@@ -28,19 +29,28 @@ class HarvardMark1Decoder extends Module {
   io.ctrl.write_reg := false.B
   io.ctrl.alu_op    := AluOp.PASS_B
 
+  io.ctrl.legal := false.B
   switch(opcode) {
-    is(1.U) { // MOV src, dst
+    is(1.U) {
+      io.ctrl.legal := true.B
+       // MOV src, dst
       io.ctrl.write_reg := true.B
     }
-    is(2.U) { // ADD src, dst
+    is(2.U) {
+      io.ctrl.legal := true.B
+       // ADD src, dst
       io.ctrl.write_reg := true.B
       io.ctrl.alu_op    := AluOp.ADD
     }
-    is(3.U) { // SUB src, dst
+    is(3.U) {
+      io.ctrl.legal := true.B
+       // SUB src, dst
       io.ctrl.write_reg := true.B
       io.ctrl.alu_op    := AluOp.SUB
     }
-    is(4.U) { // HLT
+    is(4.U) {
+      io.ctrl.legal := true.B
+       // HLT
       io.ctrl.is_hlt    := true.B
     }
   }

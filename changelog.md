@@ -1,3 +1,9 @@
+# 06/06/2026 09:40 Verification & Robustness: Illegal Instruction Exceptions and Test Expansion across 80 Cores
+- Added strict instruction opcode validation and illegal instruction hardware assertions to the decode stage of all 80 cores.
+- Expanded CoreSpec test suites for all 79 remaining cores, introducing test cases that execute valid assembly programs alongside specific checks that verify illegal opcodes correctly raise simulation assertions.
+- Optimized exception checking for multi-issue, VLIW, packet-buffered, and functional-bit architectures (including MultiFlow, Cydra-5, STC ZEBRA, and TMS320C6000) to ensure accurate detection without false failures during padding or bundle-packing phases.
+- Cleaned up backup artifacts and verified that all 80 projects compile and pass the full simulation test suite and comparative architecture profiler.
+
 # 06/05/2026 11:35 PIM House Integration: UC Berkeley IRAM, UPMEM DPU, Samsung HBM2-PIM, Micron Automata, and IBM Execube
 - Implemented five historical and modern Processing-In-Memory architectures under the new **PIM House** (House 18): UC Berkeley IRAM (vector DRAM/logic merge), UPMEM DPU (massively parallel in-DRAM processor), Samsung HBM2-PIM (programmable computing unit in HBM), Micron Automata (associative processing processor in DRAM), and IBM Execube (first commercial multi-processor PIM).
 - Fixed Scala assembler array indexing syntax (`parts(1)` instead of `parts[1]`) and UPMEM branch displacement logic.

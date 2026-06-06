@@ -73,6 +73,7 @@ class Adsp2100Core extends Module {
     }
 
     is(sDECODE) {
+      assert(decoder.io.ctrl.legal, "Unimplemented/illegal instruction: 0x%x", decoder.io.inst)
       when(decoder.io.ctrl.is_hlt) {
         hltReg := true.B
         state  := sFETCH

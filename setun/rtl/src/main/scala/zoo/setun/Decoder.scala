@@ -9,6 +9,7 @@ class SetunCtrlSignals extends Bundle {
   val is_store = Bool()
   val is_add   = Bool()
   val is_hlt   = Bool()
+  val legal    = Bool()
 }
 
 class SetunDecoder extends Module {
@@ -24,4 +25,6 @@ class SetunDecoder extends Module {
   io.ctrl.is_store := op === 0x11.U
   io.ctrl.is_add   := op === 0x12.U
   io.ctrl.is_hlt   := op === 0xFF.U
+
+  io.ctrl.legal := (io.ctrl.opcode === 0.U || io.ctrl.opcode === 16.U || io.ctrl.opcode === 17.U || io.ctrl.opcode === 18.U || io.ctrl.opcode === 255.U)
 }

@@ -10,6 +10,7 @@ class Univac1103aCtrlSignals extends Bundle {
   val is_add    = Bool()
   val is_sub    = Bool()
   val is_hlt    = Bool()
+  val legal    = Bool()
 }
 
 class Univac1103aDecoder extends Module {
@@ -33,20 +34,29 @@ class Univac1103aDecoder extends Module {
   io.ctrl.is_sub    := false.B
   io.ctrl.is_hlt    := false.B
 
+  io.ctrl.legal := false.B
   switch(opcode) {
-    is(11.U) { // TP
+    is(11.U) {
+      io.ctrl.legal := true.B
+       // TP
       io.ctrl.mem_read := true.B
       io.ctrl.is_tp    := true.B
     }
-    is(12.U) { // ADD
+    is(12.U) {
+      io.ctrl.legal := true.B
+       // ADD
       io.ctrl.mem_read := true.B
       io.ctrl.is_add   := true.B
     }
-    is(13.U) { // SUB
+    is(13.U) {
+      io.ctrl.legal := true.B
+       // SUB
       io.ctrl.mem_read := true.B
       io.ctrl.is_sub   := true.B
     }
-    is(14.U) { // HLT
+    is(14.U) {
+      io.ctrl.legal := true.B
+       // HLT
       io.ctrl.is_hlt   := true.B
     }
   }

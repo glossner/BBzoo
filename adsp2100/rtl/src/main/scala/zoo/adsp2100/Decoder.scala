@@ -10,6 +10,7 @@ class Adsp2100CtrlSignals extends Bundle {
   val is_addar = Bool()
   val is_star  = Bool()
   val is_hlt   = Bool()
+  val legal    = Bool()
 }
 
 class Adsp2100Decoder extends Module {
@@ -26,4 +27,5 @@ class Adsp2100Decoder extends Module {
   io.ctrl.is_addar := op === 0x22.U
   io.ctrl.is_star  := op === 0x23.U
   io.ctrl.is_hlt   := op === 0x00.U
+  io.ctrl.legal    := (op === 0x20.U || op === 0x21.U || op === 0x22.U || op === 0x23.U || op === 0x00.U)
 }

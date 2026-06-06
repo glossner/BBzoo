@@ -66,6 +66,7 @@ class Univac1Core extends Module {
     }
 
     is(sDECODE) {
+      assert(decoder.io.ctrl.legal, "Unimplemented/illegal instruction")
       when(decoder.io.ctrl.is_q) {
         hltReg := true.B
         state  := sFETCH

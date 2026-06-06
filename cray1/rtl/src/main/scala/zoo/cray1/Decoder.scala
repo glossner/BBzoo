@@ -18,6 +18,7 @@ class Cray1CtrlSignals extends Bundle {
   val is_set_vl  = Bool() // VL := A(j)
   val is_li_a    = Bool() // A(i) := immediate (inst(11,0))
   val is_hlt     = Bool() // Halt processor
+  val legal    = Bool()
 }
 
 /**
@@ -61,34 +62,65 @@ class Cray1Decoder extends Module {
   io.ctrl.is_li_a    := false.B
   io.ctrl.is_hlt     := false.B
 
+  io.ctrl.legal := false.B
   switch(g) {
     is(0.U) {
+      io.ctrl.legal := true.B
+      
       switch(h) {
-        is(0.U) { io.ctrl.is_set_vl := true.B }
-        is(1.U) { io.ctrl.is_hlt := true.B }
+        is(0.U) {
+      io.ctrl.legal := true.B
+       io.ctrl.is_set_vl := true.B }
+        is(1.U) {
+      io.ctrl.legal := true.B
+       io.ctrl.is_hlt := true.B }
       }
     }
     is(1.U) {
+      io.ctrl.legal := true.B
+      
       switch(h) {
-        is(0.U) { io.ctrl.is_load_a := true.B }
-        is(1.U) { io.ctrl.is_store_a := true.B }
+        is(0.U) {
+      io.ctrl.legal := true.B
+       io.ctrl.is_load_a := true.B }
+        is(1.U) {
+      io.ctrl.legal := true.B
+       io.ctrl.is_store_a := true.B }
       }
     }
     is(2.U) {
+      io.ctrl.legal := true.B
+      
       switch(h) {
-        is(0.U) { io.ctrl.is_load_v := true.B }
-        is(1.U) { io.ctrl.is_store_v := true.B }
+        is(0.U) {
+      io.ctrl.legal := true.B
+       io.ctrl.is_load_v := true.B }
+        is(1.U) {
+      io.ctrl.legal := true.B
+       io.ctrl.is_store_v := true.B }
       }
     }
     is(3.U) {
+      io.ctrl.legal := true.B
+      
       switch(h) {
-        is(0.U) { io.ctrl.is_add_a := true.B }
-        is(1.U) { io.ctrl.is_add_s := true.B }
-        is(2.U) { io.ctrl.is_add_v := true.B }
-        is(3.U) { io.ctrl.is_add_vs := true.B }
+        is(0.U) {
+      io.ctrl.legal := true.B
+       io.ctrl.is_add_a := true.B }
+        is(1.U) {
+      io.ctrl.legal := true.B
+       io.ctrl.is_add_s := true.B }
+        is(2.U) {
+      io.ctrl.legal := true.B
+       io.ctrl.is_add_v := true.B }
+        is(3.U) {
+      io.ctrl.legal := true.B
+       io.ctrl.is_add_vs := true.B }
       }
     }
     is(4.U) {
+      io.ctrl.legal := true.B
+      
       io.ctrl.is_li_a := true.B
     }
   }

@@ -5,6 +5,8 @@ import chisel3.util._
 
 class Decoder extends Module {
   val io = IO(new Bundle {
+    val legal = Output(Bool())
+
     val inst = Input(UInt(64.W))
 
     val alu_op   = Output(UInt(4.W))
@@ -37,4 +39,6 @@ class Decoder extends Module {
   io.target  := w1(15, 0)
   // Maps rd to alu_rs1 during LD_CU (opcode 3)
   io.alu_rs1 := Mux(w1(23, 20) === 3.U, w1(19, 16), w0(21, 19))
+
+  io.legal := (w0(28, 25) <= 2.U) && (w0(9, 6) <= 2.U) && (w1(23, 20) <= 3.U)
 }

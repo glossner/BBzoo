@@ -9,6 +9,7 @@ class UcsdpCtrlSignals extends Bundle {
   val is_pop   = Bool()
   val is_add   = Bool()
   val is_hlt   = Bool()
+  val legal    = Bool()
 }
 
 class UcsdpDecoder extends Module {
@@ -24,4 +25,6 @@ class UcsdpDecoder extends Module {
   io.ctrl.is_pop  := op === 0x90.U
   io.ctrl.is_add  := op === 0xA0.U
   io.ctrl.is_hlt  := op === 0x00.U
+
+  io.ctrl.legal := (io.ctrl.opcode === 0.U || io.ctrl.opcode === 80.U || io.ctrl.opcode === 90.U || io.ctrl.opcode === 128.U || io.ctrl.opcode === 144.U || io.ctrl.opcode === 160.U)
 }

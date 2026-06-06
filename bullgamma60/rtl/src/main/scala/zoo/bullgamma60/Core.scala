@@ -106,6 +106,7 @@ class Bullgamma60Core extends Module {
     }
 
     is(sDECODE) {
+      assert(decoder.io.ctrl.legal, "Unimplemented/illegal instruction")
       val ctrl = decoder.io.ctrl
       when(currentThread === 0.U) {
         when(ctrl.is_fork) {

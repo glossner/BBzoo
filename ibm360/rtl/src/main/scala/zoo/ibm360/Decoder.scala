@@ -14,6 +14,7 @@ class Ibm360CtrlSignals extends Bundle {
   val inst_len   = UInt(3.W) // 2 for RR, 4 for RX, etc.
   val is_branch  = Bool()
   val rf_src_mem = Bool()
+  val legal    = Bool()
 }
 
 /**
@@ -63,55 +64,78 @@ class Ibm360Decoder extends Module {
   // - 11xxxxxx: SS format (6 bytes)
   val opcode_type = opcode(7, 6)
 
+  io.ctrl.legal := false.B
   switch(opcode_type) {
-    is(0.U) { // RR format (16-bit)
+    is(0.U) {
+      io.ctrl.legal := true.B
+       // RR format (16-bit)
       io.ctrl.is_rr    := true.B
       io.ctrl.inst_len := 2.U
       
       switch(opcode) {
-        is(0x18.U) { // LR (Load Register)
+        is(0x18.U) {
+      io.ctrl.legal := true.B
+       // LR (Load Register)
           io.ctrl.rf_wen := true.B
           io.ctrl.alu_op := AluOp.PASS_B
         }
-        is(0x1A.U) { // AR (Add Register)
+        is(0x1A.U) {
+      io.ctrl.legal := true.B
+       // AR (Add Register)
           io.ctrl.rf_wen := true.B
           io.ctrl.alu_op := AluOp.ADD
         }
-        is(0x1B.U) { // SR (Subtract Register)
+        is(0x1B.U) {
+      io.ctrl.legal := true.B
+       // SR (Subtract Register)
           io.ctrl.rf_wen := true.B
           io.ctrl.alu_op := AluOp.SUB
         }
-        is(0x19.U) { // CR (Compare Register)
+        is(0x19.U) {
+      io.ctrl.legal := true.B
+       // CR (Compare Register)
           io.ctrl.alu_op := AluOp.SUB
         }
       }
     }
     
-    is(1.U) { // RX format (32-bit)
+    is(1.U) {
+      io.ctrl.legal := true.B
+       // RX format (32-bit)
       io.ctrl.is_rx    := true.B
       io.ctrl.inst_len := 4.U
       
       switch(opcode) {
-        is(0x58.U) { // L (Load)
+        is(0x58.U) {
+      io.ctrl.legal := true.B
+       // L (Load)
           io.ctrl.mem_read   := true.B
           io.ctrl.rf_wen     := true.B
           io.ctrl.alu_op     := AluOp.PASS_B
           io.ctrl.rf_src_mem := true.B
         }
-        is(0x5A.U) { // A (Add)
+        is(0x5A.U) {
+      io.ctrl.legal := true.B
+       // A (Add)
           io.ctrl.mem_read := true.B
           io.ctrl.rf_wen   := true.B
           io.ctrl.alu_op   := AluOp.ADD
         }
-        is(0x5B.U) { // S (Subtract)
+        is(0x5B.U) {
+      io.ctrl.legal := true.B
+       // S (Subtract)
           io.ctrl.mem_read := true.B
           io.ctrl.rf_wen   := true.B
           io.ctrl.alu_op   := AluOp.SUB
         }
-        is(0x50.U) { // ST (Store)
+        is(0x50.U) {
+      io.ctrl.legal := true.B
+       // ST (Store)
           io.ctrl.mem_write := true.B
         }
-        is(0x47.U) { // BC (Branch on Condition)
+        is(0x47.U) {
+      io.ctrl.legal := true.B
+       // BC (Branch on Condition)
           io.ctrl.is_branch := true.B
         }
       }

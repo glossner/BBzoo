@@ -65,6 +65,7 @@ class Cdc6600ppuCore extends Module {
     }
 
     is(sDECODE) {
+      assert(decoder.io.ctrl.legal, "Unimplemented/illegal instruction")
       val ctrl = decoder.io.ctrl
       when(ctrl.is_hlt) {
         hltReg := true.B

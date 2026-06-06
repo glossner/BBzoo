@@ -107,6 +107,7 @@ class Ibm360Core extends Module {
     }
 
     is(sDECODE) {
+      assert(decoder.io.ctrl.legal, "Unimplemented/illegal instruction")
       // RegFile addresses are set to B2 and X2. In the next cycle (sRX_ADDR),
       // the values GPR(B2) and GPR(X2) will be available.
       when(decoder.io.ctrl.is_rr) {

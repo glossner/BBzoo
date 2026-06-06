@@ -90,4 +90,30 @@ class CoreSpec extends AnyFlatSpec with Matchers {
       c.io.v0_1_debug.peek().litValue.toLong shouldBe 20L
     }
   }
+
+  it should "throw an assertion error on unimplemented/illegal instructions" in {
+    assertThrows[Throwable] {
+      simulate(new Cray1Core) { c =>
+        c.io.mem.ready.poke(false.B)
+        c.io.mem.rdata.poke(0.U)
+
+        c.reset.poke(true.B)
+        c.clock.step(5)
+        c.reset.poke(false.B)
+
+        var cycles = 0
+        while (cycles < 15) {
+          val req = c.io.mem.req.peek().litToBoolean
+          if (req) {
+            c.io.mem.ready.poke(true.B)
+            c.io.mem.rdata.poke(BigInt("5000", 16).U)
+          } else {
+            c.io.mem.ready.poke(false.B)
+          }
+          c.clock.step(1)
+          cycles += 1
+        }
+      }
+    }
+  }
 }

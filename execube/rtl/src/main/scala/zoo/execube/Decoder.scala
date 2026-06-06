@@ -12,6 +12,7 @@ class ExecubeCtrlSignals extends Bundle {
   val is_add   = Bool()
   val is_store = Bool()
   val is_hlt   = Bool()
+  val legal    = Bool()
 }
 
 class ExecubeDecoder extends Module {
@@ -30,4 +31,6 @@ class ExecubeDecoder extends Module {
   io.ctrl.is_add   := op === 0x02.U
   io.ctrl.is_store := op === 0x03.U
   io.ctrl.is_hlt   := op === 0x3F.U
+
+  io.ctrl.legal := (io.ctrl.opcode === 0.U || io.ctrl.opcode === 1.U || io.ctrl.opcode === 2.U || io.ctrl.opcode === 3.U || io.ctrl.opcode === 63.U)
 }

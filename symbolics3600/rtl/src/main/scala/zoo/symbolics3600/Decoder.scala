@@ -9,6 +9,7 @@ class Symbolics3600CtrlSignals extends Bundle {
   val is_istore = Bool()
   val is_iadd   = Bool()
   val is_hlt    = Bool()
+  val legal    = Bool()
 }
 
 class Symbolics3600Decoder extends Module {
@@ -24,4 +25,6 @@ class Symbolics3600Decoder extends Module {
   io.ctrl.is_istore := op === 0x36.U
   io.ctrl.is_iadd   := op === 0x60.U
   io.ctrl.is_hlt    := op === 0xFF.U
+
+  io.ctrl.legal := (io.ctrl.opcode === 0.U || io.ctrl.opcode === 21.U || io.ctrl.opcode === 54.U || io.ctrl.opcode === 96.U || io.ctrl.opcode === 255.U)
 }

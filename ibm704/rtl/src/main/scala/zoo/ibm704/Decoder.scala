@@ -11,6 +11,7 @@ class Ibm704CtrlSignals extends Bundle {
   val is_add    = Bool()
   val is_sub    = Bool()
   val is_hlt    = Bool()
+  val legal    = Bool()
 }
 
 class Ibm704Decoder extends Module {
@@ -33,24 +34,35 @@ class Ibm704Decoder extends Module {
   io.ctrl.is_sub    := false.B
   io.ctrl.is_hlt    := false.B
 
+  io.ctrl.legal := false.B
   switch(opcode) {
-    is(1.U) { // LD
+    is(1.U) {
+      io.ctrl.legal := true.B
+       // LD
       io.ctrl.mem_read := true.B
       io.ctrl.is_ld    := true.B
     }
-    is(2.U) { // ST
+    is(2.U) {
+      io.ctrl.legal := true.B
+       // ST
       io.ctrl.mem_write := true.B
       io.ctrl.is_st     := true.B
     }
-    is(3.U) { // ADD
+    is(3.U) {
+      io.ctrl.legal := true.B
+       // ADD
       io.ctrl.mem_read := true.B
       io.ctrl.is_add   := true.B
     }
-    is(4.U) { // SUB
+    is(4.U) {
+      io.ctrl.legal := true.B
+       // SUB
       io.ctrl.mem_read := true.B
       io.ctrl.is_sub   := true.B
     }
-    is(5.U) { // HLT
+    is(5.U) {
+      io.ctrl.legal := true.B
+       // HLT
       io.ctrl.is_hlt   := true.B
     }
   }

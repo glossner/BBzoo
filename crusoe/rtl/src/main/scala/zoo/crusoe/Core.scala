@@ -200,6 +200,7 @@ class Core extends Module {
     }
 
     is(sExecute) {
+      assert(decoder.io.legal, "Unimplemented/illegal instruction")
       when(lsu_active) {
         state := sExecuteLSU
       }.otherwise {

@@ -10,6 +10,7 @@ class Upd7720CtrlSignals extends Bundle {
   val is_add   = Bool()
   val is_sta   = Bool()
   val is_hlt   = Bool()
+  val legal    = Bool()
 }
 
 class Upd7720Decoder extends Module {
@@ -26,4 +27,6 @@ class Upd7720Decoder extends Module {
   io.ctrl.is_add := op === 0x12.U
   io.ctrl.is_sta := op === 0x13.U
   io.ctrl.is_hlt := op === 0x00.U
+
+  io.ctrl.legal := (io.ctrl.opcode === 0.U || io.ctrl.opcode === 10.U || io.ctrl.opcode === 11.U || io.ctrl.opcode === 12.U || io.ctrl.opcode === 13.U || io.ctrl.opcode === 16.U || io.ctrl.opcode === 17.U || io.ctrl.opcode === 18.U || io.ctrl.opcode === 19.U)
 }

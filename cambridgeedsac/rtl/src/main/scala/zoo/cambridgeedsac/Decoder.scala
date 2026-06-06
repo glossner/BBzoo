@@ -11,6 +11,7 @@ class CambridgeedsacCtrlSignals extends Bundle {
   val is_t      = Bool() // Store & clear
   val is_u      = Bool() // Store & no-clear
   val is_z      = Bool() // Halt
+  val legal    = Bool()
 }
 
 class CambridgeedsacDecoder extends Module {
@@ -33,24 +34,35 @@ class CambridgeedsacDecoder extends Module {
   io.ctrl.is_u      := false.B
   io.ctrl.is_z      := false.B
 
+  io.ctrl.legal := false.B
   switch(opcode) {
-    is(1.U) { // A
+    is(1.U) {
+      io.ctrl.legal := true.B
+       // A
       io.ctrl.mem_read := true.B
       io.ctrl.is_add   := true.B
     }
-    is(2.U) { // S
+    is(2.U) {
+      io.ctrl.legal := true.B
+       // S
       io.ctrl.mem_read := true.B
       io.ctrl.is_sub   := true.B
     }
-    is(3.U) { // T
+    is(3.U) {
+      io.ctrl.legal := true.B
+       // T
       io.ctrl.mem_write := true.B
       io.ctrl.is_t      := true.B
     }
-    is(4.U) { // U
+    is(4.U) {
+      io.ctrl.legal := true.B
+       // U
       io.ctrl.mem_write := true.B
       io.ctrl.is_u      := true.B
     }
-    is(5.U) { // Z
+    is(5.U) {
+      io.ctrl.legal := true.B
+       // Z
       io.ctrl.is_z      := true.B
     }
   }

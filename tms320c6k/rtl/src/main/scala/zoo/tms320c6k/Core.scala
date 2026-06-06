@@ -92,6 +92,7 @@ class Core extends Module {
         packetSize := 0.U
         state      := sFetch
       }.otherwise {
+        assert(decoder.io.legal, "Unimplemented/illegal instruction")
         // Execute instruction at packetIndex
         val op = decoder.io.op
         when(op === 5.U) { // HLT

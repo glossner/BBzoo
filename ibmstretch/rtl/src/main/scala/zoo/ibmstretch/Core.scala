@@ -72,6 +72,7 @@ class IbmstretchCore extends Module {
     }
 
     is(sDECODE) {
+      assert(decoder.io.ctrl.legal, "Unimplemented/illegal instruction")
       val ctrl = decoder.io.ctrl
       effAddrReg := data_addr + xregs(index_reg)
 

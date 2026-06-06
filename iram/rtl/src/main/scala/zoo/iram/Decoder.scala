@@ -14,6 +14,7 @@ class IramCtrlSignals extends Bundle {
   val is_lw    = Bool()
   val is_sw    = Bool()
   val is_hlt   = Bool()
+  val legal    = Bool()
 }
 
 class IramDecoder extends Module {
@@ -34,4 +35,6 @@ class IramDecoder extends Module {
   io.ctrl.is_lw   := op === 0x04.U
   io.ctrl.is_sw   := op === 0x05.U
   io.ctrl.is_hlt  := op === 0x3F.U
+
+  io.ctrl.legal := (io.ctrl.opcode === 0.U || io.ctrl.opcode === 1.U || io.ctrl.opcode === 2.U || io.ctrl.opcode === 3.U || io.ctrl.opcode === 4.U || io.ctrl.opcode === 5.U || io.ctrl.opcode === 63.U)
 }

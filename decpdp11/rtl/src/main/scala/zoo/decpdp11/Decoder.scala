@@ -10,6 +10,7 @@ class Pdp11CtrlSignals extends Bundle {
   val dst_mode = UInt(3.W)
   val dst_reg  = UInt(3.W)
   val is_hlt   = Bool()
+  val legal    = Bool()
 }
 
 class Pdp11Decoder extends Module {
@@ -27,4 +28,6 @@ class Pdp11Decoder extends Module {
   
   // HALT is 0x0000
   io.ctrl.is_hlt   := io.inst === 0.U
+
+  io.ctrl.legal := (io.ctrl.opcode === 0.U || io.ctrl.opcode === 1.U || io.ctrl.opcode === 2.U || io.ctrl.opcode === 3.U)
 }

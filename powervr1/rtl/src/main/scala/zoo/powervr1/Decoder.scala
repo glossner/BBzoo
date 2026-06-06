@@ -13,6 +13,7 @@ class Powervr1CtrlSignals extends Bundle {
   val is_st     = Bool()
   val is_hsr    = Bool()
   val is_hlt    = Bool()
+  val legal    = Bool()
 }
 
 class Powervr1Decoder extends Module {
@@ -32,4 +33,6 @@ class Powervr1Decoder extends Module {
   io.ctrl.is_hsr := op === 0x20.U
   io.ctrl.is_st  := op === 0x30.U
   io.ctrl.is_hlt := op === 0x00.U
+
+  io.ctrl.legal := (io.ctrl.opcode === 0.U || io.ctrl.opcode === 10.U || io.ctrl.opcode === 16.U || io.ctrl.opcode === 20.U || io.ctrl.opcode === 30.U || io.ctrl.opcode === 32.U || io.ctrl.opcode === 48.U)
 }

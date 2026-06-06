@@ -11,6 +11,7 @@ class B5500CtrlSignals extends Bundle {
   val stack_pop  = Bool()
   val alu_op     = UInt(4.W)
   val is_hlt     = Bool()
+  val legal    = Bool()
 }
 
 class B5500Decoder extends Module {
@@ -31,24 +32,35 @@ class B5500Decoder extends Module {
   io.ctrl.alu_op     := AluOp.PASS_A
   io.ctrl.is_hlt     := false.B
 
+  io.ctrl.legal := false.B
   switch(opcode) {
-    is(1.U) { // PUSH
+    is(1.U) {
+      io.ctrl.legal := true.B
+       // PUSH
       io.ctrl.mem_read   := true.B
       io.ctrl.stack_push := true.B
     }
-    is(2.U) { // POP
+    is(2.U) {
+      io.ctrl.legal := true.B
+       // POP
       io.ctrl.mem_write  := true.B
       io.ctrl.stack_pop  := true.B
     }
-    is(3.U) { // ADD
+    is(3.U) {
+      io.ctrl.legal := true.B
+       // ADD
       io.ctrl.stack_pop  := true.B
       io.ctrl.alu_op     := AluOp.ADD
     }
-    is(4.U) { // SUB
+    is(4.U) {
+      io.ctrl.legal := true.B
+       // SUB
       io.ctrl.stack_pop  := true.B
       io.ctrl.alu_op     := AluOp.SUB
     }
-    is(5.U) { // HLT
+    is(5.U) {
+      io.ctrl.legal := true.B
+       // HLT
       io.ctrl.is_hlt     := true.B
     }
   }

@@ -12,6 +12,7 @@ class Mali200CtrlSignals extends Bundle {
   val is_vst   = Bool()
   val is_vadd  = Bool()
   val is_hlt   = Bool()
+  val legal    = Bool()
 }
 
 class Mali200Decoder extends Module {
@@ -30,4 +31,6 @@ class Mali200Decoder extends Module {
   io.ctrl.is_vadd := op === 0x20.U
   io.ctrl.is_vst  := op === 0x30.U
   io.ctrl.is_hlt  := op === 0x00.U
+
+  io.ctrl.legal := (io.ctrl.opcode === 0.U || io.ctrl.opcode === 10.U || io.ctrl.opcode === 16.U || io.ctrl.opcode === 20.U || io.ctrl.opcode === 30.U || io.ctrl.opcode === 32.U || io.ctrl.opcode === 48.U)
 }

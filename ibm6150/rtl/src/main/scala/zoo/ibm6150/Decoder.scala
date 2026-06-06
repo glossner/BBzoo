@@ -8,6 +8,7 @@ class Ibm6150CtrlSignals extends Bundle {
   val reg_x    = UInt(4.W)
   val reg_y    = UInt(4.W)
   val is_hlt   = Bool()
+  val legal    = Bool()
 }
 
 class Ibm6150Decoder extends Module {
@@ -22,4 +23,6 @@ class Ibm6150Decoder extends Module {
   io.ctrl.reg_x  := io.inst(23, 20)
   io.ctrl.reg_y  := io.inst(19, 16)
   io.ctrl.is_hlt := opcode === 0.U
+
+  io.ctrl.legal := (io.ctrl.opcode === 0.U || io.ctrl.opcode === 80.U || io.ctrl.opcode === 90.U || io.ctrl.opcode === 128.U || io.ctrl.opcode === 144.U || io.ctrl.opcode === 160.U)
 }

@@ -10,6 +10,7 @@ class DecvaxCtrlSignals extends Bundle {
   val dst_mode = UInt(4.W)
   val dst_reg  = UInt(4.W)
   val is_hlt   = Bool()
+  val legal    = Bool()
 }
 
 class DecvaxDecoder extends Module {
@@ -29,4 +30,6 @@ class DecvaxDecoder extends Module {
   
   // HALT is opcode 0x00
   io.ctrl.is_hlt   := opcode === 0.U
+
+  io.ctrl.legal := (io.ctrl.opcode === 0.U || io.ctrl.opcode === 192.U || io.ctrl.opcode === 194.U || io.ctrl.opcode === 208.U)
 }

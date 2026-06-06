@@ -11,6 +11,7 @@ class Manchestermu1CtrlSignals extends Bundle {
   val is_jmp    = Bool()
   val is_jpr    = Bool()
   val is_stp    = Bool()
+  val legal    = Bool()
 }
 
 class Manchestermu1Decoder extends Module {
@@ -33,27 +34,40 @@ class Manchestermu1Decoder extends Module {
   io.ctrl.is_jpr    := false.B
   io.ctrl.is_stp    := false.B
 
+  io.ctrl.legal := false.B
   switch(opcode) {
-    is(0.U) { // JMP
+    is(0.U) {
+      io.ctrl.legal := true.B
+       // JMP
       io.ctrl.mem_read := true.B
       io.ctrl.is_jmp   := true.B
     }
-    is(1.U) { // JPR
+    is(1.U) {
+      io.ctrl.legal := true.B
+       // JPR
       io.ctrl.mem_read := true.B
       io.ctrl.is_jpr   := true.B
     }
-    is(2.U) { // LDN
+    is(2.U) {
+      io.ctrl.legal := true.B
+       // LDN
       io.ctrl.mem_read := true.B
       io.ctrl.is_ldn   := true.B
     }
-    is(3.U) { // STO
+    is(3.U) {
+      io.ctrl.legal := true.B
+       // STO
       io.ctrl.mem_write := true.B
     }
-    is(4.U) { // SUB
+    is(4.U) {
+      io.ctrl.legal := true.B
+       // SUB
       io.ctrl.mem_read := true.B
       io.ctrl.is_sub   := true.B
     }
-    is(7.U) { // STP
+    is(7.U) {
+      io.ctrl.legal := true.B
+       // STP
       io.ctrl.is_stp   := true.B
     }
   }

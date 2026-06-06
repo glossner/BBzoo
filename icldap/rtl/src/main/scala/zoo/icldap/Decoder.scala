@@ -5,6 +5,8 @@ import chisel3.util._
 
 class Decoder extends Module {
   val io = IO(new Bundle {
+    val legal = Output(Bool())
+
     val inst = Input(UInt(16.W))
     
     val hlt        = Output(Bool())
@@ -32,4 +34,6 @@ class Decoder extends Module {
   io.add_pe_bit := (op === 0x4.U)
   io.st_pe_bit  := (op === 0x5.U)
   io.clr_carry  := (op === 0x6.U)
+
+  io.legal := (op === 0.U || op === 1.U || op === 2.U || op === 3.U || op === 4.U || op === 5.U || op === 6.U)
 }

@@ -9,6 +9,7 @@ class Ibm801CtrlSignals extends Bundle {
   val rs1    = UInt(5.W)
   val rs2    = UInt(5.W)
   val is_hlt = Bool()
+  val legal    = Bool()
 }
 
 class Ibm801Decoder extends Module {
@@ -23,4 +24,6 @@ class Ibm801Decoder extends Module {
   io.ctrl.rs1    := io.inst(20, 16)
   io.ctrl.rs2    := io.inst(15, 11)
   io.ctrl.is_hlt := opcode === 0x3F.U
+
+  io.ctrl.legal := (io.ctrl.opcode === 0.U || io.ctrl.opcode === 1.U || io.ctrl.opcode === 2.U || io.ctrl.opcode === 3.U || io.ctrl.opcode === 63.U)
 }

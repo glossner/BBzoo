@@ -10,6 +10,7 @@ class ZuseZ1CtrlSignals extends Bundle {
   val alu_op    = UInt(4.W)
   val mov_r1_r2 = Bool()
   val is_hlt    = Bool()
+  val legal    = Bool()
 }
 
 class ZuseZ1Decoder extends Module {
@@ -30,23 +31,36 @@ class ZuseZ1Decoder extends Module {
   io.ctrl.mov_r1_r2 := false.B
   io.ctrl.is_hlt    := false.B
 
+  io.ctrl.legal := false.B
   switch(opcode) {
-    is(1.U) { // Pr addr (load to R1)
+    is(1.U) {
+      io.ctrl.legal := true.B
+       // Pr addr (load to R1)
       io.ctrl.mem_read := true.B
     }
-    is(2.U) { // Ps addr (store from R1)
+    is(2.U) {
+      io.ctrl.legal := true.B
+       // Ps addr (store from R1)
       io.ctrl.mem_write := true.B
     }
-    is(3.U) { // ADD
+    is(3.U) {
+      io.ctrl.legal := true.B
+       // ADD
       io.ctrl.alu_op := AluOp.ADD
     }
-    is(4.U) { // SUB
+    is(4.U) {
+      io.ctrl.legal := true.B
+       // SUB
       io.ctrl.alu_op := AluOp.SUB
     }
-    is(5.U) { // MOV R1, R2
+    is(5.U) {
+      io.ctrl.legal := true.B
+       // MOV R1, R2
       io.ctrl.mov_r1_r2 := true.B
     }
-    is(6.U) { // HLT
+    is(6.U) {
+      io.ctrl.legal := true.B
+       // HLT
       io.ctrl.is_hlt := true.B
     }
   }

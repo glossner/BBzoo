@@ -80,6 +80,7 @@ class Core extends Module {
     }
 
     is(sDecode) {
+      assert(decoder.io.legal, "Unimplemented/illegal instruction")
       val op  = decoder.io.op
       val rd  = decoder.io.rd
       val rs1 = decoder.io.rs1

@@ -29,6 +29,7 @@ class Pdp8CtrlSignals extends Bundle {
   val is_isz     = Bool()
   val is_opr     = Bool()
   val is_iot     = Bool()
+  val legal    = Bool()
 }
 
 /**
@@ -160,4 +161,6 @@ class Pdp8Decoder extends Module {
       }
     }
   }
+
+  io.ctrl.legal := true.B
 }

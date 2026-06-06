@@ -13,6 +13,7 @@ class Mips1CtrlSignals extends Bundle {
   val is_sw    = Bool()
   val is_addu  = Bool()
   val is_hlt   = Bool()
+  val legal    = Bool()
 }
 
 class Mips1Decoder extends Module {
@@ -37,4 +38,6 @@ class Mips1Decoder extends Module {
   io.ctrl.is_sw   := op === 0x2B.U
   io.ctrl.is_addu := (op === 0.U) && (funct === 0x21.U)
   io.ctrl.is_hlt  := op === 0x3F.U
+
+  io.ctrl.legal := (io.ctrl.opcode === 0.U || io.ctrl.opcode === 21.U || io.ctrl.opcode === 23.U || io.ctrl.opcode === 33.U || io.ctrl.opcode === 35.U || io.ctrl.opcode === 43.U || io.ctrl.opcode === 63.U)
 }

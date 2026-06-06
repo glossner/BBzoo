@@ -92,6 +92,7 @@ class Core extends Module {
     }
 
     is(sExecute) {
+      assert(decoder.io.legal, "Unimplemented/illegal instruction")
       when(slotIndex === 3.U || (jumpTaken && slotIndex === 0.U)) {
         // End of bundle or branch taken
         when(jumpTaken) {

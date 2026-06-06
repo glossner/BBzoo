@@ -5,6 +5,8 @@ import chisel3.util._
 
 class M68kDecoder extends Module {
   val io = IO(new Bundle {
+    val legal = Output(Bool())
+
     val inst = Input(UInt(16.W))
     
     // Decoded control signals
@@ -96,4 +98,6 @@ class M68kDecoder extends Module {
     io.bra_offset  := io.inst(7, 0).asSInt
     io.inst_words  := 1.U
   }
+
+  io.legal := (op === 0.U || op === 2.U || op === 9.U || op === 13.U)
 }

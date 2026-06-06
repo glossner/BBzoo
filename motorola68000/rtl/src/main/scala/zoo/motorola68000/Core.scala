@@ -103,6 +103,7 @@ class M68kCore extends Module {
     }
     
     is(sDECODE) {
+      assert(decoder.io.legal, "Unimplemented/illegal instruction")
       when(decoder.io.is_bra) {
         // Unconditional branch is executed immediately
         val next_pc = pc + 2.U

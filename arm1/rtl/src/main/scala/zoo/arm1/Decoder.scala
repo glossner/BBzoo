@@ -13,6 +13,7 @@ class Arm1CtrlSignals extends Bundle {
   val is_str = Bool()
   val is_add = Bool()
   val is_hlt = Bool()
+  val legal    = Bool()
 }
 
 class Arm1Decoder extends Module {
@@ -37,4 +38,6 @@ class Arm1Decoder extends Module {
   io.ctrl.is_str := op === 0x05.U
   io.ctrl.is_add := op === 0x00.U
   io.ctrl.is_hlt := op === 0x0F.U
+
+  io.ctrl.legal := (io.ctrl.opcode === 0.U || io.ctrl.opcode === 4.U || io.ctrl.opcode === 5.U || io.ctrl.opcode === 14.U || io.ctrl.opcode === 15.U)
 }

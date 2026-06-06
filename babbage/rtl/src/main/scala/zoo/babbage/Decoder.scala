@@ -9,6 +9,7 @@ class BabbageCtrlSignals extends Bundle {
   val mem_write = Bool()
   val alu_op    = UInt(4.W)
   val is_hlt    = Bool()
+  val legal    = Bool()
 }
 
 class BabbageDecoder extends Module {
@@ -28,22 +29,33 @@ class BabbageDecoder extends Module {
   io.ctrl.alu_op    := AluOp.PASS_B
   io.ctrl.is_hlt    := false.B
 
+  io.ctrl.legal := false.B
   switch(opcode) {
-    is(1.U) { // L addr
+    is(1.U) {
+      io.ctrl.legal := true.B
+       // L addr
       io.ctrl.mem_read := true.B
     }
-    is(2.U) { // S addr
+    is(2.U) {
+      io.ctrl.legal := true.B
+       // S addr
       io.ctrl.mem_write := true.B
     }
-    is(3.U) { // ADD addr
+    is(3.U) {
+      io.ctrl.legal := true.B
+       // ADD addr
       io.ctrl.mem_read := true.B
       io.ctrl.alu_op   := AluOp.ADD
     }
-    is(4.U) { // SUB addr
+    is(4.U) {
+      io.ctrl.legal := true.B
+       // SUB addr
       io.ctrl.mem_read := true.B
       io.ctrl.alu_op   := AluOp.SUB
     }
-    is(5.U) { // HLT
+    is(5.U) {
+      io.ctrl.legal := true.B
+       // HLT
       io.ctrl.is_hlt   := true.B
     }
   }

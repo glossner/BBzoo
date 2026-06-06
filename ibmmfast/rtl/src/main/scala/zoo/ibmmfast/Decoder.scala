@@ -5,6 +5,8 @@ import chisel3.util._
 
 class Decoder extends Module {
   val io = IO(new Bundle {
+    val legal = Output(Bool())
+
     val inst = Input(UInt(32.W))
     
     val is_vliw      = Output(Bool())
@@ -53,4 +55,6 @@ class Decoder extends Module {
 
   io.target_addr := io.inst(15, 0)
   io.cu_rd       := io.inst(25, 24)
+
+  io.legal := io.is_vliw || io.is_jmp || io.is_hlt || io.is_ld_cu
 }

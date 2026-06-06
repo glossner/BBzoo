@@ -72,6 +72,7 @@ class Core extends Module {
     }
 
     is(sDecode) {
+      assert(decoder.io.legal, "Unimplemented/illegal instruction")
       when(decoder.io.hlt) {
         insts := insts + 1.U
         state := sHalt

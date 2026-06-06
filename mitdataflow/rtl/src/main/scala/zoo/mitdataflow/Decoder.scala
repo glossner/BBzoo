@@ -12,6 +12,7 @@ class MitDataflowCtrlSignals extends Bundle {
   val is_store       = Bool()
   val is_add         = Bool()
   val is_hlt         = Bool()
+  val legal    = Bool()
 }
 
 class MitDataflowDecoder extends Module {
@@ -30,4 +31,6 @@ class MitDataflowDecoder extends Module {
   io.ctrl.is_add         := op === 0x41.U
   io.ctrl.is_store       := op === 0x42.U
   io.ctrl.is_hlt         := op === 0xFF.U
+
+  io.ctrl.legal := (io.ctrl.opcode === 0.U || io.ctrl.opcode === 64.U || io.ctrl.opcode === 65.U || io.ctrl.opcode === 66.U || io.ctrl.opcode === 255.U)
 }

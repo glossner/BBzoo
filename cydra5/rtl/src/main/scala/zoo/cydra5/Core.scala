@@ -77,6 +77,7 @@ class Core extends Module {
     }
 
     is(sDecode) {
+      assert(decoder.io.legal, "Unimplemented/illegal instruction")
       // Decode CTRL slot first
       when(decoder.io.ctrl_op === 2.U) { // HLT
         insts := insts + 1.U

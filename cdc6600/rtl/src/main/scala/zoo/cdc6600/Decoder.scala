@@ -10,6 +10,7 @@ class Cdc6600CtrlSignals extends Bundle {
   val k      = UInt(3.W)
   val K      = UInt(18.W)
   val is_hlt = Bool()
+  val legal    = Bool()
 }
 
 class Cdc6600Decoder extends Module {
@@ -24,4 +25,6 @@ class Cdc6600Decoder extends Module {
   io.ctrl.k      := io.inst(47, 45)
   io.ctrl.K      := io.inst(44, 27)
   io.ctrl.is_hlt := io.inst === 0.U
+
+  io.ctrl.legal := (io.ctrl.opcode === 0.U || io.ctrl.opcode === 1.U || io.ctrl.opcode === 2.U || io.ctrl.opcode === 3.U)
 }

@@ -81,6 +81,7 @@ class Cdc6600Core extends Module {
     }
 
     is(sDECODE) {
+      assert(decoder.io.ctrl.legal, "Unimplemented/illegal instruction")
       when(decoder.io.ctrl.is_hlt) {
         hltReg := true.B
         state  := sFETCH
